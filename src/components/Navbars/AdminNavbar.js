@@ -18,6 +18,15 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+    const user = localStorage.getItem("user");
+    const { name, lastname } = JSON.parse(user);
+
+    const handleLogout = () => {
+        // Elimina todos los datos del localStorage
+        localStorage.clear();
+        window.location.href = "/login";
+    };
+
     return (
         <>
             <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -52,7 +61,7 @@ const AdminNavbar = (props) => {
                                     </span>
                                     <Media className="ml-2 d-none d-lg-block">
                                         <span className="mb-0 text-sm font-weight-bold">
-                                            Jessica Jones
+                                            {`${name} ${lastname}`}
                                         </span>
                                     </Media>
                                 </Media>
@@ -78,7 +87,7 @@ const AdminNavbar = (props) => {
                                     <span>Support</span>
                                 </DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                                <DropdownItem href="#pablo" onClick={handleLogout}>
                                     <i className="ni ni-user-run" />
                                     <span>Logout</span>
                                 </DropdownItem>

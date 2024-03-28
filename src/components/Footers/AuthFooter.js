@@ -1,10 +1,11 @@
 // reactstrap components
 import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
+import myStyles from "../../assets/css/myStyles.module.css";
 
 const Login = () => {
     return (
         <>
-            <footer className="py-5">
+            <footer className={`py-5 ${myStyles.footer}`}>
                 <Container>
                     <Row className="align-items-center justify-content-xl-between">
                         <Col xl="6">

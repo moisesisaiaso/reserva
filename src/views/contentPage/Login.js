@@ -1,7 +1,7 @@
 // reactstrap components
 import { login } from "api/auth";
+import myStyles from "../../assets/css/myStyles.module.css";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import {
     Button,
     Card,
@@ -17,7 +17,6 @@ import {
 } from "reactstrap";
 
 const Login = () => {
-    const navigate = useNavigate();
     const { handleSubmit, register, reset } = useForm();
 
     console.log("hola");
@@ -31,12 +30,15 @@ const Login = () => {
             password: "",
         });
 
-        navigate("/admin/index");
+        setTimeout(() => {
+            window.location.href = "/admin/index";
+            /* navigate("/admin/index"); */
+        }, 2000);
     };
 
     return (
         <>
-            <Col lg="5" md="7">
+            <Col lg="5" md="7" className={myStyles.cardLogin}>
                 <Card className="bg-secondary shadow border-0">
                     <CardBody className="px-lg-5 py-lg-5">
                         <div className="text-center text-muted mb-4">
@@ -51,6 +53,7 @@ const Login = () => {
                                         </InputGroupText>
                                     </InputGroupAddon>
                                     <input
+                                        className={myStyles.inputs}
                                         placeholder="Email"
                                         type="email"
                                         {...register("email")}
@@ -65,6 +68,7 @@ const Login = () => {
                                         </InputGroupText>
                                     </InputGroupAddon>
                                     <input
+                                        className={myStyles.inputs}
                                         placeholder="Password"
                                         type="password"
                                         {...register("password")}

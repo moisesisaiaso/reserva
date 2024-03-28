@@ -1,0 +1,26 @@
+.authLoding {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    aspect-ratio: unset;
+    z-index: 1;
+}
+
+.cardLogin {
+    z-index: 5;
+}
+
+.footer a {
+    color: white !important;
+}
+
+.welcome {
+    position: relative;
+    z-index: 5;
+}
+
+.inputs {
+    all: unset;
+    display: block;
+    width: 89%;
+}

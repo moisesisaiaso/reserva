@@ -15,11 +15,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
         <Routes>
-            <Route path="/login/*" element={<AuthLayout />} />
             <Route element={<ProtectedRoutes />}>
                 <Route path="/admin/*" element={<AdminLayout />} />
             </Route>
-            <Route path="/" element={<Navigate to="/login" />} />
+            {localStorage.getItem("access_token") === null ? (
+                <Route path="/login/*" element={<AuthLayout />} />
+            ) : (
+                <Route path="/*" element={<Navigate to="/admin" />} />
+            )}
+            <Route path="/*" element={<Navigate to="/login" />} />
         </Routes>
     </BrowserRouter>
 );
