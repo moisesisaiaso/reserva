@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom"; // Importa NavLink como NavLinkRRD y Link desde react-router-dom
-import { PropTypes } from "prop-types"; // Importa PropTypes desde prop-types
+import { NavLink as NavLinkRRD, Link } from "react-router-dom"; // Importación de NavLink y Link de react-router-dom
+import { PropTypes } from "prop-types"; // Importación de PropTypes para definir tipos de propiedades
 import {
-    // Importa los siguientes componentes desde reactstrap
     Button,
     Card,
     CardHeader,
@@ -30,63 +29,82 @@ import {
     Container,
     Row,
     Col,
-} from "reactstrap";
+} from "reactstrap"; 
 
+// Definición del componente Sidebar
 const Sidebar = (props) => {
-    // Define un estado local para manejar el estado de la expansión de los elementos del menú
-    const [collapseStates, setCollapseStates] = useState({});
+    // Estado para controlar si el menú está colapsado o no
+    const [collapseOpen, setCollapseOpen] = useState(false);
+    // Estado para controlar el estado de colapso de cada elemento del menú
+    const [collapseStates, setCollapseStates] = useState(Array(props.routes.length).fill(false));
 
-    // Función para alternar el estado de expansión de un elemento del menú
-    const toggleCollapse = (key) => {
-        setCollapseStates((prevState) => ({
-            ...prevState,
-            [key]: !prevState[key],
-        }));
+    // Función para alternar el colapso del menú completo
+    const toggleCollapse = () => {
+        setCollapseOpen(!collapseOpen);
     };
 
-    // Función para cerrar todos los elementos colapsados del menú
+    // Función para alternar el colapso de un elemento del menú
+    const toggleItemCollapse = (index) => {
+        const newCollapseStates = [...collapseStates];
+        newCollapseStates[index] = !newCollapseStates[index];
+        setCollapseStates(newCollapseStates);
+    };
+
+    // Función para cerrar todos los colapsos
     const closeCollapse = () => {
-        setCollapseStates({});
+        setCollapseOpen(false);
+        setCollapseStates(Array(props.routes.length).fill(false));
     };
 
-    // Desestructura las propiedades recibidas
+    // Función para verificar si una ruta está activa
+    const activeRoute = (routeName) => {
+        return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
+    };
+
+    // Desestructuración de las propiedades routes y logo
     const { routes, logo } = props;
 
-    // Función para crear los elementos del menú basados en las rutas proporcionadas
+    // Función para crear los enlaces del menú
     const createLinks = (routes) => {
         return routes.map((route, key) => {
-            if (route.subRoutes) { // Si la ruta tiene subrutas
-                const isOpen = collapseStates[key]; // Verifica si el elemento está expandido
+            if (route.subRoutes) {
+                const isOpen = collapseStates[key];
                 return (
                     <li key={key} className="nav-item">
                         <a
                             href="#pablo"
-                            data-toggle="collapse"
                             className="nav-link"
-                            aria-expanded={isOpen ? "true" : "false"}
-                            onClick={() => toggleCollapse(key)}
+                            onClick={() => toggleItemCollapse(key)}
                         >
                             <i className={route.icon} />
-                            <span className="nav-link-text">{route.name}</span>
+                            <div className="d-flex justify-content-between w-100">
+                                <span className="nav-link-text">{route.name}</span>
+                                {/* Icono de flecha para indicar el estado del colapso */}
+                                <i
+                                    className={`fas ${isOpen ? 'fa-chevron-down' : 'fa-chevron-right'}`}
+                                    style={{ fontSize: '9px', color: '#6c757d' }}
+                                />
+                            </div>
                         </a>
-                        <div className={`collapse ${isOpen ? 'show' : ''}`}>
+                        <Collapse isOpen={isOpen}>
                             <ul className="nav-sm flex-column nav">
                                 {route.subRoutes.map((subRoute, subKey) => (
                                     <li key={subKey} className="nav-item">
-                                        <a
+                                        <NavLink
                                             className="nav-link"
-                                            href={subRoute.layout + subRoute.path}
+                                            to={subRoute.layout + subRoute.path}
+                                            activeClassName="active"
                                         >
                                             <span className="sidenav-mini-icon">{subRoute.miniIcon}</span>
                                             <span className="sidenav-normal">{subRoute.name}</span>
-                                        </a>
+                                        </NavLink>
                                     </li>
                                 ))}
                             </ul>
-                        </div>
+                        </Collapse>
                     </li>
                 );
-            } else { // Si la ruta no tiene subrutas
+            } else {
                 return (
                     <NavItem key={key}>
                         <NavLink
@@ -103,7 +121,7 @@ const Sidebar = (props) => {
         });
     };
 
-    // Configura las propiedades de NavbarBrand basadas en el logo proporcionado
+    // Propiedades para el NavbarBrand
     let navbarBrandProps;
     if (logo && logo.innerLink) {
         navbarBrandProps = {
@@ -117,45 +135,141 @@ const Sidebar = (props) => {
         };
     }
 
-    // Devuelve el componente Sidebar con el contenido generado dinámicamente
+    // Renderizado del componente Sidebar
     return (
         <Navbar
             className="navbar-vertical fixed-left navbar-light bg-white"
             expand="md"
             id="sidenav-main"
         >
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    onClick={closeCollapse}
-                >
+            <Container fluid>
+                {/* Botón para alternar el colapso del menú */}
+                <button className="navbar-toggler" type="button" onClick={toggleCollapse}>
                     <span className="navbar-toggler-icon" />
                 </button>
                 {/* Brand */}
                 {logo ? (
                     <NavbarBrand className="pt-0" {...navbarBrandProps}>
-                        <img
-                            alt={logo.imgAlt}
-                            className="navbar-brand-img"
-                            src={logo.imgSrc}
-                        />
+                        <img alt={logo.imgAlt} className="navbar-brand-img" src={logo.imgSrc} />
                     </NavbarBrand>
                 ) : null}
-                <Nav navbar>{createLinks(routes)}</Nav>
-           
+                {/* Usuario (se muestra en dispositivos móviles) */}
+                <Nav className="align-items-center d-md-none">
+                    <UncontrolledDropdown nav>
+                        <DropdownToggle nav className="nav-link-icon">
+                            <i className="ni ni-bell-55" />
+                        </DropdownToggle>
+                        <DropdownMenu
+                            aria-labelledby="navbar-default_dropdown_1"
+                            className="dropdown-menu-arrow"
+                            right
+                        >
+                            <DropdownItem>Action</DropdownItem>
+                            <DropdownItem>Another action</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem>Something else here</DropdownItem>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <UncontrolledDropdown nav>
+                        <DropdownToggle nav>
+                            <Media className="align-items-center">
+                                <span className="avatar avatar-sm rounded-circle">
+                                    <img
+                                        alt="..."
+                                        src={require("../../assets/img/theme/team-1-800x800.jpg")}
+                                    />
+                                </span>
+                            </Media>
+                        </DropdownToggle>
+                        <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem className="noti-title" header tag="div">
+                                <h6 className="text-overflow m-0">Welcome!</h6>
+                            </DropdownItem>
+                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                                <i className="ni ni-single-02" />
+                                <span>My profile</span>
+                            </DropdownItem>
+                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                                <i className="ni ni-settings-gear-65" />
+                                <span>Settings</span>
+                            </DropdownItem>
+                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                                <i className="ni ni-calendar-grid-58" />
+                                <span>Activity</span>
+                            </DropdownItem>
+                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                                <i className="ni ni-support-16" />
+                                <span>Support</span>
+                            </DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                                <i className="ni ni-user-run" />
+                                <span>Logout</span>
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </Nav>
+                {/* Colapso del menú */}
+                <Collapse navbar isOpen={collapseOpen}>
+                    {/* Encabezado del colapso */}
+                    <div className="navbar-collapse-header d-md-none">
+                        <Row>
+                            {logo ? (
+                                <Col className="collapse-brand" xs="6">
+                                    {logo.innerLink ? (
+                                        <Link to={logo.innerLink}>
+                                            <img alt={logo.imgAlt} src={logo.imgSrc} />
+                                        </Link>
+                                    ) : (
+                                        <a href={logo.outterLink}>
+                                            <img alt={logo.imgAlt} src={logo.imgSrc} />
+                                        </a>
+                                    )}
+                                </Col>
+                            ) : null}
+                            <Col className="collapse-close" xs="6">
+                                <button
+                                    className="navbar-toggler"
+                                    type="button"
+                                    onClick={toggleCollapse}
+                                >
+                                    <span />
+                                    <span />
+                                </button>
+                            </Col>
+                        </Row>
+                    </div>
+
+                    {/* Navegación */}
+                    <Nav navbar>{createLinks(routes)}</Nav>
+                    {/* Divider */}
+                    <hr className="my-3" />
+                    {/* Encabezado */}
+                    <h6 className="navbar-heading text-muted">Documentation</h6>
+                    {/* Enlaces de documentación */}
+                    <Nav className="mb-md-3" navbar>
+                        <NavItem>
+                            <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
+                                <i className="ni ni-spaceship" />
+                                Getting started
+                            </NavLink>
+                        </NavItem>
+                    </Nav>
+                </Collapse>
+            </Container>
         </Navbar>
     );
 };
 
-// Definición de los tipos de las propiedades esperadas por Sidebar
+// Propiedades esperadas por el componente Sidebar
 Sidebar.propTypes = {
-    routes: PropTypes.arrayOf(PropTypes.object), // Array de objetos de ruta
-    logo: PropTypes.shape({ // Objeto de forma específica para logo
-        innerLink: PropTypes.string, // Enlace interno
-        outterLink: PropTypes.string, // Enlace externo
-        imgSrc: PropTypes.string.isRequired, // Fuente de imagen requerida
-        imgAlt: PropTypes.string.isRequired, // Texto alternativo de imagen requerido
+    routes: PropTypes.arrayOf(PropTypes.object),
+    logo: PropTypes.shape({
+        innerLink: PropTypes.string,
+        outterLink: PropTypes.string,
+        imgSrc: PropTypes.string.isRequired,
+        imgAlt: PropTypes.string.isRequired,
     }),
 };
 
-export default Sidebar; // Exporta el componente Sidebar por defecto
+export default Sidebar;
