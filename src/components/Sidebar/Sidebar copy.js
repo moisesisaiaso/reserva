@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom"; // Importa NavLink como NavLinkRRD y Link desde react-router-dom
-import { PropTypes } from "prop-types"; // Importa PropTypes desde prop-types
+import { NavLink as NavLinkRRD, Link } from "react-router-dom";
+import { PropTypes } from "prop-types";
 import {
-    // Importa los siguientes componentes desde reactstrap
     Button,
     Card,
     CardHeader,
@@ -33,10 +32,8 @@ import {
 } from "reactstrap";
 
 const Sidebar = (props) => {
-    // Define un estado local para manejar el estado de la expansión de los elementos del menú
     const [collapseStates, setCollapseStates] = useState({});
 
-    // Función para alternar el estado de expansión de un elemento del menú
     const toggleCollapse = (key) => {
         setCollapseStates((prevState) => ({
             ...prevState,
@@ -44,19 +41,16 @@ const Sidebar = (props) => {
         }));
     };
 
-    // Función para cerrar todos los elementos colapsados del menú
     const closeCollapse = () => {
         setCollapseStates({});
     };
 
-    // Desestructura las propiedades recibidas
     const { routes, logo } = props;
 
-    // Función para crear los elementos del menú basados en las rutas proporcionadas
     const createLinks = (routes) => {
         return routes.map((route, key) => {
-            if (route.subRoutes) { // Si la ruta tiene subrutas
-                const isOpen = collapseStates[key]; // Verifica si el elemento está expandido
+            if (route.subRoutes) {
+                const isOpen = collapseStates[key];
                 return (
                     <li key={key} className="nav-item">
                         <a
@@ -86,7 +80,7 @@ const Sidebar = (props) => {
                         </div>
                     </li>
                 );
-            } else { // Si la ruta no tiene subrutas
+            } else {
                 return (
                     <NavItem key={key}>
                         <NavLink
@@ -103,7 +97,6 @@ const Sidebar = (props) => {
         });
     };
 
-    // Configura las propiedades de NavbarBrand basadas en el logo proporcionado
     let navbarBrandProps;
     if (logo && logo.innerLink) {
         navbarBrandProps = {
@@ -117,14 +110,13 @@ const Sidebar = (props) => {
         };
     }
 
-    // Devuelve el componente Sidebar con el contenido generado dinámicamente
     return (
         <Navbar
             className="navbar-vertical fixed-left navbar-light bg-white"
             expand="md"
             id="sidenav-main"
         >
-           
+            <Container fluid className="p-0">
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -133,7 +125,7 @@ const Sidebar = (props) => {
                     <span className="navbar-toggler-icon" />
                 </button>
                 {logo ? (
-                    <NavbarBrand className="pt-0" {...navbarBrandProps}>
+                    <NavbarBrand {...navbarBrandProps}>
                         <img
                             alt={logo.imgAlt}
                             className="navbar-brand-img"
@@ -142,20 +134,19 @@ const Sidebar = (props) => {
                     </NavbarBrand>
                 ) : null}
                 <Nav navbar>{createLinks(routes)}</Nav>
-           
+            </Container>
         </Navbar>
     );
 };
 
-// Definición de los tipos de las propiedades esperadas por Sidebar
 Sidebar.propTypes = {
-    routes: PropTypes.arrayOf(PropTypes.object), // Array de objetos de ruta
-    logo: PropTypes.shape({ // Objeto de forma específica para logo
-        innerLink: PropTypes.string, // Enlace interno
-        outterLink: PropTypes.string, // Enlace externo
-        imgSrc: PropTypes.string.isRequired, // Fuente de imagen requerida
-        imgAlt: PropTypes.string.isRequired, // Texto alternativo de imagen requerido
+    routes: PropTypes.arrayOf(PropTypes.object),
+    logo: PropTypes.shape({
+        innerLink: PropTypes.string,
+        outterLink: PropTypes.string,
+        imgSrc: PropTypes.string.isRequired,
+        imgAlt: PropTypes.string.isRequired,
     }),
 };
 
-export default Sidebar; // Exporta el componente Sidebar por defecto
+export default Sidebar;
