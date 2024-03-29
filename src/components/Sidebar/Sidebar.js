@@ -124,7 +124,6 @@ const Sidebar = (props) => {
             expand="md"
             id="sidenav-main"
         >
-           
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -132,6 +131,7 @@ const Sidebar = (props) => {
                 >
                     <span className="navbar-toggler-icon" />
                 </button>
+                {/* Brand */}
                 {logo ? (
                     <NavbarBrand className="pt-0" {...navbarBrandProps}>
                         <img

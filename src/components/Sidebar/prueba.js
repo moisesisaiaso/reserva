@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-import { PropTypes } from "prop-types";
+import { NavLink as NavLinkRRD, Link } from "react-router-dom"; // Importa NavLink como NavLinkRRD y Link desde react-router-dom
+import { PropTypes } from "prop-types"; // Importa PropTypes desde prop-types
 import {
+    // Importa los siguientes componentes desde reactstrap
     Button,
     Card,
     CardHeader,
@@ -30,6 +31,7 @@ import {
     Row,
     Col,
 } from "reactstrap";
+
 
 const Sidebar = (props) => {
     const [collapseStates, setCollapseStates] = useState({});
@@ -116,25 +118,25 @@ const Sidebar = (props) => {
             expand="md"
             id="sidenav-main"
         >
-            <Container fluid className="p-0">
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    onClick={closeCollapse}
-                >
-                    <span className="navbar-toggler-icon" />
-                </button>
-                {logo ? (
-                    <NavbarBrand {...navbarBrandProps}>
-                        <img
-                            alt={logo.imgAlt}
-                            className="navbar-brand-img"
-                            src={logo.imgSrc}
-                        />
-                    </NavbarBrand>
-                ) : null}
+            <NavbarBrand className="pt-0" {...navbarBrandProps}>
+                {logo && (
+                    <img
+                        alt={logo.imgAlt}
+                        className="navbar-brand-img"
+                        src={logo.imgSrc}
+                    />
+                )}
+            </NavbarBrand>
+            <Button
+                className="navbar-toggler"
+                type="button"
+                onClick={closeCollapse}
+            >
+                <span className="navbar-toggler-icon" />
+            </Button>
+            <Collapse isOpen={collapseStates} navbar>
                 <Nav navbar>{createLinks(routes)}</Nav>
-            </Container>
+            </Collapse>
         </Navbar>
     );
 };
