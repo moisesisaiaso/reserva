@@ -86,22 +86,21 @@ const Sidebar = (props) => {
                                 />
                             </div>
                         </a>
-                        <Collapse isOpen={isOpen}>
+                        <div className={`collapse ${isOpen ? 'show' : ''}`}>
                             <ul className="nav-sm flex-column nav">
                                 {route.subRoutes.map((subRoute, subKey) => (
                                     <li key={subKey} className="nav-item">
-                                        <NavLink
+                                        <a
                                             className="nav-link"
-                                            to={subRoute.layout + subRoute.path}
-                                            activeClassName="active"
+                                            href={subRoute.layout + subRoute.path}
                                         >
                                             <span className="sidenav-mini-icon">{subRoute.miniIcon}</span>
                                             <span className="sidenav-normal">{subRoute.name}</span>
-                                        </NavLink>
+                                        </a>
                                     </li>
                                 ))}
                             </ul>
-                        </Collapse>
+                        </div>
                     </li>
                 );
             } else {
@@ -141,6 +140,7 @@ const Sidebar = (props) => {
             className="navbar-vertical fixed-left navbar-light bg-white"
             expand="md"
             id="sidenav-main"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
             <Container fluid>
                 {/* Botón para alternar el colapso del menú */}
