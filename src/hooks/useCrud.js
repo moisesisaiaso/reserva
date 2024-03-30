@@ -1,17 +1,16 @@
-import apiClient from "apiClient";
+import axiosInstance from "api/axiosInstance";
 import { useState } from "react";
-
-import apiClient from "./ervices/apiClient";
 
 export const useCrud = () => {
     const [apiData, setApiData] = useState();
 
     /* Read */
     const getApi = (path) => {
-        apiClient
+        axiosInstance
             .get(path)
             .then(({ data }) => {
                 setApiData(data);
+                console.log(data);
                 console.log("datos recibidos");
             })
             .catch((error) => console.log(error));
@@ -19,7 +18,7 @@ export const useCrud = () => {
 
     /* Create */
     const postApi = (path, data) => {
-        apiClient
+        axiosInstance
             .post(path, data)
             .then(({ data }) => {
                 setApiData([data, ...apiData]);
@@ -30,7 +29,7 @@ export const useCrud = () => {
 
     /* DELETE */
     const deleteApi = (path, id) => {
-        apiClient
+        axiosInstance
             .delete(`${path}/${id}`)
             .then(() => {
                 const newData = apiData.filter((element) => element.id !== id);
@@ -42,7 +41,7 @@ export const useCrud = () => {
 
     /* UPDATE */
     const updateApi = (path, id, data) => {
-        apiClient
+        axiosInstance
             .patch(`${path}/${id}`, data)
             .then(({ data }) => {
                 const newData = apiData.map((element) => {

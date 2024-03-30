@@ -1,4 +1,5 @@
 import React from "react";
+import myStyles from "../assets/css/myStyles.module.css";
 import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -63,7 +64,7 @@ const Admin = (props) => {
                 </Routes>
 
                 {/* FOOTER */}
-                <Container fluid>
+                <Container fluid className={myStyles.footerContainer}>
                     <AdminFooter />
                 </Container>
             </div>

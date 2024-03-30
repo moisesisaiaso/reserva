@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import myStyles from "../../assets/css/myStyles.module.css";
 // reactstrap components
 import {
     DropdownMenu,
@@ -16,8 +17,10 @@ import {
     Container,
     Media,
 } from "reactstrap";
+import routes from "routes";
 
 const AdminNavbar = (props) => {
+    const location = useLocation();
     const user = localStorage.getItem("user");
     const { name, lastname } = JSON.parse(user);
 
@@ -27,28 +30,67 @@ const AdminNavbar = (props) => {
         window.location.href = "/login";
     };
 
+    const currentRoute = location.pathname.replace("/", "");
+    const routesArray = currentRoute.split("/");
+    console.log(routesArray);
+
+    const navbarDark = location.pathname === "/admin/home" ? "navbar-dark" : "";
+
     return (
         <>
-            <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+            <Navbar
+                className={`navbar-top ${navbarDark} ${
+                    location.pathname !== "/admin/home" && myStyles.navbarContainer
+                }`}
+                expand="md"
+                id="navbar-main"
+            >
                 <Container fluid>
-                    <Link
-                        className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                        to="/"
-                    >
-                        {props.brandText}
-                    </Link>
-                    <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-                        <FormGroup className="mb-0">
-                            <InputGroup className="input-group-alternative">
-                                <InputGroupAddon addonType="prepend">
-                                    <InputGroupText>
-                                        <i className="fas fa-search" />
-                                    </InputGroupText>
-                                </InputGroupAddon>
-                                <Input placeholder="Search" type="text" />
-                            </InputGroup>
-                        </FormGroup>
-                    </Form>
+                    {location.pathname === "/admin/home" ? (
+                        <>
+                            <Link
+                                className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+                                to="/"
+                            >
+                                {props.brandText}
+                            </Link>
+                            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                                <FormGroup className="mb-0">
+                                    <InputGroup className="input-group-alternative">
+                                        <InputGroupAddon addonType="prepend">
+                                            <InputGroupText>
+                                                <i className="fas fa-search" />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                        <Input placeholder="Search" type="text" />
+                                    </InputGroup>
+                                </FormGroup>
+                            </Form>
+                        </>
+                    ) : (
+                        <ul className={myStyles.routeLink}>
+                            {routesArray.map((route, i) => {
+                                if (i === 0) {
+                                    return (
+                                        <li key={i}>
+                                            <NavLink to="/admin/home">Home</NavLink>
+                                        </li>
+                                    );
+                                } else {
+                                    return (
+                                        <li key={i}>
+                                            <NavLink
+                                                to={`/admin/${route}`}
+                                                activeStyle={{ color: "red" }}
+                                            >
+                                                / {route}
+                                            </NavLink>
+                                        </li>
+                                    );
+                                }
+                            })}
+                        </ul>
+                    )}
                     <Nav className="align-items-center d-none d-md-flex" navbar>
                         <UncontrolledDropdown nav>
                             <DropdownToggle className="pr-0" nav>

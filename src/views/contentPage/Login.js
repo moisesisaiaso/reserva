@@ -31,8 +31,7 @@ const Login = () => {
         });
 
         setTimeout(() => {
-            window.location.href = "/admin/index";
-            /* navigate("/admin/index"); */
+            window.location.href = "/admin/home";
         }, 2000);
     };
 
