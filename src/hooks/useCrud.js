@@ -9,8 +9,8 @@ export const useCrud = () => {
         axiosInstance
             .get(path)
             .then(({ data }) => {
-                setApiData(data);
-                console.log(data);
+                setApiData(data.data);
+                console.log(data.data);
                 console.log("datos recibidos");
             })
             .catch((error) => console.log(error));
@@ -20,7 +20,7 @@ export const useCrud = () => {
     const postApi = (path, data) => {
         axiosInstance
             .post(path, data)
-            .then(({ data }) => {
+            .then(() => {
                 setApiData([data, ...apiData]);
                 console.log("Data enviada");
             })
@@ -34,6 +34,7 @@ export const useCrud = () => {
             .then(() => {
                 const newData = apiData.filter((element) => element.id !== id);
                 setApiData(newData);
+                console.log("datos nuevos: " + newData);
                 console.log("Se ha eliminado un registro");
             })
             .catch((error) => console.log(error));
@@ -43,7 +44,7 @@ export const useCrud = () => {
     const updateApi = (path, id, data) => {
         axiosInstance
             .patch(`${path}/${id}`, data)
-            .then(({ data }) => {
+            .then(() => {
                 const newData = apiData.map((element) => {
                     if (element.id === id) {
                         return data;

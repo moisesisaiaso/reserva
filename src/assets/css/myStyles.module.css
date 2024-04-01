@@ -1,4 +1,10 @@
 /** AUTH LOGIN  */
+
+.brandAuth {
+    display: block;
+    height: 5rem !important;
+    width: 10rem;
+}
 .authLoding {
     width: 100%;
     height: 100%;
@@ -87,6 +93,9 @@
 }
 .tableSpacing {
     margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .inputSearch {
@@ -114,16 +123,16 @@
     align-items: center;
     width: 7rem;
     height: 2.2rem;
-    border: 1px solid white;
     border-radius: 5px;
-    background-color: #e4701e;
-    color: white;
-}
-
-.btnReserva:active {
     background-color: transparent;
     color: black !important;
     border: 1px solid rgb(186, 185, 185);
+}
+
+.btnReserva:active {
+    background-color: #e4701e;
+    color: white;
+    border: 1px solid white;
 }
 
 .btnReserva:hover {
@@ -136,4 +145,30 @@
 
 .btnDelete:hover {
     color: #a40e27 !important;
+}
+
+.cardTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardList {
+    all: unset;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.cardList li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+
+.cardButton {
+    width: 100%;
 }

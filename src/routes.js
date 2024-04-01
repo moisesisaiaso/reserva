@@ -1,10 +1,11 @@
 import Index from "views/Index.js";
 import Profile from "views/contentPage/Profile.js";
-import Reserva from "views/contentPage/Reserva";
 import Register from "views/contentPage/Register.js";
 import Login from "views/contentPage/Login.js";
 import Tables from "views/contentPage/Tables.js";
-import Client from "views/contentPage/Client";
+import Client from "views/contentPage/clientesPages/Client";
+import Reserva from "views/contentPage/reservasPages/Reserva";
+import { Mesa } from "views/contentPage/mesasPages/Mesa";
 
 let routes = [
     {
@@ -24,8 +25,15 @@ let routes = [
     {
         path: "/reservas",
         name: "Reservas",
-        icon: "ni ni-pin-3 text-orange",
+        icon: "ni ni-tie-bow text-orange",
         component: <Reserva />,
+        layout: "/admin",
+    },
+    {
+        path: "/mesas",
+        name: "Mesas",
+        icon: "ni ni-support-16 text-pink",
+        component: <Mesa />,
         layout: "/admin",
     },
     {

@@ -1,23 +1,10 @@
-import { useState } from "react";
-import myStyles from "../../assets/css/myStyles.module.css";
-// reactstrap components
-import {
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-    FormGroup,
-    Form,
-    Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
-    Modal,
-    Row,
-    Col,
-} from "reactstrap";
+import myStyles from "../../../../../assets/css/myStyles.module.css";
 
-export const TableComponent = ({ client, deleteClient }) => {
+import { useState } from "react";
+// reactstrap components
+import { Button, Modal } from "reactstrap";
+
+export const TableComponent = ({ client, deleteClient, lengthId }) => {
     const { id, name, lastname, email, cellphone } = client;
 
     const [stateModal, setStateModal] = useState(false);
@@ -34,7 +21,7 @@ export const TableComponent = ({ client, deleteClient }) => {
     return (
         <>
             <tr>
-                <th scope="row">{id}</th>
+                <th scope="row">{lengthId + 1}</th>
                 <td>
                     {name} {lastname}
                 </td>

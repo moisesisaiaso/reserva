@@ -32,6 +32,7 @@ const AdminNavbar = (props) => {
 
     const currentRoute = location.pathname.replace("/", "");
     const routesArray = currentRoute.split("/");
+    routesArray.shift();
     console.log(routesArray);
 
     const navbarDark = location.pathname === "/admin/home" ? "navbar-dark" : "";
@@ -69,18 +70,26 @@ const AdminNavbar = (props) => {
                         </>
                     ) : (
                         <ul className={myStyles.routeLink}>
+                             <li>
+                                    <NavLink to="/admin/home">Home</NavLink>
+                            </li>
                             {routesArray.map((route, i) => {
                                 if (i === 0) {
                                     return (
                                         <li key={i}>
-                                            <NavLink to="/admin/home">Home</NavLink>
+                                            <NavLink
+                                                to={`/admin/${route}`}
+                                                activeStyle={{ color: "red" }}
+                                            >
+                                                / {route}
+                                            </NavLink>
                                         </li>
                                     );
                                 } else {
                                     return (
                                         <li key={i}>
                                             <NavLink
-                                                to={`/admin/${route}`}
+                                                to={location.pathname}
                                                 activeStyle={{ color: "red" }}
                                             >
                                                 / {route}

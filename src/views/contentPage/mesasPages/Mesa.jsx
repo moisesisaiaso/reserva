@@ -1,11 +1,7 @@
-import { useState } from "react";
-import myStyles from "../../assets/css/myStyles.module.css";
-
+import myStyles from "../../../assets/css/myStyles.module.css";
 // reactstrap components
-import { Card, CardHeader, CardBody, Container, Row, Col, UncontrolledTooltip } from "reactstrap";
-
-const Reserva = () => {
-    const [copiedText, setCopiedText] = useState();
+import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
+export const Mesa = () => {
     return (
         <>
             {/* Page content */}
@@ -31,5 +27,3 @@ const Reserva = () => {
         </>
     );
 };
-
-export default Reserva;

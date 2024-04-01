@@ -9,6 +9,7 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import { FormClient } from "../views/contentPage/clientesPages/FormClient";
 
 const Admin = (props) => {
     const mainContent = React.useRef(null);
@@ -60,7 +61,8 @@ const Admin = (props) => {
                 {/* CONTENT */}
                 <Routes>
                     {getRoutes(routes)}
-                    <Route path="*" element={<Navigate to="/admin/index" replace />} />
+                    <Route path="/clients/create" element={<FormClient />} exact/>
+                    <Route path="*" element={<Navigate to="/admin/home" replace />} />
                 </Routes>
 
                 {/* FOOTER */}
