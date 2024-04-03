@@ -1,4 +1,4 @@
-import myStyles from "../../../../../assets/css/myStyles.module.css";
+import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import { Button } from "reactstrap";
 import { useState } from "react";
@@ -19,10 +19,9 @@ export const OptionBtn = ({ setIsTable }) => {
         }
     };
 
-
-    const handleBtnCreate = ()=> {
+    const handleBtnCreate = () => {
         window.location.href = "/admin/clients/create";
-    }
+    };
 
     return (
         <>

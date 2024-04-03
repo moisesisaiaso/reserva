@@ -1,4 +1,4 @@
-import myStyles from "../../../../../assets/css/myStyles.module.css";
+import myStyles from "../../../../assets/css/myStyles.module.css";
 import { Button, Card, CardBody, CardHeader, CardText, CardTitle } from "reactstrap";
 
 export const CardClient = ({ client }) => {

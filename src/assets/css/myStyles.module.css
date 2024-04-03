@@ -98,23 +98,65 @@
     gap: 1rem;
 }
 
+/*? filter input  */
+
+.inputFilters {
+    display: flex;
+    column-gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.inputFilters form {
+    width: 100%;
+    flex-basis: 32%;
+    flex-grow: 1;
+}
+
+.inputContainer {
+    display: block;
+    width: 100% !important;
+}
+
+.inputFilters form button {
+    all: unset;
+    cursor: pointer;
+}
+
 .inputSearch {
     border: 1px solid rgb(186, 185, 185);
+    border-radius: 5px;
+    height: 3rem;
+    max-width: 100%;
+    padding-left: 0.9rem;
 }
+
+.input {
+    all: unset;
+    width: 88%;
+    height: 100%;
+}
+.input:focus {
+    all: unset;
+    width: 88%;
+    height: 100%;
+}
+
+/*? table */
 
 .actions {
     display: flex;
     justify-content: space-between;
+    column-gap: 0.7rem;
     align-items: center;
-}
-
-.actions a {
-    font-size: 0.8rem;
 }
 
 .actions div {
     display: flex;
     column-gap: 0.7rem;
+}
+
+.actions div a {
+    cursor: pointer;
 }
 
 .btnReserva {
@@ -127,6 +169,13 @@
     background-color: transparent;
     color: black !important;
     border: 1px solid rgb(186, 185, 185);
+}
+
+.btnEdit {
+    color: #e4701e;
+}
+.btnEdit:hover {
+    color: #e4701e;
 }
 
 .btnReserva:active {

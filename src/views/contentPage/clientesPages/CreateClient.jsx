@@ -1,7 +1,17 @@
+import { useParams } from "react-router-dom";
 import myStyles from "../../../assets/css/myStyles.module.css";
+import { FormCreateEdit } from "./extraComponents/FormCreateEdit";
 // reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-export const FormClient = () => {
+export const CreateClient = () => {
+    const { id } = useParams();
+
+    console.log(id);
+    let textClient = "Crear";
+    if (id) {
+        textClient = "Editar";
+    }
+
     return (
         <>
             {/* Page content */}
@@ -10,15 +20,10 @@ export const FormClient = () => {
                     <div className="col">
                         <Card className="shadow">
                             <CardHeader>
-                                <h1>Administración de Clientes</h1>
+                                <h1>{textClient} Cliente</h1>
                             </CardHeader>
                             <CardBody>
-                                <h2>Lista de clientes (clientes)</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-                                    ut rerum autem ad, animi neque quasi et quisquam illum debitis
-                                    odit voluptas ipsa assumenda cum. Porro ad eius commodi autem.
-                                </p>
+                                <FormCreateEdit id={id} />
                             </CardBody>
                         </Card>
                     </div>

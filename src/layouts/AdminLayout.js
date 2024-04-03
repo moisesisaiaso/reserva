@@ -9,7 +9,8 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
-import { FormClient } from "../views/contentPage/clientesPages/FormClient";
+import { routesSideBar } from "routesSideBar";
+
 
 const Admin = (props) => {
     const mainContent = React.useRef(null);
@@ -46,7 +47,7 @@ const Admin = (props) => {
             {/* barra lateral */}
             <Sidebar
                 {...props}
-                routes={routes}
+                routes={routesSideBar}
                 logo={{
                     innerLink: "/admin/index",
                     imgSrc: require("../assets/img/brand/logo1.png"),
@@ -61,7 +62,6 @@ const Admin = (props) => {
                 {/* CONTENT */}
                 <Routes>
                     {getRoutes(routes)}
-                    <Route path="/clients/create" element={<FormClient />} exact/>
                     <Route path="*" element={<Navigate to="/admin/home" replace />} />
                 </Routes>
 

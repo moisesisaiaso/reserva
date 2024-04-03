@@ -16,11 +16,25 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
+    /* Read */
+    const getOneApi = (path, id) => {
+        axiosInstance
+            .post(`${path}/${id}`)
+            .then(({ data }) => {
+                setApiData(data.data);
+                console.log(data.data);
+                console.log("dato recibido");
+            })
+            .catch((error) => console.log(error));
+    };
+
     /* Create */
     const postApi = (path, data) => {
+        console.log(data);
         axiosInstance
             .post(path, data)
             .then(() => {
+                console.log("apiData: " + apiData);
                 setApiData([data, ...apiData]);
                 console.log("Data enviada");
             })
@@ -57,5 +71,5 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
-    return [apiData, getApi, postApi, deleteApi, updateApi];
+    return [apiData, getApi, getOneApi, postApi, deleteApi, updateApi];
 };

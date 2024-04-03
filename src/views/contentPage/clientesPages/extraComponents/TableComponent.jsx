@@ -1,6 +1,7 @@
-import myStyles from "../../../../../assets/css/myStyles.module.css";
+import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
@@ -8,6 +9,17 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
     const { id, name, lastname, email, cellphone } = client;
 
     const [stateModal, setStateModal] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleDetail = () => {
+       
+        window.location.href = `/admin/clients/detail/${id}`;
+    };
+    const handleEdit = () => {
+      
+        window.location.href = `/admin/clients/create/${id}`;
+    };
 
     const toggleModal = () => {
         setStateModal(!stateModal);
@@ -33,7 +45,10 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
                     </a>
 
                     <div>
-                        <a href="#" className={myStyles.btnEdit}>
+                        <a onClick={handleDetail} className={myStyles.btnDetail}>
+                            <i class="fa-regular fa-eye fa-2x"></i>
+                        </a>
+                        <a onClick={handleEdit} className={myStyles.btnEdit}>
                             <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
 

@@ -6,14 +6,14 @@ import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table 
 import { useCrud } from "hooks/useCrud";
 
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
-import { CardClient } from "./extraComponents/client/CardClient";
-import { Filters } from "./extraComponents/client/Filters";
-import { OptionBtn } from "./extraComponents/client/OptionBtn";
-import { TableComponent } from "./extraComponents/client/TableComponent";
+import { CardClient } from "./extraComponents/CardClient";
+import { Filters } from "./extraComponents/Filters";
+import { OptionBtn } from "./extraComponents/OptionBtn";
+import { TableComponent } from "./extraComponents/TableComponent";
 
 const Client = () => {
     const [isTable, setIsTable] = useState(true);
-    const [clients, getClients, , deleteClient] = useCrud();
+    const [clients, getClients, , , deleteClient] = useCrud();
     const [clientList, setClientList] = useState();
 
     useEffect(() => {
@@ -21,7 +21,9 @@ const Client = () => {
     }, []);
 
     useEffect(() => {
-        setClientList(clients);
+        const sorteData = clients?.sort((a, b) => b.id - a.id);
+
+        setClientList(sorteData);
     }, [clients]);
 
     return (
@@ -48,7 +50,7 @@ const Client = () => {
 
                                 {/* filtros */}
                                 <section>
-                                    <Filters />
+                                    <Filters clients={clients} setClientList={setClientList} />
                                 </section>
 
                                 {/* tabla */}
