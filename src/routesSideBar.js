@@ -17,7 +17,7 @@ export let routesSideBar = [
                 layout: "/admin",
             },
             {
-                path: "/clients",
+                path: "/clients/create",
                 name: "Registro Clientes",
                 layout: "/admin",
             },
