@@ -8,16 +8,18 @@ import { Button, Modal } from "reactstrap";
 export const TableComponent = ({ client, deleteClient, lengthId }) => {
     const { id, name, lastname, email, cellphone } = client;
 
-    const [stateModal, setStateModal] = useState(false);
-
     const navigate = useNavigate();
 
+    const [stateModal, setStateModal] = useState(false);
+
+    const handleReserva = () => {
+        navigate(`/admin/reservas/create/${id}`, { state: "Crear" });
+    };
+
     const handleDetail = () => {
-       
         window.location.href = `/admin/clients/detail/${id}`;
     };
     const handleEdit = () => {
-      
         window.location.href = `/admin/clients/create/${id}`;
     };
 
@@ -40,7 +42,7 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
                 <td>{email} </td>
                 <td>{cellphone}</td>
                 <td className={myStyles.actions}>
-                    <a href="#" className={myStyles.btnReserva}>
+                    <a onClick={handleReserva} className={myStyles.btnReserva}>
                         Reservar
                     </a>
 

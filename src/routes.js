@@ -8,6 +8,7 @@ import Reserva from "views/contentPage/reservasPages/Reserva";
 import { Mesa } from "views/contentPage/mesasPages/Mesa";
 import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
 import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
+import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -35,6 +36,11 @@ let routes = [
     {
         path: "/reservas",
         component: <Reserva />,
+        layout: "/admin",
+    },
+    {
+        path: "/reservas/create/:id?",
+        component: <CreateReserva />,
         layout: "/admin",
     },
     {
