@@ -21,6 +21,7 @@ axiosInstance.interceptors.response.use(
                 const { data } = response;
                 const { accessToken, refreshToken, id, name, lastname, email, roles, cellphone } =
                     data;
+
                 // Si la respuesta es exitosa (estado 200), se actualizan los tokens de acceso y actualización en el almacenamiento local y en los encabezados predeterminados de axios.
                 // También se almacena la información del usuario en el almacenamiento local. Luego, se vuelve a intentar la solicitud original.
                 if (response.status === 200) {
@@ -35,6 +36,8 @@ axiosInstance.interceptors.response.use(
                         roles,
                         cellphone,
                     };
+
+                    console.log("usuario refresh", user);
                     localStorage.setItem("user", JSON.stringify(user));
 
                     return axiosInstance(error.config);

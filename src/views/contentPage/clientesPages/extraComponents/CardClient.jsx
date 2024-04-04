@@ -3,6 +3,11 @@ import { Button, Card, CardBody, CardHeader, CardText, CardTitle } from "reactst
 
 export const CardClient = ({ client }) => {
     const { id, name, lastname, email, cellphone, allergies } = client;
+
+    const handleDetail = () => {
+        window.location.href = `/admin/clients/detail/${id}`;
+    };
+
     return (
         <>
             <Card
@@ -32,7 +37,7 @@ export const CardClient = ({ client }) => {
                             </li>
                         </ul>
                     </CardText>
-                    <Button color="warning" className={myStyles.cardButton}>
+                    <Button color="warning" className={myStyles.cardButton} onClick={handleDetail}>
                         <i className="ni ni-single-02" /> Ir al detalle
                     </Button>
                 </CardBody>

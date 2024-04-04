@@ -5,19 +5,21 @@ import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({ client, deleteClient, lengthId }) => {
+export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, currentPage }) => {
     const { id, name, lastname, email, cellphone } = client;
-
-    const [stateModal, setStateModal] = useState(false);
 
     const navigate = useNavigate();
 
+    const [stateModal, setStateModal] = useState(false);
+
+    const handleReserva = () => {
+        navigate("/admin/reservas/create", { state: id });
+    };
+
     const handleDetail = () => {
-       
         window.location.href = `/admin/clients/detail/${id}`;
     };
     const handleEdit = () => {
-      
         window.location.href = `/admin/clients/create/${id}`;
     };
 
@@ -30,17 +32,21 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
         toggleModal();
     };
 
+    /* items clients */
+    const pageActual = currentPage - 1;
+    const groupPage = pageActual * itemsPerPage;
+
     return (
         <>
             <tr>
-                <th scope="row">{lengthId + 1}</th>
+                <th scope="row">{lengthId + 1 + groupPage}</th>
                 <td>
                     {name} {lastname}
                 </td>
                 <td>{email} </td>
                 <td>{cellphone}</td>
                 <td className={myStyles.actions}>
-                    <a href="#" className={myStyles.btnReserva}>
+                    <a onClick={handleReserva} className={myStyles.btnReserva}>
                         Reservar
                     </a>
 

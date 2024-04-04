@@ -1,5 +1,5 @@
 import axiosInstance from "api/axiosInstance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useCrud = () => {
     const [apiData, setApiData] = useState();
@@ -16,17 +16,15 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
-    /* Read */
-    const getOneApi = (path, id) => {
+    /*    const getOneApi = (path, id) => {
         axiosInstance
-            .post(`${path}/${id}`)
+            .get(`${path}/${id}`)
             .then(({ data }) => {
-                setApiData(data.data);
-                console.log(data.data);
-                console.log("dato recibido");
+                setApiData(data.client);
+                console.log("Dato recibido: ", data.client);
             })
             .catch((error) => console.log(error));
-    };
+    }; */
 
     /* Create */
     const postApi = (path, data) => {
@@ -57,7 +55,7 @@ export const useCrud = () => {
     /* UPDATE */
     const updateApi = (path, id, data) => {
         axiosInstance
-            .patch(`${path}/${id}`, data)
+            .put(`${path}/${id}`, data)
             .then(() => {
                 const newData = apiData.map((element) => {
                     if (element.id === id) {
@@ -71,5 +69,9 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
-    return [apiData, getApi, getOneApi, postApi, deleteApi, updateApi];
+    useEffect(() => {
+        console.log("un elemento:", apiData);
+    }, [apiData]);
+
+    return [apiData, getApi, postApi, deleteApi, updateApi];
 };
