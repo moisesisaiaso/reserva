@@ -10,6 +10,18 @@ export let routesSideBar = [
         name: "Clientes",
         icon: "ni ni-single-02 text-blue",
         layout: "/admin",
+        subRoutes: [
+            {
+                path: "/clients",
+                name: "Listado Clientes",
+                layout: "/admin",
+            },
+            {
+                path: "/clients",
+                name: "Registro Clientes",
+                layout: "/admin",
+            },
+        ],
     },
     {
         path: "/reservas",

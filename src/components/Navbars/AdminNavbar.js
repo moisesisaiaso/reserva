@@ -47,24 +47,59 @@ const AdminNavbar = (props) => {
                 id="navbar-main"
             >
                 <Container fluid>
-                    <Link
-                        className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                        to="/"
-                    >
-                        {props.brandText}
-                    </Link>
-                    <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-                        <FormGroup className="mb-0">
-                            <InputGroup className="input-group-alternative">
-                                <InputGroupAddon addonType="prepend">
-                                    <InputGroupText>
-                                        <i className="fas fa-search" />
-                                    </InputGroupText>
-                                </InputGroupAddon>
-                                <Input placeholder="Search" type="text" />
-                            </InputGroup>
-                        </FormGroup>
-                    </Form>
+                    {location.pathname === "/admin/home" ? (
+                        <>
+                            <Link
+                                className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+                                to="/"
+                            >
+                                {props.brandText}
+                            </Link>
+                            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                                <FormGroup className="mb-0">
+                                    <InputGroup className="input-group-alternative">
+                                        <InputGroupAddon addonType="prepend">
+                                            <InputGroupText>
+                                                <i className="fas fa-search" />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                        <Input placeholder="Search" type="text" />
+                                    </InputGroup>
+                                </FormGroup>
+                            </Form>
+                        </>
+                    ) : (
+                        <ul className={myStyles.routeLink}>
+                             <li>
+                                    <NavLink to="/admin/home">Home</NavLink>
+                            </li>
+                            {routesArray.map((route, i) => {
+                                if (i === 0) {
+                                    return (
+                                        <li key={i}>
+                                            <NavLink
+                                                to={`/admin/${route}`}
+                                                activeStyle={{ color: "red" }}
+                                            >
+                                                / {route}
+                                            </NavLink>
+                                        </li>
+                                    );
+                                } else {
+                                    return (
+                                        <li key={i}>
+                                            <NavLink
+                                                to={location.pathname}
+                                                activeStyle={{ color: "red" }}
+                                            >
+                                                / {route}
+                                            </NavLink>
+                                        </li>
+                                    );
+                                }
+                            })}
+                        </ul>
+                    )}
                     <Nav className="align-items-center d-none d-md-flex" navbar>
                         <UncontrolledDropdown nav>
                             <DropdownToggle className="pr-0" nav>
