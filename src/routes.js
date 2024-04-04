@@ -1,112 +1,63 @@
 import Index from "views/Index.js";
 import Profile from "views/contentPage/Profile.js";
-import Maps from "views/contentPage/Maps.js";
 import Register from "views/contentPage/Register.js";
 import Login from "views/contentPage/Login.js";
 import Tables from "views/contentPage/Tables.js";
-import Icons from "views/contentPage/Icons.js";
+import Client from "views/contentPage/clientesPages/Client";
+import Reserva from "views/contentPage/reservasPages/Reserva";
+import { Mesa } from "views/contentPage/mesasPages/Mesa";
+import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
+import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
 
 let routes = [
     {
-        path: "/index",
-        name: "Inicio",
-        icon: "ni ni-tv-2 text-primary",
+        path: "/home",
         component: <Index />,
         layout: "/admin",
     },
     {
-        path: "/clientes",
-        name: "Clientes",
-        icon: "ni ni-single-02 text-pink",
+        path: "/clients",
+        component: <Client />,
         layout: "/admin",
-        subRoutes: [
-            {
-                path: "/listado",
-                name: "Listado de Clientes",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/clientes",
-            },
-            {
-                path: "/registro",
-                name: "Registro de Clientes",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/clientes",
-            },
-        ],
+    },
+    {
+        path: "/clients/detail/:id",
+        component: <CustomerDetail />,
+        layout: "/admin",
+    },
+    {
+        path: "/clients/create/:id?",
+        component: <CreateClient />,
+        layout: "/admin",
     },
     {
         path: "/reservas",
-        name: "Reservas",
-        icon: "ni ni-calendar-grid-58 text-orange",
+        component: <Reserva />,
         layout: "/admin",
-        subRoutes: [
-            {
-                path: "/listado",
-                name: "Listado de Reservas",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/reservas",
-            },
-            {
-                path: "/mesas",
-                name: "Crear Reserva",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/reservas",
-            },
-        ],
     },
     {
         path: "/mesas",
-        name: "Mesas",
-        icon: "ni ni-align-left-2 text-default",
-        component: <Index />,
-        layout: "/admin",
-        subRoutes: [
-            {
-                path: "/listado",
-                name: "Listado de Mesas",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/reservas",
-            },
-            {
-                path: "/mesas",
-                name: "Asignar Mesas",
-                icon: "",
-                component: <Index />,
-                layout: "/admin/reservas",
-            },
-        ],
-    },
-    {
-        path: "/register",
-        name: "Usuarios",
-        icon: "ni ni-single-02 text-pink",
-        component: <Register />,
-        layout: "/auth",
-    },
-    {
-        path: "/maps",
-        name: "Calendario",
-        icon: "ni ni-calendar-grid-58 text-orange",
-        component: <Maps />,
+        component: <Mesa />,
         layout: "/admin",
     },
     {
-        path: "/icons",
-        name: "Graficas",
-        icon: "ni ni-chart-pie-35 text-blue",
-        component: <Icons />,
+        path: "/user-profile",
+        component: <Profile />,
+        layout: "/admin",
+    },
+    {
+        path: "/tables",
+        component: <Tables />,
         layout: "/admin",
     },
     {
         path: "/login",
-        name: "Configuración",
-        icon: "ni ni-settings text-yellow",
         component: <Login />,
+        layout: "/auth",
+    },
+    {
+        path: "/register",
+        component: <Register />,
         layout: "/auth",
     },
 ];
