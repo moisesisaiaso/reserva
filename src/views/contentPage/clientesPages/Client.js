@@ -15,16 +15,40 @@ const Client = () => {
     const [isTable, setIsTable] = useState(true);
     const [clients, getClients, , , deleteClient] = useCrud();
     const [clientList, setClientList] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         getClients("/intimar/client");
     }, []);
 
-    useEffect(() => {
-        const sorteData = clients?.sort((a, b) => b.id - a.id);
+    /* logica para la paginación */
+    // Inicializa la página actual y la cantidad de elementos por página
+    let itemsPerPage = 5;
 
-        setClientList(sorteData);
-    }, [clients]);
+    let pages = Math.ceil(
+        clients?.length / itemsPerPage
+    ); /* este dato es para utilizarlo en la paginación */
+
+    console.log("paginaActual: ", currentPage);
+
+    // Función para obtener los datos paginados
+    const getPaginatedData = (data, currentPage, itemsPerPage) => {
+        const totalPages = data?.length / itemsPerPage;
+        if (currentPage >= 1 && currentPage <= Math.ceil(totalPages)) {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            const sorteData = data?.sort((a, b) => b.id - a.id);
+
+            const cutArray = sorteData.slice(startIndex, endIndex);
+
+            setClientList(cutArray);
+        }
+    };
+
+    useEffect(() => {
+        getPaginatedData(clients, currentPage, itemsPerPage);
+    }, [clients, currentPage]);
 
     return (
         <>
@@ -85,7 +109,11 @@ const Client = () => {
                                 </section>
                                 {/* Paginación */}
                                 <section>
-                                    <PaginationComponent />
+                                    <PaginationComponent
+                                        currentPage={currentPage}
+                                        setCurrentPage={setCurrentPage}
+                                        pages={pages}
+                                    />
                                 </section>
                             </CardBody>
                         </Card>

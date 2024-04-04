@@ -1,3 +1,5 @@
+/* ESTE SOLO ES PARA EL SIDEBAR */
+
 export let routesSideBar = [
     {
         path: "/home",
@@ -32,7 +34,7 @@ export let routesSideBar = [
 
     {
         path: "/tables",
-        name: "Tables",
+        name: "Tables-Graficas",
         icon: "ni ni-bullet-list-67 text-red",
         layout: "/admin",
     },

@@ -9,6 +9,8 @@ import { Mesa } from "views/contentPage/mesasPages/Mesa";
 import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
 import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
 
+/* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
+
 let routes = [
     {
         path: "/home",

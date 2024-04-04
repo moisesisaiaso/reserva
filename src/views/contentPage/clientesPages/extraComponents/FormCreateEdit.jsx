@@ -184,6 +184,8 @@ export const FormCreateEdit = ({ id }) => {
                                 id="input-city"
                                 placeholder="Ingrese el teléfono"
                                 type="text"
+                                required
+                                pattern="[0-9]{1,9}"
                                 {...register("cellphone")}
                             />
                         </FormGroup>
