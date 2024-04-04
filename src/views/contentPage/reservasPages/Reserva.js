@@ -14,10 +14,10 @@ const Reserva = () => {
                     <div className="col">
                         <Card className="shadow">
                             <CardHeader>
-                                <h1>Administración de Clientes</h1>
+                                <h1>Administración de Reservas</h1>
                             </CardHeader>
                             <CardBody>
-                                <h2>Lista de clientes (clientes)</h2>
+                                <h2>Lista de reservas (clientes)</h2>
                                 <p>
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
                                     ut rerum autem ad, animi neque quasi et quisquam illum debitis

@@ -33,13 +33,13 @@ export const Filters = ({ clients, setClientList }) => {
         const regex = new RegExp(query, "i"); // 'i' para hacer la búsqueda insensible a mayúsculas/minúsculas
 
         // Filtrar por nombre, email o teléfono
-        const filteredUsers = clients.filter((client) => {
+        const filteredClients = clients.filter((client) => {
             return (
                 regex.test(client.name) || regex.test(client.email) || regex.test(client.cellphone)
             );
         });
 
-        setClientList(filteredUsers);
+        setClientList(filteredClients);
     }
 
     return (
