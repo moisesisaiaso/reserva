@@ -1,3 +1,5 @@
+import myStyles from "../../assets/css/myStyles.module.css";
+
 // reactstrap components
 import { NavbarBrand, Navbar, Container } from "reactstrap";
 
@@ -9,7 +11,8 @@ const AdminNavbar = () => {
                     <NavbarBrand>
                         <img
                             alt="..."
-                            src={require("../../assets/img/brand/argon-react-white.png")}
+                            src={require("../../assets/img/brand/logo1.png")}
+                            className={myStyles.brandAuth}
                         />
                     </NavbarBrand>
                 </Container>

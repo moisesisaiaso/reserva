@@ -16,7 +16,7 @@ root.render(
     <BrowserRouter>
         <Routes>
             <Route element={<ProtectedRoutes />}>
-                <Route path="/admin/*" element={<AdminLayout />} />
+                <Route path="/admin/*" element={<AdminLayout />} exact />
             </Route>
             {localStorage.getItem("access_token") === null ? (
                 <Route path="/login/*" element={<AuthLayout />} />
