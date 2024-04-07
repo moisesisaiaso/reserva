@@ -3,14 +3,20 @@
 export let routesSideBar = [
     {
         path: "/home",
-        name: "Dashboard",
+        name: "Inicio",
         icon: "ni ni-tv-2 text-primary",
+        layout: "/admin",
+    },
+    {
+        path: "/tables",
+        name: "Calendario",
+        icon: "ni ni-calendar-grid-58 text-red",
         layout: "/admin",
     },
     {
         path: "/clients",
         name: "Clientes",
-        icon: "ni ni-single-02 text-blue",
+        icon: "ni ni-single-02 text-orange",
         layout: "/admin",
         subRoutes: [
             {
@@ -20,7 +26,7 @@ export let routesSideBar = [
             },
             {
                 path: "/clients/create",
-                name: "Registro Clientes",
+                name: "Registrar Cliente",
                 layout: "/admin",
             },
         ],
@@ -28,38 +34,43 @@ export let routesSideBar = [
     {
         path: "/reservas",
         name: "Reservas",
-        icon: "ni ni-tie-bow text-orange",
+        icon: "ni ni-tie-bow text-yellow",
+        layout: "/admin",
+    },
+    {
+        path: "/mesas",
+        name: "Asignar mesas",
+        icon: "ni ni-support-16 text-info",
         layout: "/admin",
     },
     {
         path: "/mesas",
         name: "Mesas",
-        icon: "ni ni-support-16 text-pink",
-        layout: "/admin",
-    },
-    {
-        path: "/user-profile",
-        name: "User Profile",
-        icon: "ni ni-single-02 text-yellow",
-        layout: "/admin",
-    },
-
-    {
-        path: "/tables",
-        name: "Tables-Graficas",
-        icon: "ni ni-bullet-list-67 text-red",
+        icon: "ni ni-support-16 text-red",
         layout: "/admin",
     },
     {
         path: "/login",
-        name: "Login",
-        icon: "ni ni-key-25 text-info",
-        layout: "/auth",
+        name: "Graficas",
+        icon: "ni ni-chart-bar-32 text-orange",
+        layout: "/admin",
+    },
+    {
+        path: "/user-profile",
+        name: "Empleados",
+        icon: "ni ni-single-02 text-yellow",
+        layout: "/admin",
     },
     {
         path: "/register",
-        name: "Register",
-        icon: "ni ni-circle-08 text-pink",
+        name: "Ajustes",
+        icon: "ni ni-settings text-info",
         layout: "/auth",
     },
+    // {
+    //     path: "/tables",
+    //     name: "Tables-Graficas",
+    //     icon: "ni ni-bullet-list-67 text-red",
+    //     layout: "/admin",
+    // },
 ];
