@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({ client, deleteClient, lengthId }) => {
+export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, currentPage }) => {
     const { id, name, lastname, email, cellphone } = client;
 
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
     const [stateModal, setStateModal] = useState(false);
 
     const handleReserva = () => {
-        navigate(`/admin/reservas/create/${id}`, { state: "Crear" });
+        navigate("/admin/reservas/create", { state: id });
     };
 
     const handleDetail = () => {
@@ -32,10 +32,14 @@ export const TableComponent = ({ client, deleteClient, lengthId }) => {
         toggleModal();
     };
 
+    /* items clients */
+    const pageActual = currentPage - 1;
+    const groupPage = pageActual * itemsPerPage;
+
     return (
         <>
             <tr>
-                <th scope="row">{lengthId + 1}</th>
+                <th scope="row">{lengthId + 1 + groupPage}</th>
                 <td>
                     {name} {lastname}
                 </td>

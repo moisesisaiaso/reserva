@@ -10,6 +10,7 @@ import { CardClient } from "./extraComponents/CardClient";
 import { Filters } from "./extraComponents/Filters";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 import { TableComponent } from "./extraComponents/TableComponent";
+import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 
 const Client = () => {
     const [isTable, setIsTable] = useState(true);
@@ -31,23 +32,10 @@ const Client = () => {
 
     console.log("paginaActual: ", currentPage);
 
-    // Función para obtener los datos paginados
-    const getPaginatedData = (data, currentPage, itemsPerPage) => {
-        const totalPages = data?.length / itemsPerPage;
-        if (currentPage >= 1 && currentPage <= Math.ceil(totalPages)) {
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-
-            const sorteData = data?.sort((a, b) => b.id - a.id);
-
-            const cutArray = sorteData.slice(startIndex, endIndex);
-
-            setClientList(cutArray);
-        }
-    };
-
     useEffect(() => {
-        getPaginatedData(clients, currentPage, itemsPerPage);
+        // Función para obtener los datos paginados
+        const cutArray = getPaginatedData(clients, currentPage, itemsPerPage);
+        setClientList(cutArray);
     }, [clients, currentPage]);
 
     return (
@@ -97,6 +85,8 @@ const Client = () => {
                                                         client={client}
                                                         lengthId={i}
                                                         deleteClient={deleteClient}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
                                                     />
                                                 ))}
                                             </tbody>

@@ -225,3 +225,23 @@
 .cardButton {
     width: 100%;
 }
+
+.btnCheckedContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    column-gap: 0.5rem;
+}
+.btnChecked {
+    display: block;
+    height: 2rem;
+    width: 2rem !important;
+    border: 1px solid rgb(212, 211, 211);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnChecked:hover {
+    border: 1px solid rgb(212, 211, 211);
+}
