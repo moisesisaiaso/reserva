@@ -20,25 +20,22 @@ import { useEffect, useState } from "react";
 export const FormCreateEdit = ({ id }) => {
     const { handleSubmit, register, reset } = useForm();
 
-    const [client, getClients, getOneClient, createClient, , updateClient] = useCrud();
-
-    // const [showClient, setShowClient] = useState();
+    const [client, getClients, createClient, , updateClient] = useCrud();
 
     console.log(id);
-    const dataEdit = async () => {
-        if (id) {
-            await getOneClient("/intimar/client/findById", id);
-        }
-    };
 
     useEffect(() => {
-        dataEdit();
         getClients("/intimar/client");
     }, []);
 
     useEffect(() => {
-        if (id) {
-            const { name, lastname, age, email, cellphone, address, allergies } = client;
+        let parseId = parseInt(id);
+        if (id && client) {
+            let clientEdit = client?.filter((element) => element.id === parseId);
+
+            console.log(clientEdit);
+
+            const { name, lastname, age, email, cellphone, address, allergies } = clientEdit[0];
             reset({
                 name,
                 lastname,
@@ -58,6 +55,7 @@ export const FormCreateEdit = ({ id }) => {
 
         if (id) {
             updateClient("/intimar/client", id, data);
+            console.log("Editado");
         } else {
             createClient("/intimar/client", data);
         }
