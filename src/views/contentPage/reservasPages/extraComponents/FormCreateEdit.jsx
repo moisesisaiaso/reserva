@@ -114,7 +114,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
         if (collapseIsOpen) {
             data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-            data.file = currentFile;
         } else {
             delete data.anticipo;
         }
@@ -124,8 +123,28 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         /* cambiar a FORM DATA */
         const formData = new FormData();
 
+        // Primero, maneja el objeto anidado 'anticipo' si existe
+        if (data.anticipo) {
+            for (const key in data.anticipo) {
+                if (data.anticipo.hasOwnProperty(key)) {
+                    formData.append(
+                        `anticipo[${key}]`,
+                        data.anticipo[key]
+                    ); /* anticipo[${key}] mandar de esta forma los datos permite que se añadan los campos en el formato anidado del objeto anticipo */
+                }
+            }
+        }
+
+        // Luego, maneja todas las demás claves que no están anidadas
         for (const key in data) {
-            formData.append(key, data[key]);
+            if (data.hasOwnProperty(key) && key !== "anticipo") {
+                formData.append(key, data[key]);
+            }
+        }
+
+        // Finalmente, añade el archivo si existe
+        if (currentFile) {
+            formData.append("file", currentFile);
         }
 
         console.log(formData);
