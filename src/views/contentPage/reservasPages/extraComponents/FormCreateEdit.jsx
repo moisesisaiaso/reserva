@@ -231,7 +231,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             />
                         </FormGroup>
                     </Col>
-
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-first-name">
                             Cantidad de Adultos
