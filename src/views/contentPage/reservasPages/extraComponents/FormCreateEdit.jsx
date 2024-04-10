@@ -15,54 +15,70 @@ import {
     Card,
 } from "reactstrap";
 
+//todo: solo debo de crear la logica para que cuando el anticipo no sea requido por la cantidad de personas no se despliegue el formulario para el anticipo de lo contrario si es mayor o igual a 8 personas se debe desplegar, la logica para recibir solo los datos de la reserva cuando no exista el anticipo y cuando si exista recibir todo los datos ya existe esta logica pero hay que restringir el acceso para evitar que el administrador envie datos por error
+
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
+export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* Collapse Anticipo */
-    const [collapse, setCollapse] = useState(false);
-    const toggle = () => setCollapse(!collapse);
+    const [collapseIsOpen, setCollapseIsOpen] = useState(false);
+    const toggle = () => setCollapseIsOpen(!collapseIsOpen);
+
+    /*data input File */
+    const infoFile = useRef();
+    const [currentFile, setCurrentFile] = useState();
 
     const { handleSubmit, register, reset } = useForm();
     const [dataClient, setDataClient] = useState();
-   
+    const [clienteIdReserva, setClienteIdReserva] = useState();
 
     const [clients, getClients] = useCrud();
-    const [reservas,getReservas, createReserva, , updateReserva ] = useCrud();
+    const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
 
     console.log(parameterId);
 
     useEffect(() => {
         getClients("/intimar/client");
-        if(parameterId){
+        if (parameterId) {
             getReservas("/intimar/reserva");
         }
-    }, []); 
+    }, []);
 
+    let idClient = "";
     useEffect(() => {
         /* para obtener el cliente si existe su id */
-        if (reservarWithClientId || parameterId) {
-            const idClient = reservarWithClientId? reservarWithClientId : parameterId
+        if (reservarWithClientId) {
             /* obtengo el cliente por su id para crear o editar una reserva */
-            let parseId = parseInt(idClient);
-          if(clients){
-              let clientEdit = clients.filter((element) => element.id === parseId);
-              console.log(clientEdit);
-              setDataClient(clientEdit[0]);
-          }
-
-
+            idClient = parseInt(reservarWithClientId);
+            if (clients) {
+                let clientEdit = clients.filter((element) => element.id === idClient);
+                console.log(clientEdit);
+                setDataClient(clientEdit[0]);
+            }
         }
-        
-        if(parameterId && reservas) {
-            /* obtengo la reserva por su id (editar la reserva)*/
-            let parseId = parseInt(parameterId);
-            let reservaEdit = reservas.filter((element) => element.id === parseId)
-            
-            const { fecha_reserva, hora_reserva, cant_adultos, cant_ninos,anticipo_required,motivo_reserva,clienteId,userId,anticipo} = reservaEdit[0];
 
-            const { monto_anticipo, banco, moneda, estado_anticipo,} = anticipo;
+        if (parameterId && reservas) {
+            /* obtengo la reserva por su id (editar la reserva)*/
+            let idReserva = parseInt(parameterId);
+            let reservaEdit = reservas.filter((element) => element.id === idReserva);
+
+            const {
+                fecha_reserva,
+                hora_reserva,
+                cant_adultos,
+                cant_ninos,
+                anticipo_required,
+                motivo_reserva,
+                clienteId,
+                userId,
+                anticipo,
+            } = reservaEdit[0];
+
+            setClienteIdReserva(clienteId);
+
+            const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
 
             reset({
                 fecha_reserva,
@@ -80,8 +96,6 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
                     estado_anticipo,
                 },
             });
-
-           
         }
     }, [clients, reservas]);
 
@@ -97,37 +111,92 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
         data.userId = Number(id);
         data.cant_adultos = Number(data.cant_adultos);
         data.cant_ninos = Number(data.cant_ninos);
-        data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-        data.anticipo_required = collapse;
 
-        console.log(data);
+        if (collapseIsOpen) {
+            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
+        } else {
+            delete data.anticipo;
+        }
+
+        data.anticipo_required = collapseIsOpen;
+
+        /* cambiar a FORM DATA */
+        const formData = new FormData();
+
+        // Primero, maneja el objeto anidado 'anticipo' si existe
+        if (data.anticipo) {
+            for (const key in data.anticipo) {
+                if (data.anticipo.hasOwnProperty(key)) {
+                    formData.append(
+                        `anticipo[${key}]`,
+                        data.anticipo[key]
+                    ); /* anticipo[${key}] mandar de esta forma los datos permite que se añadan los campos en el formato anidado del objeto anticipo */
+                }
+            }
+        }
+
+        // Luego, maneja todas las demás claves que no están anidadas
+        for (const key in data) {
+            if (data.hasOwnProperty(key) && key !== "anticipo") {
+                formData.append(key, data[key]);
+            }
+        }
+
+        // Finalmente, añade el archivo si existe
+        if (currentFile) {
+            formData.append("file", currentFile);
+        }
+
+        console.log(formData);
 
         if (parameterId) {
             updateReserva("/intimar/client", parameterId, data);
             console.log("Editado");
-            
         } else {
             createReserva("/intimar/reserva", data);
         }
 
-        reset({
-            fecha_reserva: "",
-            hora_reserva: "",
-            cant_adultos: "",
-            cant_ninos: "",
-            anticipo_required: "",
-            motivo_reserva: "",
-            clienteId: "",
-            userId: "",
-            anticipo: {
-                monto_anticipo: "",
-                banco: "",
-                moneda: "",
-                estado_anticipo: "",
-            },
-        });
+        if (collapseIsOpen) {
+            reset({
+                fecha_reserva: "",
+                hora_reserva: "",
+                cant_adultos: "",
+                cant_ninos: "",
+                anticipo_required: "",
+                motivo_reserva: "",
+                clienteId: "",
+                userId: "",
+                anticipo: {
+                    monto_anticipo: "",
+                    banco: "",
+                    moneda: "",
+                    estado_anticipo: "",
+                },
+            });
+        } else {
+            reset({
+                fecha_reserva: "",
+                hora_reserva: "",
+                cant_adultos: "",
+                cant_ninos: "",
+                anticipo_required: "",
+                motivo_reserva: "",
+                clienteId: "",
+                userId: "",
+            });
+        }
 
         // window.location.href = "/admin/clients";
+    };
+
+    /* datos de lo que viene en el campo file */
+    const handleFileChange = () => {
+        const selectedFile = infoFile.current.files[0];
+        if (selectedFile) {
+            setCurrentFile(selectedFile);
+        } else {
+            setCurrentFile("No se ha seleccionado ningún archivo.");
+        }
     };
 
     console.log("typo de dato de id cliente: ", typeof reservarWithClientId);
@@ -154,7 +223,7 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option
-                                        value={reservarWithClientId? reservarWithClientId : parameterId }
+                                        value={reservarWithClientId ? idClient : clienteIdReserva}
                                         selected
                                     >{`${dataClient?.name} ${dataClient?.lastname}`}</option>
                                 ) : (
@@ -181,8 +250,6 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
                             />
                         </FormGroup>
                     </Col>
-                </Row>
-                <Row>
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-first-name">
                             Cantidad de Adultos
@@ -237,6 +304,35 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
                             />
                         </FormGroup>
                     </Col>
+                    <Col md="12">
+                        <label className="form-control-label">Subir Comprobante</label>
+                        <FormGroup
+                            className={
+                                myStyles.inputSearch +
+                                " " +
+                                myStyles.Inputgroup +
+                                " " +
+                                myStyles.inputFileGroup
+                            }
+                        >
+                            {currentFile ? (
+                                <p>
+                                    {currentFile.name} {currentFile.size} Kb
+                                </p>
+                            ) : (
+                                <p>No se ha seleccionado ningún archivo.</p>
+                            )}
+
+                            <input
+                                className={`form-control-alternative ${myStyles.inputFile}`}
+                                placeholder="Seleccione el archivo"
+                                type="file"
+                                {...register("file")}
+                                ref={infoFile}
+                                onChange={handleFileChange}
+                            />
+                        </FormGroup>
+                    </Col>
                 </Row>
             </div>
             <hr className="my-4" />
@@ -247,12 +343,12 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
             <div>
                 <div className={myStyles.btnCheckedContainer}>
                     <Button onClick={toggle} className={myStyles.btnChecked}>
-                        {collapse && <i class="fa-solid fa-check"></i>}
+                        {collapseIsOpen && <i class="fa-solid fa-check"></i>}
                     </Button>
                     <span>¿Anticipo Requerido?</span>
                 </div>
 
-                <Collapse isOpen={collapse}>
+                <Collapse isOpen={collapseIsOpen}>
                     {/* FORM */}
                     <div className="pl-lg-4">
                         <Row>
@@ -265,7 +361,6 @@ export const FormCreateEdit = ({ parameterId,reservarWithClientId }) => {
                                 >
                                     <input
                                         className={`form-control-alternative ${myStyles.input}`}
-                                        id=""
                                         placeholder="Ingrese la cantidad en números"
                                         type="number"
                                         {...register("anticipo.monto_anticipo")}
