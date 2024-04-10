@@ -1,27 +1,21 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import {
-    FormGroup,
-    Form,
-    Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
-    Col,
-    Row,
-    Button,
-    Collapse,
-    CardBody,
-    Card,
-} from "reactstrap";
+import { FormGroup, Col, Row, Button, Collapse } from "reactstrap";
 
 //todo: solo debo de crear la logica para que cuando el anticipo no sea requido por la cantidad de personas no se despliegue el formulario para el anticipo de lo contrario si es mayor o igual a 8 personas se debe desplegar, la logica para recibir solo los datos de la reserva cuando no exista el anticipo y cuando si exista recibir todo los datos ya existe esta logica pero hay que restringir el acceso para evitar que el administrador envie datos por error
 
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
+export const FormCreateEdit = ({
+    parameterId,
+    reservarWithClientId,
+    setParameterId,
+    setReservarWithClientId,
+}) => {
+    const navigate = useNavigate();
     /* Collapse Anticipo */
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
     const toggle = () => setCollapseIsOpen(!collapseIsOpen);
@@ -73,33 +67,50 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 motivo_reserva,
                 clienteId,
                 userId,
-                anticipo,
             } = reservaEdit[0];
 
             setClienteIdReserva(clienteId);
+            setCollapseIsOpen(anticipo_required);
 
-            const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
-
-            reset({
-                fecha_reserva,
-                hora_reserva,
-                cant_adultos,
-                cant_ninos,
-                anticipo_required,
-                motivo_reserva,
-                clienteId,
-                userId,
-                anticipo: {
-                    monto_anticipo,
-                    banco,
-                    moneda,
-                    estado_anticipo,
-                },
-            });
+            /* si al momento de editar una reserva la propiedad anticipo_required es true, me despliega el formulario para editar el anticipo y esta condición me permite rellenar los campos de la reserva a editar solo con los compos que corresponden a cuando la reserva es con anticipo o no */
+            if (collapseIsOpen) {
+                const { anticipo } = reservaEdit[0];
+                const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
+                reset({
+                    fecha_reserva,
+                    hora_reserva,
+                    cant_adultos,
+                    cant_ninos,
+                    anticipo_required,
+                    motivo_reserva,
+                    clienteId,
+                    userId,
+                    anticipo: {
+                        monto_anticipo,
+                        banco,
+                        moneda,
+                        estado_anticipo,
+                    },
+                });
+            } else {
+                reset({
+                    fecha_reserva,
+                    hora_reserva,
+                    cant_adultos,
+                    cant_ninos,
+                    anticipo_required,
+                    motivo_reserva,
+                    clienteId,
+                    userId,
+                });
+            }
         }
     }, [clients, reservas]);
 
     const user = localStorage.getItem("user");
+
+    /* varible a la que se le asigna la data puede ser (form data u objeto json) */
+    let requestData;
 
     const submit = (data) => {
         if (reservarWithClientId) {
@@ -116,44 +127,57 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
         } else {
             delete data.anticipo;
+            delete data.file;
         }
 
         data.anticipo_required = collapseIsOpen;
 
-        /* cambiar a FORM DATA */
-        const formData = new FormData();
+        /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
 
-        // Primero, maneja el objeto anidado 'anticipo' si existe
-        if (data.anticipo) {
-            for (const key in data.anticipo) {
-                if (data.anticipo.hasOwnProperty(key)) {
-                    formData.append(
-                        `anticipo[${key}]`,
-                        data.anticipo[key]
-                    ); /* anticipo[${key}] mandar de esta forma los datos permite que se añadan los campos en el formato anidado del objeto anticipo */
+        if (collapseIsOpen) {
+            const formData = new FormData();
+
+            console.log("data anticipo: ", data.anticipo);
+
+            // Primero, maneja el objeto anidado 'anticipo' si existe
+            if (data.anticipo) {
+                for (const key in data.anticipo) {
+                    if (data.anticipo.hasOwnProperty(key)) {
+                        formData.append(
+                            `anticipo[${key}]`,
+                            data.anticipo[key]
+                        ); /* anticipo[${key}] mandar de esta forma los datos permite que se añadan los campos en el formato anidado del objeto anticipo */
+                    }
                 }
             }
-        }
 
-        // Luego, maneja todas las demás claves que no están anidadas
-        for (const key in data) {
-            if (data.hasOwnProperty(key) && key !== "anticipo") {
-                formData.append(key, data[key]);
+            // Luego, maneja todas las demás claves que no están anidadas
+            for (const key in data) {
+                if (data.hasOwnProperty(key) && key !== "anticipo" && key !== "file") {
+                    formData.append(key, data[key]);
+                }
             }
-        }
 
-        // Finalmente, añade el archivo si existe
-        if (currentFile) {
-            formData.append("file", currentFile);
-        }
+            // Finalmente, añade el archivo si existe
+            if (currentFile) {
+                formData.append("file", currentFile);
+            }
 
-        console.log(formData);
-
-        if (parameterId) {
-            updateReserva("/intimar/client", parameterId, data);
-            console.log("Editado");
+            requestData = formData;
+            for (let [key, value] of requestData.entries()) {
+                console.log(key, value);
+            }
         } else {
-            createReserva("/intimar/reserva", data);
+            requestData = data;
+        }
+
+        /* peticiones para editar y crear reservas */
+        if (parameterId) {
+            updateReserva("/intimar/client", parameterId, requestData);
+            console.log("Editar");
+        } else {
+            createReserva("/intimar/reserva", requestData);
+            console.log("crear");
         }
 
         if (collapseIsOpen) {
@@ -166,6 +190,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 motivo_reserva: "",
                 clienteId: "",
                 userId: "",
+                file: "",
                 anticipo: {
                     monto_anticipo: "",
                     banco: "",
@@ -186,7 +211,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             });
         }
 
-        // window.location.href = "/admin/clients";
+        setCollapseIsOpen(false);
+        setParameterId(false);
+        setReservarWithClientId(false);
+
+        // window.location.href = "/admin/reservas";
+
+        // navigate("/admin/reservas/create", { state: false }); esta me sirve para el boton de crear reservas para eliminar el id del cliente que llega por estado de la url cuando accedo a crear una reserva apartir del boton reservar de la tabla clientes
     };
 
     /* datos de lo que viene en el campo file */
@@ -194,8 +225,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         const selectedFile = infoFile.current.files[0];
         if (selectedFile) {
             setCurrentFile(selectedFile);
-        } else {
-            setCurrentFile("No se ha seleccionado ningún archivo.");
         }
     };
 
@@ -219,7 +248,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 }}
                                 type="select"
                                 {...register("clienteId")}
-                                disabled
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option
@@ -304,35 +332,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             />
                         </FormGroup>
                     </Col>
-                    <Col md="12">
-                        <label className="form-control-label">Subir Comprobante</label>
-                        <FormGroup
-                            className={
-                                myStyles.inputSearch +
-                                " " +
-                                myStyles.Inputgroup +
-                                " " +
-                                myStyles.inputFileGroup
-                            }
-                        >
-                            {currentFile ? (
-                                <p>
-                                    {currentFile.name} {currentFile.size} Kb
-                                </p>
-                            ) : (
-                                <p>No se ha seleccionado ningún archivo.</p>
-                            )}
-
-                            <input
-                                className={`form-control-alternative ${myStyles.inputFile}`}
-                                placeholder="Seleccione el archivo"
-                                type="file"
-                                {...register("file")}
-                                ref={infoFile}
-                                onChange={handleFileChange}
-                            />
-                        </FormGroup>
-                    </Col>
                 </Row>
             </div>
             <hr className="my-4" />
@@ -397,6 +396,35 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         placeholder="Ingrese la moneda"
                                         type="text"
                                         {...register("anticipo.moneda")}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="12">
+                                <label className="form-control-label">Subir Comprobante</label>
+                                <FormGroup
+                                    className={
+                                        myStyles.inputSearch +
+                                        " " +
+                                        myStyles.Inputgroup +
+                                        " " +
+                                        myStyles.inputFileGroup
+                                    }
+                                >
+                                    {currentFile ? (
+                                        <p>
+                                            {currentFile.name} {currentFile.size} Kb
+                                        </p>
+                                    ) : (
+                                        <p>No se ha seleccionado ningún archivo.</p>
+                                    )}
+
+                                    <input
+                                        className={`form-control-alternative ${myStyles.inputFile}`}
+                                        placeholder="Seleccione el archivo"
+                                        type="file"
+                                        {...register("file")}
+                                        ref={infoFile}
+                                        onChange={handleFileChange}
                                     />
                                 </FormGroup>
                             </Col>

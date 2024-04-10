@@ -4,10 +4,19 @@ import { useLocation } from "react-router-dom";
 import { FormCreateEdit } from "./extraComponents/FormCreateEdit";
 // reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
+import { useEffect, useState } from "react";
 export const CreateReserva = () => {
     const { id } = useParams();
     const location = useLocation();
-    const reservarWithClientId = location.state;
+    const clientId = location.state;
+
+    const [parameterId, setParameterId] = useState();
+    const [reservarWithClientId, setReservarWithClientId] = useState();
+
+    useEffect(() => {
+        setReservarWithClientId(clientId);
+        setParameterId(id);
+    }, []);
 
     console.log(id);
 
@@ -30,8 +39,10 @@ export const CreateReserva = () => {
                             <CardBody>
                                 {
                                     <FormCreateEdit
-                                        parameterId={id}
+                                        parameterId={parameterId}
                                         reservarWithClientId={reservarWithClientId}
+                                        setParameterId={setParameterId}
+                                        setReservarWithClientId={setReservarWithClientId}
                                     />
                                 }
                             </CardBody>

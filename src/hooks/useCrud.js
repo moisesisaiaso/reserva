@@ -32,9 +32,11 @@ export const useCrud = () => {
         axiosInstance
             .post(path, data)
             .then(() => {
-                console.log("apiData: " + apiData);
-                setApiData([data, ...apiData]);
                 console.log("Data enviada");
+                if (apiData) {
+                    console.log("apiData: " + apiData);
+                    setApiData([data, ...apiData]);
+                }
             })
             .catch((error) => console.log(error));
     };
