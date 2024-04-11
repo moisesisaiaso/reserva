@@ -2,23 +2,31 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import { FormGroup, Col, Row, Button, Collapse } from "reactstrap";
 
-//todo: solo debo de crear la logica para que cuando el anticipo no sea requido por la cantidad de personas no se despliegue el formulario para el anticipo de lo contrario si es mayor o igual a 8 personas se debe desplegar, la logica para recibir solo los datos de la reserva cuando no exista el anticipo y cuando si exista recibir todo los datos ya existe esta logica pero hay que restringir el acceso para evitar que el administrador envie datos por error
-
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const FormCreateEdit = ({
-    parameterId,
-    reservarWithClientId,
-    setParameterId,
-    setReservarWithClientId,
-}) => {
+export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const navigate = useNavigate();
     /* Collapse Anticipo */
+    const adultosString = useRef();
+    const ninosString = useRef();
+
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-    const toggle = () => setCollapseIsOpen(!collapseIsOpen);
+
+    const handleTotalPeople = () => {
+        let numberAdultos = parseInt(adultosString?.current?.value) || 0;
+        let numberNinos = parseInt(ninosString?.current?.value) || 0;
+
+        const totalPeoble = numberAdultos + numberNinos;
+
+        if (totalPeoble >= 8) {
+            setCollapseIsOpen(true);
+        } else {
+            setCollapseIsOpen(false);
+        }
+    };
 
     /*data input File */
     const infoFile = useRef();
@@ -120,35 +128,28 @@ export const FormCreateEdit = ({
         }
         const { id } = JSON.parse(user);
         data.userId = Number(id);
-        data.cant_adultos = Number(data.cant_adultos);
-        data.cant_ninos = Number(data.cant_ninos);
+        data.cant_adultos = Number(adultosString.current.value);
+        data.cant_ninos = Number(ninosString.current.value);
 
-        if (collapseIsOpen) {
-            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-        } else {
-            delete data.anticipo;
-            delete data.file;
-        }
+        console.log("valor adultos: ", data.cant_adultos);
+        console.log("valor niños: ", data.cant_ninos);
 
         data.anticipo_required = collapseIsOpen;
 
         /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
 
         if (collapseIsOpen) {
+            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
+            let fechaHoy = new Date().toISOString().split("T")[0];
+            data.anticipo.fecha_anticipo = fechaHoy;
+
             const formData = new FormData();
 
             console.log("data anticipo: ", data.anticipo);
 
             // Primero, maneja el objeto anidado 'anticipo' si existe
             if (data.anticipo) {
-                for (const key in data.anticipo) {
-                    if (data.anticipo.hasOwnProperty(key)) {
-                        formData.append(
-                            `anticipo[${key}]`,
-                            data.anticipo[key]
-                        ); /* anticipo[${key}] mandar de esta forma los datos permite que se añadan los campos en el formato anidado del objeto anticipo */
-                    }
-                }
+                formData.append("anticipo", JSON.stringify(data.anticipo));
             }
 
             // Luego, maneja todas las demás claves que no están anidadas
@@ -164,10 +165,13 @@ export const FormCreateEdit = ({
             }
 
             requestData = formData;
+
             for (let [key, value] of requestData.entries()) {
                 console.log(key, value);
             }
         } else {
+            delete data.anticipo;
+            delete data.file;
             requestData = data;
         }
 
@@ -212,8 +216,6 @@ export const FormCreateEdit = ({
         }
 
         setCollapseIsOpen(false);
-        setParameterId(false);
-        setReservarWithClientId(false);
 
         // window.location.href = "/admin/reservas";
 
@@ -225,6 +227,23 @@ export const FormCreateEdit = ({
         const selectedFile = infoFile.current.files[0];
         if (selectedFile) {
             setCurrentFile(selectedFile);
+        }
+    };
+
+    /* Validando la HORA */
+    const validarHora = (e) => {
+        const hora = e.target.value; //formato 'HH:MM'
+        const [horas, minutos] = hora.split(":").map((element) => Number(element));
+        const totalMinutos = horas * 60 + minutos;
+
+        // Convertir las horas de inicio y fin a minutos
+        const inicio = 11 * 60; // 11:00 AM en minutos
+        const fin = 16 * 60; //4:00 PM en minutos
+
+        if (totalMinutos < inicio || totalMinutos > fin) {
+            e.target.setCustomValidity("La hora debe estar entre las 11:00 y las 16:00.");
+        } else {
+            e.target.setCustomValidity("");
         }
     };
 
@@ -248,6 +267,7 @@ export const FormCreateEdit = ({
                                 }}
                                 type="select"
                                 {...register("clienteId")}
+                                required
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option
@@ -289,6 +309,9 @@ export const FormCreateEdit = ({
                                 placeholder="Ingrese la cantidad en números"
                                 type="number"
                                 {...register("cant_adultos")}
+                                ref={adultosString}
+                                onChange={handleTotalPeople}
+                                required
                             />
                         </FormGroup>
                     </Col>
@@ -303,6 +326,8 @@ export const FormCreateEdit = ({
                                 placeholder="Ingrese la cantidad en números"
                                 type="number"
                                 {...register("cant_ninos")}
+                                ref={ninosString}
+                                onChange={handleTotalPeople}
                             />
                         </FormGroup>
                     </Col>
@@ -316,6 +341,7 @@ export const FormCreateEdit = ({
                                 id="input-last-name"
                                 type="date"
                                 {...register("fecha_reserva")}
+                                required
                             />
                         </FormGroup>
                     </Col>
@@ -328,7 +354,12 @@ export const FormCreateEdit = ({
                                 className={`form-control-alternative ${myStyles.input}`}
                                 id="input-last-name"
                                 type="time"
+                                onChange={validarHora}
+                                onInvalid={(e) =>
+                                    e.target.setCustomValidity(e.target.validationMessage)
+                                }
                                 {...register("hora_reserva")}
+                                required
                             />
                         </FormGroup>
                     </Col>
@@ -341,7 +372,7 @@ export const FormCreateEdit = ({
             {/* ANTICIPO COLAPSE */}
             <div>
                 <div className={myStyles.btnCheckedContainer}>
-                    <Button onClick={toggle} className={myStyles.btnChecked}>
+                    <Button disabled className={myStyles.btnChecked}>
                         {collapseIsOpen && <i class="fa-solid fa-check"></i>}
                     </Button>
                     <span>¿Anticipo Requerido?</span>
@@ -363,6 +394,7 @@ export const FormCreateEdit = ({
                                         placeholder="Ingrese la cantidad en números"
                                         type="number"
                                         {...register("anticipo.monto_anticipo")}
+                                        required={collapseIsOpen}
                                     />
                                 </FormGroup>
                             </Col>
@@ -380,6 +412,7 @@ export const FormCreateEdit = ({
                                         placeholder="Ingrese el Banco"
                                         type="text"
                                         {...register("anticipo.banco")}
+                                        required={collapseIsOpen}
                                     />
                                 </FormGroup>
                             </Col>
@@ -396,6 +429,24 @@ export const FormCreateEdit = ({
                                         placeholder="Ingrese la moneda"
                                         type="text"
                                         {...register("anticipo.moneda")}
+                                        required={collapseIsOpen}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col lg="6">
+                                <label className="form-control-label" htmlFor="input-city">
+                                    Estado Anticipo
+                                </label>
+                                <FormGroup
+                                    className={myStyles.inputSearch + " " + myStyles.Inputgroup}
+                                >
+                                    <input
+                                        className={`form-control-alternative ${myStyles.input}`}
+                                        id="input-city"
+                                        placeholder="Ingrese el estado del anticipo"
+                                        type="text"
+                                        {...register("anticipo.estado_anticipo")}
+                                        required={collapseIsOpen}
                                     />
                                 </FormGroup>
                             </Col>
@@ -425,22 +476,7 @@ export const FormCreateEdit = ({
                                         {...register("file")}
                                         ref={infoFile}
                                         onChange={handleFileChange}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col lg="6">
-                                <label className="form-control-label" htmlFor="input-city">
-                                    Estado Anticipo
-                                </label>
-                                <FormGroup
-                                    className={myStyles.inputSearch + " " + myStyles.Inputgroup}
-                                >
-                                    <input
-                                        className={`form-control-alternative ${myStyles.input}`}
-                                        id="input-city"
-                                        placeholder="Ingrese el estado del anticipo"
-                                        type="text"
-                                        {...register("anticipo.estado_anticipo")}
+                                        required={collapseIsOpen}
                                     />
                                 </FormGroup>
                             </Col>
