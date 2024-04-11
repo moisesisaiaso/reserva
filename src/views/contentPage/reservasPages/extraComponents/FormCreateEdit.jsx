@@ -134,18 +134,15 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         console.log("valor adultos: ", data.cant_adultos);
         console.log("valor niños: ", data.cant_ninos);
 
-        if (collapseIsOpen) {
-            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-        } else {
-            delete data.anticipo;
-            delete data.file;
-        }
-
         data.anticipo_required = collapseIsOpen;
 
         /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
 
         if (collapseIsOpen) {
+            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
+            let fechaHoy = new Date().toISOString().split("T")[0];
+            data.anticipo.fecha_anticipo = fechaHoy;
+
             const formData = new FormData();
 
             console.log("data anticipo: ", data.anticipo);
@@ -168,10 +165,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             requestData = formData;
+
             for (let [key, value] of requestData.entries()) {
                 console.log(key, value);
             }
         } else {
+            delete data.anticipo;
+            delete data.file;
             requestData = data;
         }
 
