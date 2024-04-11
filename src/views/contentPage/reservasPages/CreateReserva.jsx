@@ -41,8 +41,6 @@ export const CreateReserva = () => {
                                     <FormCreateEdit
                                         parameterId={parameterId}
                                         reservarWithClientId={reservarWithClientId}
-                                        setParameterId={setParameterId}
-                                        setReservarWithClientId={setReservarWithClientId}
                                     />
                                 }
                             </CardBody>
