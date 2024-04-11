@@ -267,6 +267,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 }}
                                 type="select"
                                 {...register("clienteId")}
+                                required
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option
@@ -310,6 +311,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 {...register("cant_adultos")}
                                 ref={adultosString}
                                 onChange={handleTotalPeople}
+                                required
                             />
                         </FormGroup>
                     </Col>
@@ -339,6 +341,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 id="input-last-name"
                                 type="date"
                                 {...register("fecha_reserva")}
+                                required
                             />
                         </FormGroup>
                     </Col>
@@ -351,11 +354,12 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 className={`form-control-alternative ${myStyles.input}`}
                                 id="input-last-name"
                                 type="time"
-                                {...register("hora_reserva")}
                                 onChange={validarHora}
                                 onInvalid={(e) =>
                                     e.target.setCustomValidity(e.target.validationMessage)
                                 }
+                                {...register("hora_reserva")}
+                                required
                             />
                         </FormGroup>
                     </Col>
