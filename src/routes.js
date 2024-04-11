@@ -5,10 +5,14 @@ import Login from "views/contentPage/Login.js";
 import Tables from "views/contentPage/Tables.js";
 import Client from "views/contentPage/clientesPages/Client";
 import Reserva from "views/contentPage/reservasPages/Reserva";
+import Employee from "views/contentPage/empleadosPages/Employee";
+
 import { Mesa } from "views/contentPage/mesasPages/Mesa";
 import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
 import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
 import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
+import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
+
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -18,6 +22,7 @@ let routes = [
         component: <Index />,
         layout: "/admin",
     },
+    //CLIENTES
     {
         path: "/clients",
         component: <Client />,
@@ -33,6 +38,7 @@ let routes = [
         component: <CreateClient />,
         layout: "/admin",
     },
+    //RESERVAS
     {
         path: "/reservas",
         component: <Reserva />,
@@ -43,11 +49,25 @@ let routes = [
         component: <CreateReserva />,
         layout: "/admin",
     },
+    //MESAS
     {
         path: "/mesas",
         component: <Mesa />,
         layout: "/admin",
     },
+    //EMPLEADOS
+    {
+        path: "/employees",
+        component: <Employee />,
+        layout: "/admin",
+    },
+    {
+        path: "/employees/create/:id?",
+        component: <CreateEmployee/>,
+        layout: "/admin",
+    },
+
+    //AUTH
     {
         path: "/user-profile",
         component: <Profile />,

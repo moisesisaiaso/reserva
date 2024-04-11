@@ -56,7 +56,7 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/user-profile",
+        path: "/employees",
         name: "Empleados",
         icon: "ni ni-single-02 text-yellow",
         layout: "/admin",
