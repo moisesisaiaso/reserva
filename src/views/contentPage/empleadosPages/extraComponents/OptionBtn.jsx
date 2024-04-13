@@ -28,7 +28,7 @@ export const OptionBtn = ({ setIsTable }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}> 
             <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreate}>
                 <i className="ni ni-fat-add fa-2x" />
-                <span>Agregar Cliente</span>
+                <span>Agregar Empleado</span>
             </Button>
             <div>
                 <Button

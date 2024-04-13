@@ -51,7 +51,7 @@ const Employee = () => {
                         </CardHeader>
                         <CardBody>
                             {/* crear - tabla, tarjetas */}
-                            <section className={myStyles.employeeSection}>
+                            <section className={`${myStyles.employeeSection} mb-4`}>
                                 <OptionBtn setIsTable={setIsTable} />
                             </section>
 
@@ -61,11 +61,11 @@ const Employee = () => {
                             </h2>
 
                             {/* Filtros */}
-                            <section>
-                                <Filters employees={employees} setClientList={setEmployeeList} />
+                            <section className="mb-4">
+                                <Filters employees={employees} setEmployeeList={setEmployeeList} />
                             </section>
 
-                           {/* tabla */}
+                            {/* tabla */}
                             <section className={myStyles.tableSpacing}>
                                 {isTable ? (
                                     <Table striped responsive>

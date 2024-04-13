@@ -11,6 +11,8 @@ import { Mesa } from "views/contentPage/mesasPages/Mesa";
 import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
 import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
 import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
+
+import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
 
 
@@ -59,6 +61,11 @@ let routes = [
     {
         path: "/employees",
         component: <Employee />,
+        layout: "/admin",
+    },
+    {
+        path: "/employees/detail/:id",
+        component: <EmployeeDetail />,
         layout: "/admin",
     },
     {

@@ -62,7 +62,8 @@
     "react-router-dom": "6.21.1",
     "react-scripts": "5.0.1",
     "reactstrap": "8.10.0",
-    "sass": "1.69.5"
+    "sass": "1.69.5",
+    "toastr": "^2.1.4"
   },
   "devDependencies": {
     "gulp": "4.0.2",

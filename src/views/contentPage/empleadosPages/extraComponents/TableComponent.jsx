@@ -18,14 +18,15 @@ export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPag
     const { id, name, lastname, email, cellphone, roles } = employee;
 
     const handleEmployee = () => {
-        navigate("/admin/employee/create", { state: id });
+        navigate("/admin/employees/create", { state: id });
     };
 
     const handleDetail = () => {
-        window.location.href = `/admin/employee/detail/${id}`;
+        window.location.href = `/admin/employees/detail/${id}`;
+        
     };
     const handleEdit = () => {
-        window.location.href = `/admin/employee/create/${id}`;
+        window.location.href = `/admin/employees/create/${id}`;
     };
 
     const toggleModal = () => {
