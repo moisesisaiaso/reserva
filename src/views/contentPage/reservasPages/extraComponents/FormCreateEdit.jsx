@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
-    const navigate = useNavigate();
     /* Collapse Anticipo */
     const adultosString = useRef();
     const ninosString = useRef();
@@ -217,9 +216,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
         setCollapseIsOpen(false);
 
-        // window.location.href = "/admin/reservas";
-
-        // navigate("/admin/reservas/create", { state: false }); esta me sirve para el boton de crear reservas para eliminar el id del cliente que llega por estado de la url cuando accedo a crear una reserva apartir del boton reservar de la tabla clientes
+        window.location.href = "/admin/reservas";
     };
 
     /* datos de lo que viene en el campo file */

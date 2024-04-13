@@ -1,11 +1,42 @@
-import { useState } from "react";
 import myStyles from "../../../assets/css/myStyles.module.css";
 
+import { useEffect, useState } from "react";
 // reactstrap components
-import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
+import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table } from "reactstrap";
+import { useCrud } from "hooks/useCrud";
 
+import { PaginationComponent } from "views/generalComponents/PaginationComponent";
+import { CardReserva } from "./extraComponents/CardReserva";
+import { Filters } from "./extraComponents/Filters";
+
+import { TableComponent } from "./extraComponents/TableComponent";
+import { getPaginatedData } from "views/generalComponents/getPaginatedData";
+import { OptionBtn } from "./extraComponents/OptionBtn";
 const Reserva = () => {
-    const [copiedText, setCopiedText] = useState();
+    const [isTable, setIsTable] = useState(true);
+    const [reservas, getReservas, , , deleteReservas] = useCrud();
+    const [reservaList, setReservaList] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        getReservas("/intimar/reserva");
+    }, []);
+
+    /* logica para la paginación */
+    // Inicializa la página actual y la cantidad de elementos por página
+    let itemsPerPage = 5;
+
+    let pages = Math.ceil(
+        reservas?.length / itemsPerPage
+    ); /* este dato es para utilizarlo en la paginación */
+
+    console.log("paginaActual: ", currentPage);
+
+    useEffect(() => {
+        // Función para obtener los datos paginados
+        const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
+        setReservaList(cutArray);
+    }, [reservas, currentPage]);
     return (
         <>
             {/* Page content */}
@@ -13,16 +44,72 @@ const Reserva = () => {
                 <Row>
                     <div className="col">
                         <Card className="shadow">
-                            <CardHeader>
+                            <CardHeader className={myStyles.clientsHeader}>
                                 <h1>Administración de Reservas</h1>
+                                <a href="">
+                                    <i className="ni ni-collection fa-2x" />
+                                </a>
                             </CardHeader>
                             <CardBody>
-                                <h2>Lista de reservas (clientes)</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-                                    ut rerum autem ad, animi neque quasi et quisquam illum debitis
-                                    odit voluptas ipsa assumenda cum. Porro ad eius commodi autem.
-                                </p>
+                                {/* crear - tabla, tarjetas */}
+                                <section className={myStyles.clientsSection}>
+                                    <OptionBtn setIsTable={setIsTable} />
+                                </section>
+                                <h2 className={myStyles.clientsH2}>
+                                    Lista de Reservas ({reservas?.length} Reservas)
+                                </h2>
+
+                                {/* filtros */}
+                                <section>
+                                    <Filters reservas={reservas} setReservaList={setReservaList} />
+                                </section>
+
+                                {/* tabla */}
+                                <section className={myStyles.tableSpacing}>
+                                    {isTable ? (
+                                        <Table striped responsive>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nombre del Cliente</th>
+                                                    <th>Fecha de reserva</th>
+                                                    <th>Hora de reserva</th>
+                                                    <th>Cantidad de adultos</th>
+                                                    <th>Cantidad de niños</th>
+
+                                                    <th>Estado de anticipo</th>
+
+                                                    <th>Motivo de reserva</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {reservaList?.map((reserva, i) => (
+                                                    <TableComponent
+                                                        key={reserva.id}
+                                                        reserva={reserva}
+                                                        lengthId={i}
+                                                        deleteReservas={deleteReservas}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
+                                                    />
+                                                ))}
+                                            </tbody>
+                                        </Table>
+                                    ) : (
+                                        reservaList?.map((reserva) => (
+                                            <CardReserva key={reserva.id} reserva={reserva} />
+                                        ))
+                                    )}
+                                </section>
+                                {/* Paginación */}
+                                <section>
+                                    <PaginationComponent
+                                        currentPage={currentPage}
+                                        setCurrentPage={setCurrentPage}
+                                        pages={pages}
+                                    />
+                                </section>
                             </CardBody>
                         </Card>
                     </div>
