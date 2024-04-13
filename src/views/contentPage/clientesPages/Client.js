@@ -67,36 +67,42 @@ const Client = () => {
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>
-                                    {isTable ? (
-                                        <Table striped responsive>
-                                            <thead>
+                                {isTable ? (
+                                    <Table striped responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nombre</th>
+                                                <th>Correo Electrónico</th>
+                                                <th>Teléfono</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {clientList?.map((client, i) => (
+                                                <TableComponent
+                                                    key={client.id}
+                                                    client={client}
+                                                    lengthId={i}
+                                                    deleteClient={deleteClient}
+                                                    currentPage={currentPage}
+                                                    itemsPerPage={itemsPerPage}
+                                                />
+                                            ))}
+                                            {clientList?.length === 0 && (
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Nombre</th>
-                                                    <th>Correo Electrónico</th>
-                                                    <th>Teléfono</th>
-                                                    <th>Acciones</th>
+                                                    <td colSpan="5">No hay clientes para mostrar</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {clientList?.map((client, i) => (
-                                                    <TableComponent
-                                                        key={client.id}
-                                                        client={client}
-                                                        lengthId={i}
-                                                        deleteClient={deleteClient}
-                                                        currentPage={currentPage}
-                                                        itemsPerPage={itemsPerPage}
-                                                    />
-                                                ))}
-                                            </tbody>
-                                        </Table>
-                                    ) : (
-                                        clientList?.map((client) => (
-                                            <CardClient key={client.id} client={client} />
-                                        ))
-                                    )}
-                                </section>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                ) : (
+                                    clientList?.map((client) => (
+                                        <CardClient key={client.id} client={client} />
+                                    ))
+                                )}
+                            </section>
+
                                 {/* Paginación */}
                                 <section>
                                     <PaginationComponent
