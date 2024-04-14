@@ -18,11 +18,25 @@ import {
     Media,
 } from "reactstrap";
 import routes from "routes";
+import axiosInstance from "api/axiosInstance";
+import { useEffect, useState } from "react";
+import { error } from "toastr";
 
 const AdminNavbar = (props) => {
     const location = useLocation();
-    const user = localStorage.getItem("user");
-    const { name, lastname } = JSON.parse(user);
+    const [user, setUser] = useState();
+
+    const getUser = async () => {
+        const data = await axiosInstance
+            .get("/intimar/employee/me")
+            .then(({ data }) => setUser(data))
+            .catch((error) => console.log(error));
+        console.log("user: ", data);
+    };
+
+    useEffect(() => {
+        getUser();
+    }, []);
 
     const handleLogout = () => {
         // Elimina todos los datos del localStorage
@@ -30,7 +44,7 @@ const AdminNavbar = (props) => {
         window.location.href = "/login";
     };
 
-    const currentRoute = location.pathname.replace("/", "");
+    const currentRoute = location.pathname.replace("/", ""); /* Elimino el primero / de la url */
     const routesArray = currentRoute.split("/");
     routesArray.shift();
     console.log(routesArray);
@@ -70,8 +84,8 @@ const AdminNavbar = (props) => {
                         </>
                     ) : (
                         <ul className={myStyles.routeLink}>
-                             <li>
-                                    <NavLink to="/admin/home">Home</NavLink>
+                            <li>
+                                <NavLink to="/admin/home">Home</NavLink>
                             </li>
                             {routesArray.map((route, i) => {
                                 if (i === 0) {
@@ -112,7 +126,7 @@ const AdminNavbar = (props) => {
                                     </span>
                                     <Media className="ml-2 d-none d-lg-block">
                                         <span className="mb-0 text-sm font-weight-bold">
-                                            {`${name} ${lastname}`}
+                                            {`${user?.name} ${user?.lastname}`}
                                         </span>
                                     </Media>
                                 </Media>

@@ -19,8 +19,7 @@ axiosInstance.interceptors.response.use(
                 // Llama a la función refreshAccessToken para obtener un nuevo token de acceso.
                 const response = await refreshAccessToken();
                 const { data } = response;
-                const { accessToken, refreshToken, id, name, lastname, email, roles, cellphone } =
-                    data;
+                const { accessToken, refreshToken } = data;
 
                 // Si la respuesta es exitosa (estado 200), se actualizan los tokens de acceso y actualización en el almacenamiento local y en los encabezados predeterminados de axios.
                 // También se almacena la información del usuario en el almacenamiento local. Luego, se vuelve a intentar la solicitud original.
@@ -28,17 +27,6 @@ axiosInstance.interceptors.response.use(
                     axiosInstance.defaults.headers.common["x-access-token"] = accessToken;
                     localStorage.setItem("access_token", accessToken);
                     localStorage.setItem("refresh_token", refreshToken);
-                    const user = {
-                        id,
-                        name,
-                        lastname,
-                        email,
-                        roles,
-                        cellphone,
-                    };
-
-                    console.log("usuario refresh", user);
-                    localStorage.setItem("user", JSON.stringify(user));
 
                     return axiosInstance(error.config);
                 }
@@ -64,21 +52,12 @@ export async function login(credentials) {
     try {
         const response = await axiosInstance.post("/intimar/auth/signin", credentials);
         const { data } = response;
-        const { accessToken, refreshToken, id, name, lastname, email, roles, cellphone } = data;
+        const { accessToken, refreshToken } = data;
 
         if (response.status === 200) {
             axiosInstance.defaults.headers.common["x-access-token"] = accessToken;
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
-            const user = {
-                id,
-                name,
-                lastname,
-                email,
-                roles,
-                cellphone,
-            };
-            localStorage.setItem("user", JSON.stringify(user));
         }
     } catch (error) {
         console.error(error);

@@ -5,7 +5,7 @@ import { FormGroup, Col, Row, Button, Collapse } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* Collapse Anticipo */
@@ -37,6 +37,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
     const [clients, getClients] = useCrud();
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
+    const [listReservas, setListReservas] = useState();
+
+    const [clientName, setClientName] = useState();
 
     console.log(parameterId);
 
@@ -46,6 +49,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             getReservas("/intimar/reserva");
         }
     }, []);
+
+    useEffect(()=>{
+        setListReservas(reservas);
+    },[reservas]);
 
     let idClient = "";
     useEffect(() => {
@@ -60,11 +67,12 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
         }
 
-        if (parameterId && reservas) {
+        if (parameterId && listReservas) {
             /* obtengo la reserva por su id (editar la reserva)*/
             let idReserva = parseInt(parameterId);
-            let reservaEdit = reservas.filter((element) => element.id === idReserva);
+            let reservaEdit = listReservas.filter((element) => element.id === idReserva);
 
+            
             const {
                 fecha_reserva,
                 hora_reserva,
@@ -73,14 +81,19 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 anticipo_required,
                 motivo_reserva,
                 clienteId,
-                userId,
+                file,
+                client
             } = reservaEdit[0];
 
+            console.log("holaa: ",reservaEdit);
+
+            setClientName(client);
             setClienteIdReserva(clienteId);
             setCollapseIsOpen(anticipo_required);
 
             /* si al momento de editar una reserva la propiedad anticipo_required es true, me despliega el formulario para editar el anticipo y esta condición me permite rellenar los campos de la reserva a editar solo con los compos que corresponden a cuando la reserva es con anticipo o no */
-            if (collapseIsOpen) {
+            if (anticipo_required) {
+                setCollapseIsOpen(anticipo_required);
                 const { anticipo } = reservaEdit[0];
                 const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
                 reset({
@@ -91,7 +104,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     anticipo_required,
                     motivo_reserva,
                     clienteId,
-                    userId,
+                    file,
                     anticipo: {
                         monto_anticipo,
                         banco,
@@ -108,13 +121,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     anticipo_required,
                     motivo_reserva,
                     clienteId,
-                    userId,
+                    
                 });
             }
         }
-    }, [clients, reservas]);
+    }, [clients, listReservas]);
 
-    const user = localStorage.getItem("user");
+
 
     /* varible a la que se le asigna la data puede ser (form data u objeto json) */
     let requestData;
@@ -125,8 +138,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         } else {
             data.clienteId = Number(data.clienteId);
         }
-        const { id } = JSON.parse(user);
-        data.userId = Number(id);
+        
         data.cant_adultos = Number(adultosString.current.value);
         data.cant_ninos = Number(ninosString.current.value);
 
@@ -192,7 +204,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 anticipo_required: "",
                 motivo_reserva: "",
                 clienteId: "",
-                userId: "",
                 file: "",
                 anticipo: {
                     monto_anticipo: "",
@@ -210,13 +221,17 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 anticipo_required: "",
                 motivo_reserva: "",
                 clienteId: "",
-                userId: "",
+               
             });
         }
 
         setCollapseIsOpen(false);
 
-        window.location.href = "/admin/reservas";
+        setTimeout(() => {
+            window.location.href = "/admin/reservas";
+        }, 4000);
+
+        
     };
 
     /* datos de lo que viene en el campo file */
@@ -270,7 +285,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     <option
                                         value={reservarWithClientId ? idClient : clienteIdReserva}
                                         selected
-                                    >{`${dataClient?.name} ${dataClient?.lastname}`}</option>
+                                    >{reservarWithClientId?`${dataClient?.name} ${dataClient?.lastname}`:clientName?.name}</option>
                                 ) : (
                                     clients?.map((client) => (
                                         <option key={client.id} value={client.id}>

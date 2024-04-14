@@ -2,52 +2,34 @@ import { useEffect, useState } from "react";
 import { CustomInput, Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 export const PaginationComponent = ({ currentPage, setCurrentPage, pages }) => {
-    const [isActiveNumPrev, setIsActiveNumPrev] = useState("active");
-    const [isActiveNumCenter, setIsActiveNumCenter] = useState("");
-    const [isActiveNumNext, setIsActiveNumNext] = useState("");
-    const [stateActive, setStateActive] = useState("");
-
-    /* creo un array apartir de un numero */
-    const arrayPages = Array.from({ length: pages }, (_, index) => index);
-
+    const [isActivePrev, setIsActivePrev] = useState();
+    const [isActiveNext, setIsActiveNext] = useState();
     const handleBtnPrevious = () => {
         console.log("prev", currentPage - 1);
-        if (currentPage !== 1) {
+        if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
     };
 
     const handleBtnNext = () => {
         console.log("next", currentPage + 1);
-        if (currentPage !== pages) {
+        if (currentPage < pages) {
             setCurrentPage(currentPage + 1);
         }
     };
 
-    const active = () => {
-        if (currentPage <= 1) {
-            setIsActiveNumPrev("");
-            setIsActiveNumCenter("");
-            setIsActiveNumNext("active");
-        } else if (currentPage >= pages) {
-            setIsActiveNumPrev("active");
-            setIsActiveNumCenter("");
-            setIsActiveNumNext("");
-        } else {
-            setIsActiveNumPrev("");
-            setIsActiveNumCenter("active");
-            setIsActiveNumNext("");
-        }
-
-        if (pages < 3) {
-            setStateActive([isActiveNumPrev, isActiveNumNext]);
-        } else {
-            setStateActive([isActiveNumPrev, isActiveNumCenter, isActiveNumNext]);
-        }
+    const goToPage = (page) => {
+        setCurrentPage(page);
     };
 
     useEffect(() => {
-        active();
+        if (currentPage === pages) {
+            setIsActivePrev("");
+            setIsActiveNext("active");
+        } else {
+            setIsActiveNext("");
+            setIsActivePrev("active");
+        }
     }, [currentPage]);
 
     return (
@@ -62,19 +44,28 @@ export const PaginationComponent = ({ currentPage, setCurrentPage, pages }) => {
                         <span className="sr-only">Previous</span>
                     </PaginationLink>
                 </PaginationItem>
-
-                {arrayPages.map((page) => {
-                    if (page < 3) {
-                        return (
-                            <PaginationItem className={stateActive[page]}>
-                                <PaginationLink onClick={(e) => e.preventDefault()}>
-                                    {page + 1}
-                                </PaginationLink>
-                            </PaginationItem>
-                        );
-                    }
-                })}
-
+                <PaginationItem className={isActivePrev}>
+                    <PaginationLink
+                        onClick={(e) => {
+                            currentPage === pages ? goToPage(1) : e.preventDefault();
+                        }}
+                    >
+                        {currentPage === pages ? 1 : currentPage}
+                    </PaginationLink>
+                </PaginationItem>
+                <p
+                    style={{
+                        display: "flex",
+                        alignItems: "end",
+                        height: "2.2rem",
+                        margin: "0 0.5rem",
+                    }}
+                >
+                    ......... De
+                </p>
+                <PaginationItem className={isActiveNext}>
+                    <PaginationLink onClick={() => goToPage(pages)}>{pages}</PaginationLink>
+                </PaginationItem>
                 <PaginationItem>
                     <PaginationLink onClick={handleBtnNext}>
                         <i className="fa fa-angle-right" />
