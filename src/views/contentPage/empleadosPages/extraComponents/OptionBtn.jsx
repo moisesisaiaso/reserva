@@ -25,7 +25,7 @@ export const OptionBtn = ({ setIsTable }) => {
 
     return (
         // esta linea es para que el filtro aparezca a un lado del boton de agregar empleado
-        <div style={{ display: "flex", justifyContent: "space-between" }}> 
+        <>
             <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreate}>
                 <i className="ni ni-fat-add fa-2x" />
                 <span>Agregar Empleado</span>
@@ -58,6 +58,6 @@ export const OptionBtn = ({ setIsTable }) => {
                     Tarjetas
                 </Button>
             </div>
-        </div>
+            </>
     );
 };

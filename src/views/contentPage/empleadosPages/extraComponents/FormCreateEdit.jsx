@@ -37,20 +37,7 @@ export const FormCreateEdit = ({ id }) => {
     }, [employee]);
 
     const submit = (data) => {
-        console.log(data);
-        if (data.roles) {
-            // Crear objeto con los roles en formato esperado por la API
-            const roles = data.roles.map((role) => ({ name: role }));
-    
-            const formData = {
-                ...data,
-                roles,
-            };
-    
-            createEmployee("/intimar/auth/signup", formData);
-        } else {
-            console.error("No se proporcionaron roles.");
-        }
+            createEmployee("/intimar/auth/signup", data);
 
         reset({
             name: "",

@@ -52,16 +52,16 @@ export const Filters = ({ employees, setEmployeeList }) => {
         <div className={myStyles.inputFilters}>
             <Form onSubmit={searchEmployee}>
                 <Row>
-                <Col xs="12" sm="6" lg="3" className={myStyles.inputContainer}>
+                    <Col xs="12" sm="6" lg="3" className={myStyles.inputContainer}>
                         <FormGroup>
                             <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
-                                    className={`form-control-alternative ${myStyles.input}`}
+                                    className={`form-control-alternative ${myStyles.input} ${myStyles.inputFilters}`}
                                     placeholder="Nombre"
                                     type="text"
                                     ref={inputName}
                                 />
-                                <InputGroupAddon addonType="prepend">
+                                <InputGroupAddon >
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -73,12 +73,12 @@ export const Filters = ({ employees, setEmployeeList }) => {
                         <FormGroup>
                             <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
-                                    className={`form-control-alternative ${myStyles.input}`}
+                                    className={`form-control-alternative ${myStyles.input } ${myStyles.inputFilters }`}
                                     placeholder="Email"
                                     type="text"
                                     ref={inputEmail}
                                 />
-                                 <InputGroupAddon addonType="prepend">
+                                 <InputGroupAddon  className={myStyles.buttonSearch}>
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -91,12 +91,12 @@ export const Filters = ({ employees, setEmployeeList }) => {
                         <FormGroup>
                             <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
-                                    className={`form-control-alternative ${myStyles.input}`}
+                                    className={`form-control-alternative ${myStyles.input} ${myStyles.inputFilters}`}
                                     placeholder="Teléfono"
                                     type="text"
                                     ref={inputCellphone}
                                 />
-                               <InputGroupAddon addonType="prepend">
+                               <InputGroupAddon >
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -105,27 +105,27 @@ export const Filters = ({ employees, setEmployeeList }) => {
                         </FormGroup>
                     </Col>
                     <Col xs="12" sm="6" lg="3" className={myStyles.inputContainer}>
-            <FormGroup>
-                <InputGroup className={`mb-4 ${myStyles.inputSearch}`}>
-                    <select
-                        className={`form-select form-select-sm ${myStyles.selectInput}`}
-                        aria-label=".form-select-sm example"
-                        ref={inputRole}
-                        onChange={handleRoleChange}
-                    >
-                        <option value="">Buscar por rol</option>
-                        {roles.map((role, index) => (
-                            <option key={index} value={role}>{role}</option>
-                        ))}
-                    </select>
-                    <InputGroupAddon addonType="prepend">
-                        <button style={{ marginRight: "20px" }}>
-                            <i className="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </InputGroupAddon>
-                </InputGroup>
-            </FormGroup>
-        </Col>
+                    <FormGroup>
+                        <InputGroup className={`mb-4 ${myStyles.inputSearch}`}>
+                            <select
+                                className={`form-select form-select-sm ${myStyles.selectInput} ${myStyles.inputFilters}`}
+                                aria-label=".form-select-sm example"
+                                ref={inputRole}
+                                onChange={handleRoleChange}
+                            >
+                                <option value="">Buscar por rol</option>
+                                {roles.map((role, index) => (
+                                    <option key={index} value={role}>{role}</option>
+                                ))}
+                            </select>
+                            <InputGroupAddon >
+                                <button style={{ marginRight: "20px" }}>
+                                    <i className="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </FormGroup>
+                </Col>
                 </Row>
             </Form>
         </div>

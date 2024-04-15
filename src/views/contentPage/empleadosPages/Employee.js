@@ -46,17 +46,17 @@ const Employee = () => {
             <Row>
                 <div className="col">
                     <Card className="shadow">
-                        <CardHeader className={myStyles.employeeHeader}>
+                        <CardHeader className={myStyles.clientsHeader}>
                             <h1>Administración de Empleados</h1>
                         </CardHeader>
                         <CardBody>
                             {/* crear - tabla, tarjetas */}
-                            <section className={`${myStyles.employeeSection} mb-4`}>
+                            <section className={myStyles.clientsSection}>
                                 <OptionBtn setIsTable={setIsTable} />
                             </section>
 
                             {/* Título de la lista de empleados */}
-                            <h2 className={myStyles.employeesH2}>
+                            <h2 className={myStyles.clientsH2}>
                                 Lista de Empleados ({employees?.length} Empleados)
                             </h2>
 

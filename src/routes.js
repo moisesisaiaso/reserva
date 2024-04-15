@@ -6,11 +6,14 @@ import Tables from "views/contentPage/Tables.js";
 import Client from "views/contentPage/clientesPages/Client";
 import Reserva from "views/contentPage/reservasPages/Reserva";
 import Employee from "views/contentPage/empleadosPages/Employee";
+import Mesa from "views/contentPage/mesasPages/Mesa";
 
-import { Mesa } from "views/contentPage/mesasPages/Mesa";
+// import { Mesa } from "views/contentPage/mesasPages/Mesa";
 import { CustomerDetail } from "views/contentPage/clientesPages/CustomerDetail";
 import { CreateClient } from "views/contentPage/clientesPages/CreateClient";
 import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
+
+import { CreateMesa } from "views/contentPage/mesasPages/CreateMesa";
 
 import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
@@ -55,6 +58,11 @@ let routes = [
     {
         path: "/mesas",
         component: <Mesa />,
+        layout: "/admin",
+    },
+    {
+        path: "/mesas/create/:id?",
+        component: <CreateMesa />,
         layout: "/admin",
     },
     //EMPLEADOS
