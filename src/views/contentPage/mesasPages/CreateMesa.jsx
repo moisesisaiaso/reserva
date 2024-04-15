@@ -17,7 +17,7 @@ export const CreateMesa = () => {
                     <div className="col">
                         <Card className="shadow">
                             <CardHeader>
-                                <h1>{textClient} Cliente</h1>
+                                <h1>{textClient} Mesa</h1>
                             </CardHeader>
                             <CardBody>
                                 <FormCreate id={id} />

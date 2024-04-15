@@ -1,21 +1,14 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 import { Button, Card, CardBody, CardHeader, CardText, CardTitle } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 export const CardReserva = ({ reserva }) => {
-    const {
-        id,
-        fecha_reserva,
-        hora_reserva,
-        cant_adultos,
-        cant_ninos,
-        anticipo_required,
-        motivo_reserva,
-        clienteId,
-        userId,
-    } = reserva;
+    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client } =
+        reserva;
 
+    const navigate = useNavigate();
     const handleDetail = () => {
-        window.location.href = `/admin/reservas/detail/${id}`;
+       navigate("/admin/reservas/detail",{state: id});
     };
 
     return (
@@ -26,13 +19,16 @@ export const CardReserva = ({ reserva }) => {
                 outline
                 style={{
                     width: "18rem",
+                    height: "24rem",
                 }}
             >
                 <CardHeader className={myStyles.cardTitle}>
-                    <h4>{/* {name} {lastname} */}</h4>
+                    <h4>
+                        {client.name} {client.lastname}
+                    </h4>
                 </CardHeader>
                 <CardBody>
-                    <CardText>
+                    <CardText style={{ height: "13rem" }}>
                         <ul className={myStyles.cardList}>
                             <li>
                                 <i className="ni ni-email-83" /> {fecha_reserva}
@@ -50,7 +46,7 @@ export const CardReserva = ({ reserva }) => {
                             {reserva.anticipo && (
                                 <li>
                                     <i class="fa-solid fa-circle-exclamation"></i>
-                                    {reserva?.anticipo}
+                                    {reserva?.anticipo.estado_anticipo}
                                 </li>
                             )}
                             <li>

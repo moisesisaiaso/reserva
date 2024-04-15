@@ -1,36 +1,36 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
 export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
-    const {
-        id,
-        fecha_reserva,
-        hora_reserva,
-        cant_adultos,
-        cant_ninos,
-        anticipo_required,
-        motivo_reserva,
-        clienteId,
-        userId,
-    } = reserva;
+    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client } =
+        reserva;
+
+    console.log("data client ", client?.name);
+
+    let estadoAnticipo = "";
+    if (reserva.anticipo) {
+        estadoAnticipo = reserva.anticipo.estado_anticipo;
+    } else {
+        estadoAnticipo = "";
+    }
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
-    const handleReserva = () => {
-        navigate("/admin/reservas/create", { state: id });
-    };
+   /*  const handleMesa = () => {
+        navigate("/admin/mesas/create", { state: id });
+    }; */
 
     const handleDetail = () => {
-        window.location.href = `/admin/reservas/detail/${id}`;
+        navigate("/admin/reservas/detail", { state: id });
     };
     const handleEdit = () => {
-        window.location.href = `/admin/reservas/create/${id}`;
+        navigate(`/admin/reservas/create/${id}`);
     };
 
     const toggleModal = () => {
@@ -50,16 +50,18 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         <>
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
-                <td>{/* {name} {lastname} */}</td>
+                <td>
+                    {client?.name} {client?.lastname}
+                </td>
                 <td>{fecha_reserva} </td>
                 <td>{hora_reserva}</td>
                 <td>{cant_adultos}</td>
                 <td>{cant_ninos}</td>
-                <td>{reserva?.anticipo}</td>
+                <td>{estadoAnticipo}</td>
                 <td>{motivo_reserva}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleReserva} className={myStyles.btnReserva}>
-                        Reservar
+                    <a /* onClick={ handleMesa} */ className={myStyles.btnReserva}>
+                        Asignar Mesa
                     </a>
 
                     <div>
@@ -96,8 +98,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguró que desea eliminar la reserva del cliente
-                        <strong>{/* {name} {lastname} */}</strong>
+                        Está seguro que desea eliminar la reserva del cliente: 
+                        <strong> {client?.name} {client?.lastname}</strong>
                     </p>
                 </div>
                 <div className="modal-footer">
