@@ -1,7 +1,43 @@
+import { useEffect, useState } from "react";
 import myStyles from "../../../assets/css/myStyles.module.css";
+
 // reactstrap components
-import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-export const Mesa = () => {
+import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table } from "reactstrap";
+import { useCrud } from "hooks/useCrud";
+
+import { PaginationComponent } from "views/generalComponents/PaginationComponent";
+import { CardMesa } from "./extraComponents/CardMesa";
+import { Filters } from "./extraComponents/Filters";
+import { OptionBtn } from "./extraComponents/OptionBtn";
+import { TableComponent } from "./extraComponents/TableComponent";
+import { getPaginatedData } from "views/generalComponents/getPaginatedData";
+
+const Mesa = () => {
+    const [isTable, setIsTable] = useState(true);
+    const [mesas, getMesas, , deleteMesa] = useCrud();
+    const [mesaList, setMesaList] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        getMesas("/intimar/mesa");
+    }, []);
+
+    /* logica para la paginación */
+    // Inicializa la página actual y la cantidad de elementos por página
+    let itemsPerPage = 5;
+
+    let pages = Math.ceil(
+        mesas?.length / itemsPerPage
+    ); /* este dato es para utilizarlo en la paginación */
+
+    console.log("paginaActual: ", currentPage);
+
+    useEffect(() => {
+        // Función para obtener los datos paginados
+        const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
+        setMesaList(cutArray);
+    }, [mesas, currentPage]);
+
     return (
         <>
             {/* Page content */}
@@ -9,16 +45,74 @@ export const Mesa = () => {
                 <Row>
                     <div className="col">
                         <Card className="shadow">
-                            <CardHeader>
+                            <CardHeader className={myStyles.mesasHeader}>
                                 <h1>Administración de Mesas</h1>
+                                <a href="">
+                                    <i className="ni ni-collection fa-2x" />
+                                </a>
                             </CardHeader>
                             <CardBody>
-                                <h2>Lista de mesas (clientes)</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-                                    ut rerum autem ad, animi neque quasi et quisquam illum debitis
-                                    odit voluptas ipsa assumenda cum. Porro ad eius commodi autem.
-                                </p>
+                                {/* crear - tabla, tarjetas */}
+                                <section className={myStyles.mesasSection}>
+                                    <OptionBtn setIsTable={setIsTable} />
+                                </section>
+                                <h2 className={myStyles.mesasH2}>
+                                    Lista de Mesas ({mesas?.length} Mesas)
+                                </h2>
+
+                                {/* filtros */}
+                                <section>
+                                    <Filters mesas={mesas} setMesaList={setMesaList} />
+                                </section>
+
+                                {/* tabla */}
+                                <section className={myStyles.tableSpacing}>
+                                    {isTable ? (
+                                        <Table striped responsive>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Ubicación de Mesa</th>
+                                                    <th>Número de Mesa</th>
+                                                    <th>Estado de Mesa</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {mesaList?.map((mesa, i) => (
+                                                    <TableComponent
+                                                        key={mesa.id}
+                                                        mesa={mesa}
+                                                        lengthId={i}
+                                                        deleteMesa={deleteMesa}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
+                                                    />
+                                                ))}
+                                                {mesaList?.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan="5">
+                                                            No hay mesas para mostrar
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </Table>
+                                    ) : (
+                                        mesaList?.map((mesa) => (
+                                            <CardMesa key={mesa.id} mesa={mesa} />
+                                        ))
+                                    )}
+                                </section>
+
+                                {/* Paginación */}
+                                <section>
+                                    <PaginationComponent
+                                        currentPage={currentPage}
+                                        setCurrentPage={setCurrentPage}
+                                        pages={pages}
+                                    />
+                                </section>
                             </CardBody>
                         </Card>
                     </div>
@@ -27,3 +121,5 @@ export const Mesa = () => {
         </>
     );
 };
+
+export default Mesa;

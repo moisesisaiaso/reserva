@@ -6,7 +6,7 @@ export const useCrud = () => {
 
     /* Read */
     const getApi = (path) => {
-        axiosInstance
+        return axiosInstance
             .get(path)
             .then(({ data }) => {
                 setApiData(data.data);
@@ -29,7 +29,7 @@ export const useCrud = () => {
     /* Create */
     const postApi = (path, data) => {
         console.log(data);
-        axiosInstance
+        return axiosInstance
             .post(path, data)
             .then(() => {
                 console.log("Data enviada");
@@ -43,7 +43,7 @@ export const useCrud = () => {
 
     /* DELETE */
     const deleteApi = (path, id) => {
-        axiosInstance
+        return axiosInstance
             .delete(`${path}/${id}`)
             .then(() => {
                 const newData = apiData.filter((element) => element.id !== id);
@@ -56,7 +56,7 @@ export const useCrud = () => {
 
     /* UPDATE */
     const updateApi = (path, id, data) => {
-        axiosInstance
+        return axiosInstance
             .put(`${path}/${id}`, data)
             .then(() => {
                 const newData = apiData.map((element) => {

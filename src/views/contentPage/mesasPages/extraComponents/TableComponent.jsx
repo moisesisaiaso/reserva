@@ -1,36 +1,25 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
-    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client } =
-        reserva;
-
-    console.log("data client ", client?.name);
-
-    let estadoAnticipo = "";
-    if (reserva.anticipo) {
-        estadoAnticipo = reserva.anticipo.estado_anticipo;
-    } else {
-        estadoAnticipo = "";
-    }
+export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
+    const { id, ubicacion_mesa, numero_mesa, estado_mesa} = mesa;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
     const handleMesa = () => {
-        navigate("/admin/mesas/create", { state: id });
+        /* aquí enviamos a asignar mesa */
+        // navigate("/admin/reservas/create", { state: id });
     };
 
-    const handleDetail = () => {
-        navigate("/admin/reservas/detail", { state: id });
-    };
+   
     const handleEdit = () => {
-        navigate(`/admin/reservas/create/${id}`);
+        navigate("/admin/mesas/create/",{state: id});
     };
 
     const toggleModal = () => {
@@ -38,11 +27,11 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
     };
 
     const handleDelete = () => {
-        deleteReserva("/intimar/reserva", id);
+        deleteMesa("/intimar/mesa", id);
         toggleModal();
     };
 
-    /* items reservas */
+    /* items mesas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -51,23 +40,16 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
                 <td>
-                    {client?.name} {client?.lastname}
+                    {ubicacion_mesa}
                 </td>
-                <td>{fecha_reserva} </td>
-                <td>{hora_reserva}</td>
-                <td>{cant_adultos}</td>
-                <td>{cant_ninos}</td>
-                <td>{estadoAnticipo}</td>
-                <td>{motivo_reserva}</td>
+                <td>{numero_mesa} </td>
+                <td>{estado_mesa}</td>
                 <td className={myStyles.actions}>
                     <a onClick={handleMesa} className={myStyles.btnReserva}>
-                        Asignar Mesa
+                       Asignar mesa
                     </a>
 
                     <div>
-                        <a onClick={handleDetail} className={myStyles.btnDetail}>
-                            <i class="fa-regular fa-eye fa-2x"></i>
-                        </a>
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
                             <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
@@ -98,10 +80,9 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguro que desea eliminar la reserva del cliente:
+                        Está seguró que desea eliminar la mesa 
                         <strong>
-                            {" "}
-                            {client?.name} {client?.lastname}
+                            # {numero_mesa}
                         </strong>
                     </p>
                 </div>

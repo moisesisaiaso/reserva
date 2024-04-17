@@ -14,7 +14,7 @@ import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 
 const Client = () => {
     const [isTable, setIsTable] = useState(true);
-    const [clients, getClients, , , deleteClient] = useCrud();
+    const [clients, getClients, , deleteClient] = useCrud();
     const [clientList, setClientList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -67,41 +67,43 @@ const Client = () => {
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>
-                                {isTable ? (
-                                    <Table striped responsive>
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nombre</th>
-                                                <th>Correo Electrónico</th>
-                                                <th>Teléfono</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {clientList?.map((client, i) => (
-                                                <TableComponent
-                                                    key={client.id}
-                                                    client={client}
-                                                    lengthId={i}
-                                                    deleteClient={deleteClient}
-                                                    currentPage={currentPage}
-                                                    itemsPerPage={itemsPerPage}
-                                                />
-                                            ))}
-                                            {clientList?.length === 0 && (
+                                    {isTable ? (
+                                        <Table striped responsive>
+                                            <thead>
                                                 <tr>
-                                                    <td colSpan="5">No hay clientes para mostrar</td>
+                                                    <th>#</th>
+                                                    <th>Nombre</th>
+                                                    <th>Correo Electrónico</th>
+                                                    <th>Teléfono</th>
+                                                    <th>Acciones</th>
                                                 </tr>
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                ) : (
-                                    clientList?.map((client) => (
-                                        <CardClient key={client.id} client={client} />
-                                    ))
-                                )}
-                            </section>
+                                            </thead>
+                                            <tbody>
+                                                {clientList?.map((client, i) => (
+                                                    <TableComponent
+                                                        key={client.id}
+                                                        client={client}
+                                                        lengthId={i}
+                                                        deleteClient={deleteClient}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
+                                                    />
+                                                ))}
+                                                {clientList?.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan="5">
+                                                            No hay clientes para mostrar
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </Table>
+                                    ) : (
+                                        clientList?.map((client) => (
+                                            <CardClient key={client.id} client={client} />
+                                        ))
+                                    )}
+                                </section>
 
                                 {/* Paginación */}
                                 <section>

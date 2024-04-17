@@ -16,13 +16,15 @@ import Reserva from "views/contentPage/reservasPages/Reserva";
 import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
 import { ReservaDetail } from "views/contentPage/reservasPages/ReservaDetail";
 
+//? mesas
+import  Mesa  from "views/contentPage/mesasPages/Mesa";
+import {CreateMesa} from "views/contentPage/mesasPages/CreateMesa"
+
 //? employee
 import Employee from "views/contentPage/empleadosPages/Employee";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
 import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
 
-//? mesas
-import { Mesa } from "views/contentPage/mesasPages/Mesa";
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -68,6 +70,11 @@ let routes = [
     {
         path: "/mesas",
         component: <Mesa />,
+        layout: "/admin",
+    },
+    {
+        path: "/mesas/create/:id?",
+        component: <CreateMesa />,
         layout: "/admin",
     },
     //^EMPLEADOS
