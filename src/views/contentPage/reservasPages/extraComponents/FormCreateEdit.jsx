@@ -6,17 +6,23 @@ import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 
-
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
+    /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
+    cuando parameterId existe significa que este dato viene del parametro de la url cuando accedo a este formulario lo que significa que es para editar un registro, es decir con este parameterId obtengo todo los campos de esta asignación de mesa ya existente para poder mostrarlo en los campos y editar  */
     /* Collapse Anticipo */
     const adultosString = useRef();
     const ninosString = useRef();
+    const [adultos, setAdultos] = useState();
+    const [ninos, setNinos] = useState();
 
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
 
     const handleTotalPeople = () => {
         let numberAdultos = parseInt(adultosString?.current?.value) || 0;
         let numberNinos = parseInt(ninosString?.current?.value) || 0;
+
+        setAdultos(numberAdultos);
+        setNinos(numberNinos);
 
         const totalPeoble = numberAdultos + numberNinos;
 
@@ -37,7 +43,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
     const [clients, getClients] = useCrud();
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
-    const [listReservas, setListReservas] = useState();
+    const [reserva, setReserva] = useState();
 
     const [clientName, setClientName] = useState();
 
@@ -45,20 +51,19 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
     useEffect(() => {
         getClients("/intimar/client");
+
         if (parameterId) {
             getReservas("/intimar/reserva");
         }
-    }, []);
-
-    useEffect(()=>{
-        setListReservas(reservas);
-    },[reservas]);
+    }, [
+        parameterId,
+    ]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
 
     let idClient = "";
     useEffect(() => {
-        /* para obtener el cliente si existe su id */
+        /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
         if (reservarWithClientId) {
-            /* obtengo el cliente por su id para crear o editar una reserva */
+            /* obtengo el cliente por su id para crear una reserva */
             idClient = parseInt(reservarWithClientId);
             if (clients) {
                 let clientEdit = clients.filter((element) => element.id === idClient);
@@ -67,12 +72,17 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
         }
 
-        if (parameterId && listReservas) {
+        if (parameterId && reservas) {
             /* obtengo la reserva por su id (editar la reserva)*/
             let idReserva = parseInt(parameterId);
-            let reservaEdit = listReservas.filter((element) => element.id === idReserva);
+            let reservaEdit = reservas.filter((element) => element.id === idReserva);
 
-            
+            setReserva(reservaEdit[0]);
+        }
+    }, [clients, parameterId, reservas]);
+
+    useEffect(() => {
+        if (reserva) {
             const {
                 fecha_reserva,
                 hora_reserva,
@@ -82,19 +92,26 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 motivo_reserva,
                 clienteId,
                 file,
-                client
-            } = reservaEdit[0];
+                client,
+            } = reserva;
 
-            console.log("holaa: ",reservaEdit);
+            console.log("holaa: ", client);
 
             setClientName(client);
             setClienteIdReserva(clienteId);
             setCollapseIsOpen(anticipo_required);
 
+            /* En estos casos se tuvo que mandar directamente los valores a los campos con el atributo value ya que use Form no mostraba estos valores */
+            setAdultos(reserva.cant_adultos);
+            setNinos(reserva.cant_ninos);
+
+            setCurrentFile(file);
+
             /* si al momento de editar una reserva la propiedad anticipo_required es true, me despliega el formulario para editar el anticipo y esta condición me permite rellenar los campos de la reserva a editar solo con los compos que corresponden a cuando la reserva es con anticipo o no */
+
             if (anticipo_required) {
                 setCollapseIsOpen(anticipo_required);
-                const { anticipo } = reservaEdit[0];
+                const { anticipo } = reserva;
                 const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
                 reset({
                     fecha_reserva,
@@ -121,122 +138,120 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     anticipo_required,
                     motivo_reserva,
                     clienteId,
-                    
                 });
             }
         }
-    }, [clients, listReservas]);
-
-
+    }, [reserva]);
 
     /* varible a la que se le asigna la data puede ser (form data u objeto json) */
     let requestData;
 
-    const submit = (data) => {
-        if (reservarWithClientId) {
-            data.clienteId = reservarWithClientId;
-        } else {
-            data.clienteId = Number(data.clienteId);
-        }
-        
-        data.cant_adultos = Number(adultosString.current.value);
-        data.cant_ninos = Number(ninosString.current.value);
-
-        console.log("valor adultos: ", data.cant_adultos);
-        console.log("valor niños: ", data.cant_ninos);
-
-        data.anticipo_required = collapseIsOpen;
-
-        /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
-
-        if (collapseIsOpen) {
-            data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-            let fechaHoy = new Date().toISOString().split("T")[0];
-            data.anticipo.fecha_anticipo = fechaHoy;
-
-            const formData = new FormData();
-
-            console.log("data anticipo: ", data.anticipo);
-
-            // Primero, maneja el objeto anidado 'anticipo' si existe
-            if (data.anticipo) {
-                formData.append("anticipo", JSON.stringify(data.anticipo));
+    const submit = async (data) => {
+        try {
+            if (reservarWithClientId) {
+                data.clienteId = reservarWithClientId;
+            } else {
+                data.clienteId = Number(data.clienteId);
             }
 
-            // Luego, maneja todas las demás claves que no están anidadas
-            for (const key in data) {
-                if (data.hasOwnProperty(key) && key !== "anticipo" && key !== "file") {
-                    formData.append(key, data[key]);
+            data.cant_adultos = Number(adultosString.current.value);
+            data.cant_ninos = Number(ninosString.current.value);
+
+            console.log("valor adultos: ", data.cant_adultos);
+            console.log("valor niños: ", data.cant_ninos);
+
+            data.anticipo_required = collapseIsOpen;
+
+            /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
+
+            if (collapseIsOpen) {
+                data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
+                let fechaHoy = new Date().toISOString().split("T")[0];
+                data.anticipo.fecha_anticipo = fechaHoy;
+
+                const formData = new FormData();
+
+                console.log("data anticipo: ", data.anticipo);
+
+                // Primero, maneja el objeto anidado 'anticipo' si existe
+                if (data.anticipo) {
+                    formData.append("anticipo", JSON.stringify(data.anticipo));
                 }
+
+                // Luego, maneja todas las demás claves que no están anidadas
+                for (const key in data) {
+                    if (data.hasOwnProperty(key) && key !== "anticipo" && key !== "file") {
+                        formData.append(key, data[key]);
+                    }
+                }
+
+                // Finalmente, añade el archivo si existe
+                if (currentFile) {
+                    formData.append("file", currentFile);
+                }
+
+                requestData = formData;
+
+                for (let [key, value] of requestData.entries()) {
+                    console.log(key, value);
+                }
+            } else {
+                delete data.anticipo;
+                delete data.file;
+                requestData = data;
             }
 
-            // Finalmente, añade el archivo si existe
-            if (currentFile) {
-                formData.append("file", currentFile);
+            /* peticiones para editar y crear reservas */
+            if (parameterId) {
+                await updateReserva("/intimar/client", parameterId, requestData);
+                console.log("Editar");
+            } else {
+                const crear = await createReserva("/intimar/reserva", requestData);
+                console.log("respuesta de crear", crear?.data);
+                console.log("crear");
             }
 
-            requestData = formData;
-
-            for (let [key, value] of requestData.entries()) {
-                console.log(key, value);
+            if (collapseIsOpen) {
+                reset({
+                    fecha_reserva: "",
+                    hora_reserva: "",
+                    cant_adultos: "",
+                    cant_ninos: "",
+                    anticipo_required: "",
+                    motivo_reserva: "",
+                    clienteId: "",
+                    file: "",
+                    anticipo: {
+                        monto_anticipo: "",
+                        banco: "",
+                        moneda: "",
+                        estado_anticipo: "",
+                    },
+                });
+            } else {
+                reset({
+                    fecha_reserva: "",
+                    hora_reserva: "",
+                    cant_adultos: "",
+                    cant_ninos: "",
+                    anticipo_required: "",
+                    motivo_reserva: "",
+                    clienteId: "",
+                });
             }
-        } else {
-            delete data.anticipo;
-            delete data.file;
-            requestData = data;
-        }
 
-        /* peticiones para editar y crear reservas */
-        if (parameterId) {
-            updateReserva("/intimar/client", parameterId, requestData);
-            console.log("Editar");
-        } else {
-            createReserva("/intimar/reserva", requestData);
-            console.log("crear");
-        }
+            setCollapseIsOpen(false);
 
-        if (collapseIsOpen) {
-            reset({
-                fecha_reserva: "",
-                hora_reserva: "",
-                cant_adultos: "",
-                cant_ninos: "",
-                anticipo_required: "",
-                motivo_reserva: "",
-                clienteId: "",
-                file: "",
-                anticipo: {
-                    monto_anticipo: "",
-                    banco: "",
-                    moneda: "",
-                    estado_anticipo: "",
-                },
-            });
-        } else {
-            reset({
-                fecha_reserva: "",
-                hora_reserva: "",
-                cant_adultos: "",
-                cant_ninos: "",
-                anticipo_required: "",
-                motivo_reserva: "",
-                clienteId: "",
-               
-            });
-        }
-
-        setCollapseIsOpen(false);
-
-        setTimeout(() => {
             window.location.href = "/admin/reservas";
-        }, 4000);
-
-        
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     /* datos de lo que viene en el campo file */
     const handleFileChange = () => {
         const selectedFile = infoFile.current.files[0];
+
         if (selectedFile) {
             setCurrentFile(selectedFile);
         }
@@ -285,7 +300,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     <option
                                         value={reservarWithClientId ? idClient : clienteIdReserva}
                                         selected
-                                    >{reservarWithClientId?`${dataClient?.name} ${dataClient?.lastname}`:clientName?.name}</option>
+                                    >
+                                        {reservarWithClientId
+                                            ? `${dataClient?.name} ${dataClient?.lastname}`
+                                            : clientName?.name}
+                                    </option>
                                 ) : (
                                     clients?.map((client) => (
                                         <option key={client.id} value={client.id}>
@@ -321,6 +340,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 placeholder="Ingrese la cantidad en números"
                                 type="number"
                                 {...register("cant_adultos")}
+                                value={adultos}
                                 ref={adultosString}
                                 onChange={handleTotalPeople}
                                 required
@@ -338,6 +358,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 placeholder="Ingrese la cantidad en números"
                                 type="number"
                                 {...register("cant_ninos")}
+                                value={ninos}
                                 ref={ninosString}
                                 onChange={handleTotalPeople}
                             />

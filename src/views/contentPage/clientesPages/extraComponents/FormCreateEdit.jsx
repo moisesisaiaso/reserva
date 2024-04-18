@@ -48,16 +48,16 @@ export const FormCreateEdit = ({ id }) => {
         }
     }, [client]);
 
-    const submit = (data) => {
+    const submit = async (data) => {
         data.age = Number(data.age);
 
         console.log(data);
 
         if (id) {
-            updateClient("/intimar/client", id, data);
+            await updateClient("/intimar/client", id, data);
             console.log("Editado");
         } else {
-            createClient("/intimar/client", data);
+            await createClient("/intimar/client", data);
         }
 
         reset({

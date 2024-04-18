@@ -128,3 +128,8 @@ export const Filters = ({ clients, setClientList }) => {
         </div>
     );
 };
+
+
+
+
+

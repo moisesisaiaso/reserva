@@ -22,9 +22,9 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
 
     const [stateModal, setStateModal] = useState(false);
 
-   /*  const handleMesa = () => {
+    const handleMesa = () => {
         navigate("/admin/mesas/create", { state: id });
-    }; */
+    };
 
     const handleDetail = () => {
         navigate("/admin/reservas/detail", { state: id });
@@ -60,7 +60,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <td>{estadoAnticipo}</td>
                 <td>{motivo_reserva}</td>
                 <td className={myStyles.actions}>
-                    <a /* onClick={ handleMesa} */ className={myStyles.btnReserva}>
+                    <a onClick={handleMesa} className={myStyles.btnReserva}>
                         Asignar Mesa
                     </a>
 
@@ -98,8 +98,11 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguro que desea eliminar la reserva del cliente: 
-                        <strong> {client?.name} {client?.lastname}</strong>
+                        Está seguro que desea eliminar la reserva del cliente:
+                        <strong>
+                            {" "}
+                            {client?.name} {client?.lastname}
+                        </strong>
                     </p>
                 </div>
                 <div className="modal-footer">

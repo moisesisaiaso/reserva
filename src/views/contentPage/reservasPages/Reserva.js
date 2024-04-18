@@ -14,7 +14,7 @@ import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
-    const [reservas, getReservas, , , deleteReservas] = useCrud();
+    const [reservas, getReservas, , deleteReserva] = useCrud();
     const [reservaList, setReservaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -89,7 +89,7 @@ const Reserva = () => {
                                                         key={reserva.id}
                                                         reserva={reserva}
                                                         lengthId={i}
-                                                        deleteReservas={deleteReservas}
+                                                        deleteReserva={deleteReserva}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
                                                     />

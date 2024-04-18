@@ -5,22 +5,21 @@ import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, currentPage }) => {
-    const { id, name, lastname, email, cellphone } = client;
+export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
+    const { id, ubicacion_mesa, numero_mesa, estado_mesa} = mesa;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
-    const handleReserva = () => {
-        navigate("/admin/reservas/create", { state: id });
+    const handleMesa = () => {
+        /* aquí enviamos a asignar mesa */
+        // navigate("/admin/reservas/create", { state: id });
     };
 
-    const handleDetail = () => {
-        window.location.href = `/admin/clients/detail/${id}`;
-    };
+   
     const handleEdit = () => {
-        window.location.href = `/admin/clients/create/${id}`;
+        navigate("/admin/mesas/create/",{state: id});
     };
 
     const toggleModal = () => {
@@ -28,11 +27,11 @@ export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, c
     };
 
     const handleDelete = () => {
-        deleteClient("/intimar/client", id);
+        deleteMesa("/intimar/mesa", id);
         toggleModal();
     };
 
-    /* items clients */
+    /* items mesas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -41,19 +40,16 @@ export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, c
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
                 <td>
-                    {name} {lastname}
+                    {ubicacion_mesa}
                 </td>
-                <td>{email} </td>
-                <td>{cellphone}</td>
+                <td>{numero_mesa} </td>
+                <td>{mesa.estado_mesa ? 'Disponible' : 'No disponible'}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleReserva} className={myStyles.btnReserva}>
-                        Reservar
+                    <a onClick={handleMesa} className={myStyles.btnReserva}>
+                       Asignar mesa
                     </a>
 
                     <div>
-                        <a onClick={handleDetail} className={myStyles.btnDetail}>
-                            <i class="fa-regular fa-eye fa-2x"></i>
-                        </a>
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
                             <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
@@ -84,9 +80,9 @@ export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, c
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguró que desea eliminar al Cliente con nombre{" "}
+                        Está seguró que desea eliminar la mesa 
                         <strong>
-                            {name} {lastname}
+                            # {numero_mesa}
                         </strong>
                     </p>
                 </div>

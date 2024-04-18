@@ -6,20 +6,20 @@ import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table 
 import { useCrud } from "hooks/useCrud";
 
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
-import { CardClient } from "./extraComponents/CardClient";
+import { CardMesa } from "./extraComponents/CardMesa";
 import { Filters } from "./extraComponents/Filters";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 
-const Client = () => {
+const Mesa = () => {
     const [isTable, setIsTable] = useState(true);
-    const [clients, getClients, , deleteClient] = useCrud();
-    const [clientList, setClientList] = useState();
+    const [mesas, getMesas, , deleteMesa] = useCrud();
+    const [mesaList, setMesaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        getClients("/intimar/client");
+        getMesas("/intimar/mesa");
     }, []);
 
     /* logica para la paginación */
@@ -27,16 +27,16 @@ const Client = () => {
     let itemsPerPage = 5;
 
     let pages = Math.ceil(
-        clients?.length / itemsPerPage
+        mesas?.length / itemsPerPage
     ); /* este dato es para utilizarlo en la paginación */
 
     console.log("paginaActual: ", currentPage);
 
     useEffect(() => {
         // Función para obtener los datos paginados
-        const cutArray = getPaginatedData(clients, currentPage, itemsPerPage);
-        setClientList(cutArray);
-    }, [clients, currentPage]);
+        const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
+        setMesaList(cutArray);
+    }, [mesas, currentPage]);
 
     return (
         <>
@@ -46,7 +46,7 @@ const Client = () => {
                     <div className="col">
                         <Card className="shadow">
                             <CardHeader className={myStyles.clientsHeader}>
-                                <h1>Administración de Clientes</h1>
+                                <h1>Administración de Mesas</h1>
                                 <a href="">
                                     <i className="ni ni-collection fa-2x" />
                                 </a>
@@ -57,12 +57,12 @@ const Client = () => {
                                     <OptionBtn setIsTable={setIsTable} />
                                 </section>
                                 <h2 className={myStyles.clientsH2}>
-                                    Lista de Clientes ({clients?.length} Clientes)
+                                    Lista de Mesas ({mesas?.length} Mesas)
                                 </h2>
 
                                 {/* filtros */}
                                 <section>
-                                    <Filters clients={clients} setClientList={setClientList} />
+                                    <Filters mesas={mesas} setMesaList={setMesaList} />
                                 </section>
 
                                 {/* tabla */}
@@ -72,35 +72,35 @@ const Client = () => {
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Nombre</th>
-                                                    <th>Correo Electrónico</th>
-                                                    <th>Teléfono</th>
+                                                    <th>Ubicación de Mesa</th>
+                                                    <th>Número de Mesa</th>
+                                                    <th>Estado de Mesa</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {clientList?.map((client, i) => (
+                                                {mesaList?.map((mesa, i) => (
                                                     <TableComponent
-                                                        key={client.id}
-                                                        client={client}
+                                                        key={mesa.id}
+                                                        mesa={mesa}
                                                         lengthId={i}
-                                                        deleteClient={deleteClient}
+                                                        deleteMesa={deleteMesa}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
                                                     />
                                                 ))}
-                                                {clientList?.length === 0 && (
+                                                {mesaList?.length === 0 && (
                                                     <tr>
                                                         <td colSpan="5">
-                                                            No hay clientes para mostrar
+                                                            No hay mesas para mostrar
                                                         </td>
                                                     </tr>
                                                 )}
                                             </tbody>
                                         </Table>
                                     ) : (
-                                        clientList?.map((client) => (
-                                            <CardClient key={client.id} client={client} />
+                                        mesaList?.map((mesa) => (
+                                            <CardMesa key={mesa.id} mesa={mesa} />
                                         ))
                                     )}
                                 </section>
@@ -122,4 +122,4 @@ const Client = () => {
     );
 };
 
-export default Client;
+export default Mesa;

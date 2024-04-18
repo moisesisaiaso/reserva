@@ -1,13 +1,19 @@
 import { useParams } from "react-router-dom";
 import myStyles from "../../../assets/css/myStyles.module.css";
-import { FormCreate } from "./extraComponents/FormCreate";
+import { useLocation } from "react-router-dom";
+import { FormCreateEdit } from "./extraComponents/FormCreateEdit";
 // reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
+import { useEffect, useState } from "react";
 export const CreateMesa = () => {
-    const { id } = useParams();
+    const location = useLocation();
+    const id = location.state;
 
-    console.log(id);
-    let textClient = "Crear";
+    let textMesa = "Crear";
+
+    if (id) {
+        textMesa = "Editar";
+    }
 
     return (
         <>
@@ -17,11 +23,9 @@ export const CreateMesa = () => {
                     <div className="col">
                         <Card className="shadow">
                             <CardHeader>
-                                <h1>{textClient} Mesa</h1>
+                                <h1>{textMesa} Mesa</h1>
                             </CardHeader>
-                            <CardBody>
-                                <FormCreate id={id} />
-                            </CardBody>
+                            <CardBody>{<FormCreateEdit id={id} />}</CardBody>
                         </Card>
                     </div>
                 </Row>

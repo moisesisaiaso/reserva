@@ -61,7 +61,7 @@ export const PaginationComponent = ({ currentPage, setCurrentPage, pages }) => {
                         margin: "0 0.5rem",
                     }}
                 >
-                    ......... De
+                     de
                 </p>
                 <PaginationItem className={isActiveNext}>
                     <PaginationLink onClick={() => goToPage(pages)}>{pages}</PaginationLink>
