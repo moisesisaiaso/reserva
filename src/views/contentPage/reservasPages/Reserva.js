@@ -74,11 +74,9 @@ const Reserva = () => {
                                                     <th>Nombre del Cliente</th>
                                                     <th>Fecha de reserva</th>
                                                     <th>Hora de reserva</th>
-                                                    <th>Cantidad de adultos</th>
-                                                    <th>Cantidad de niños</th>
-
+                                                    <th>Cant. de adultos</th>
+                                                    <th>Cant. de niños</th>
                                                     <th>Estado de anticipo</th>
-
                                                     <th>Motivo de reserva</th>
                                                     <th>Acciones</th>
                                                 </tr>
