@@ -68,7 +68,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                     </Badge>
                 </td>
                 <td>{estadoAnticipo}</td>
-                <td>{motivo_reserva}</td>
+                {/* <td>{motivo_reserva}</td> */}
                 <td className={myStyles.actions}>
                     <a onClick={handleMesa} className={myStyles.btnReserva}>
                         Asignar Mesa

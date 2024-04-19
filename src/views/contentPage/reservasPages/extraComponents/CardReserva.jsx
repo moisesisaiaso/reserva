@@ -38,10 +38,13 @@ export const CardReserva = ({ reserva }) => {
 
     return (
         <Card className={`my-2 ${myStyles.card}`} color="primary" outline style={{ width: "18rem", height: "24rem" }}>
-            <CardHeader className={myStyles.cardTitle}>
-                <h4>
+            <CardHeader className={`${myStyles.cardTitle} ${myStyles.columnDirection}`}>
+                <h3>
+                    <strong>ID Reserva: {id} </strong>
+                </h3>
+                <h3>
                     {client.name} {client.lastname}
-                </h4>
+                </h3>
             </CardHeader>
             <CardBody className="text-center">
                 <ul className={myStyles.cardList}>

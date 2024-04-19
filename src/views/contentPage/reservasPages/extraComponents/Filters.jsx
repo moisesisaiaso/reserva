@@ -4,9 +4,6 @@ import {
     FormGroup,
     Form,
     Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
     Col,
     Row,
     Button,
@@ -90,7 +87,7 @@ export const Filters = ({ reservas, setReservaList }) => {
         <div className={myStyles.inputFilters}>
             <Form>
                 <Row>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                         <FormGroup>
                             <Label for="mes_reserva">Buscar por Mes</Label>
                             <Input
@@ -115,7 +112,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                             </Input>
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                         <FormGroup>
                             <Label for="dia_reserva">Buscar por Día</Label>
                             <Input
@@ -132,7 +129,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                             />
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                         <FormGroup>
                             <Label for="hora_reserva">Buscar por Hora</Label>
                             <Input
@@ -152,7 +149,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                             </Input>
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                         <FormGroup>
                             <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
                             <Input
@@ -168,17 +165,13 @@ export const Filters = ({ reservas, setReservaList }) => {
                             </Input>
                         </FormGroup>
                     </Col>
-                </Row>
-                <Col>
-                        <div className="text-right"> {/* Envuelve los botones en un div y aplica la clase text-right */}
-                            {/* <Button color="primary" onClick={searchReserva}>
-                                Buscar
-                            </Button> */}
-                            <Button color="secondary" onClick={resetTable}>
-                                Reiniciar
-                            </Button>
-                        </div>
+                    <Col xs={12} className="d-flex justify-content-end">
+                        {/*<Button color="primary" onClick={searchReserva} className="mr-2 mb-2">  Buscar</Button>*/}
+                        <Button color="secondary" onClick={resetTable} className="mb-2">
+                            Reiniciar
+                        </Button>
                     </Col>
+                </Row>
             </Form>
         </div>
     );
