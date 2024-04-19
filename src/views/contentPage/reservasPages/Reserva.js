@@ -76,6 +76,7 @@ const Reserva = () => {
                                                     <th>Hora de reserva</th>
                                                     <th>Cant. de adultos</th>
                                                     <th>Cant. de niños</th>
+                                                    <th>Estado de reserva</th>
                                                     <th>Estado de anticipo</th>
                                                     <th>Motivo de reserva</th>
                                                     <th>Acciones</th>
