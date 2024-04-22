@@ -291,3 +291,8 @@
     border: none;
     color: grey;
 }
+
+.selected {
+    background-color: #098598; 
+    color: white; 
+}

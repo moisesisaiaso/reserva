@@ -123,16 +123,18 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-last-name">
-                            Años
+                        <label className="form-control-label" htmlFor="input-city">
+                            Teléfono
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id="input-last-name"
-                                placeholder="Ingrese los años"
-                                type="number"
-                                {...register("age")}
+                                id="input-city"
+                                placeholder="Ingrese el teléfono"
+                                type="text"
+                                required
+                                pattern="[0-9]{1,9}"
+                                {...register("cellphone")}
                             />
                         </FormGroup>
                     </Col>
@@ -154,7 +156,7 @@ export const FormCreateEdit = ({ id }) => {
             </div>
             <hr className="my-4" />
             {/* Address */}
-            <h6 className="heading-small text-muted mb-4">Información de contacto</h6>
+            <h6 className="heading-small text-muted mb-4">Información adicional</h6>
             <div className="pl-lg-4">
                 <Row>
                     <Col lg="6">
@@ -173,18 +175,16 @@ export const FormCreateEdit = ({ id }) => {
                     </Col>
 
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-city">
-                            Teléfono
+                        <label className="form-control-label" htmlFor="input-last-name">
+                            Edad
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id="input-city"
-                                placeholder="Ingrese el teléfono"
-                                type="text"
-                                required
-                                pattern="[0-9]{1,9}"
-                                {...register("cellphone")}
+                                id="input-last-name"
+                                placeholder="Ingrese los años"
+                                type="number"
+                                {...register("age")}
                             />
                         </FormGroup>
                     </Col>

@@ -1,14 +1,16 @@
+import { Button } from "reactstrap";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import { Button } from "reactstrap";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 export const OptionBtn = ({ setIsTable }) => {
-    const [activeTabla, setActiveTabla] = useState("active");
-    const [activeTarjeta, setActiveTarjeta] = useState("");
+    const [activeTarjeta, setActiveTarjeta] = useState("active");
+    const [activeTabla, setActiveTabla] = useState("");
 
     const navigate = useNavigate();
+    useEffect(() => {
+        setIsTable(false);
+    }, [setIsTable]);
 
     const handleActive = (option) => {
         if (option === "tabla") {
@@ -28,7 +30,12 @@ export const OptionBtn = ({ setIsTable }) => {
 
     return (
         <>
-            <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreate}>
+            <Button
+                type="button"
+                size="lg"
+                className={myStyles.btCreate}
+                onClick={handleBtnCreate}
+            >
                 <i className="ni ni-fat-add fa-2x" />
                 <span>Agregar Mesa</span>
             </Button>
@@ -39,9 +46,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     type="button"
                     size="lg"
                     aria-pressed={true}
-                    onClick={() => {
-                        handleActive("tarjeta");
-                    }}
+                    onClick={() => handleActive("tarjeta")}
                     className={activeTarjeta}
                 >
                     Tarjetas
@@ -52,9 +57,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     type="button"
                     size="lg"
                     aria-pressed={true}
-                    onClick={() => {
-                        handleActive("tabla");
-                    }}
+                    onClick={() => handleActive("tabla")}
                     className={activeTabla}
                 >
                     Tabla
@@ -63,7 +66,6 @@ export const OptionBtn = ({ setIsTable }) => {
         </>
     );
 };
-
 
 
 
