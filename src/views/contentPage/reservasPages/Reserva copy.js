@@ -78,25 +78,28 @@ const Reserva = () => {
                                                     <th>Cant. de niños</th>
                                                     <th>Estado de reserva</th>
                                                     <th>Estado de anticipo</th>
+                                                    {/* <th>Motivo de reserva</th> */}
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {reservaList?.length === 0 ? (
+                                                
+                                                {reservaList?.map((reserva, i) => (
+                                                    <TableComponent
+                                                        key={reserva.id}
+                                                        reserva={reserva}
+                                                        lengthId={i}
+                                                        deleteReserva={deleteReserva}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
+                                                    />
+                                                ))}
+                                                {reservaList?.length === 0 && (
                                                     <tr>
-                                                        <td colSpan="9">No hay reservas que coincida con la busqueda</td>
+                                                        <td colSpan="5">
+                                                            No hay reservas para mostrar
+                                                        </td>
                                                     </tr>
-                                                ) : (
-                                                    reservaList.map((reserva, i) => (
-                                                        <TableComponent
-                                                            key={reserva.id}
-                                                            reserva={reserva}
-                                                            lengthId={i}
-                                                            deleteReserva={deleteReserva}
-                                                            currentPage={currentPage}
-                                                            itemsPerPage={itemsPerPage}
-                                                        />
-                                                    ))
                                                 )}
                                             </tbody>
                                         </Table>

@@ -84,34 +84,6 @@ export const FormCreateEdit = ({ id }) => {
                 </Row>
                 <Row>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-email">
-                            Correo Electrónico
-                        </label>
-                        <FormGroup>
-                            <Input
-                                id="input-email"
-                                placeholder="Ingrese el Correo Electrónico"
-                                type="email"
-                                {...register("email")}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-password">
-                            Contraseña
-                        </label>
-                        <FormGroup>
-                            <Input
-                                id="input-password"
-                                placeholder="Ingrese la Contraseña"
-                                type="password"
-                                {...register("password")}
-                            />
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg="6">
                         <label className="form-control-label" htmlFor="input-cellphone">
                             Teléfono
                         </label>
@@ -144,9 +116,42 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
+                </div>
+                <hr className="my-4" />
+            <h6 className="heading-small text-muted mb-4"> Crear usuario </h6>
+            <div className="pl-lg-4">
+            <Row>
+                    <Col lg="6">
+                        <label className="form-control-label" htmlFor="input-email">
+                            Correo Electrónico
+                        </label>
+                        <FormGroup>
+                            <Input
+                                id="input-email"
+                                placeholder="Ingrese el Correo Electrónico"
+                                type="email"
+                                {...register("email")}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                        <label className="form-control-label" htmlFor="input-password">
+                            Contraseña
+                        </label>
+                        <FormGroup>
+                            <Input
+                                id="input-password"
+                                placeholder="Ingrese la Contraseña"
+                                type="password"
+                                {...register("password")}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
             </div>
+
             <Button block color="primary" size="lg" type="submit">
-                <i className="ni ni-send" /> Registrar Empleado
+                <i className="ni ni-send" /> Crear Empleado
             </Button>
         </Form>
     );

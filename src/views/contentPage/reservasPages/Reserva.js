@@ -12,6 +12,7 @@ import { Filters } from "./extraComponents/Filters";
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 import { OptionBtn } from "./extraComponents/OptionBtn";
+
 const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
     const [reservas, getReservas, , deleteReserva] = useCrud();
@@ -24,9 +25,9 @@ const Reserva = () => {
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
-    let itemsPerPage = 5;
+    const itemsPerPage = 5;
 
-    let pages = Math.ceil(
+    const pages = Math.ceil(
         reservas?.length / itemsPerPage
     ); /* este dato es para utilizarlo en la paginación */
 
@@ -37,6 +38,7 @@ const Reserva = () => {
         const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
         setReservaList(cutArray);
     }, [reservas, currentPage]);
+
     return (
         <>
             {/* Page content */}
@@ -55,6 +57,7 @@ const Reserva = () => {
                                 <section className={myStyles.clientsSection}>
                                     <OptionBtn setIsTable={setIsTable} />
                                 </section>
+
                                 <h2 className={myStyles.clientsH2}>
                                     Lista de Reservas ({reservas?.length} Reservas)
                                 </h2>
@@ -64,9 +67,11 @@ const Reserva = () => {
                                     <Filters reservas={reservas} setReservaList={setReservaList} />
                                 </section>
 
-                                {/* tabla */}
+                                {/* Tabla o tarjetas */}
                                 <section className={myStyles.tableSpacing}>
-                                    {isTable ? (
+                                    {reservaList && reservaList.length === 0 ? (
+                                        <p>No hay reservas que mostrar</p>
+                                    ) : isTable ? (
                                         <Table striped responsive>
                                             <thead>
                                                 <tr>
@@ -83,24 +88,15 @@ const Reserva = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
                                                 {reservaList?.map((reserva, i) => (
                                                     <TableComponent
                                                         key={reserva.id}
                                                         reserva={reserva}
-                                                        lengthId={i}
                                                         deleteReserva={deleteReserva}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
                                                     />
                                                 ))}
-                                                {reservaList?.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan="5">
-                                                            No hay reservas para mostrar
-                                                        </td>
-                                                    </tr>
-                                                )}
                                             </tbody>
                                         </Table>
                                     ) : (
@@ -109,6 +105,7 @@ const Reserva = () => {
                                         ))
                                     )}
                                 </section>
+
                                 {/* Paginación */}
                                 <section>
                                     <PaginationComponent

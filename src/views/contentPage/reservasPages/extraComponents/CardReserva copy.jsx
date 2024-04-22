@@ -58,7 +58,7 @@ export const CardReserva = ({ reserva = {} }) => {
           <strong>ID Reserva: {id}</strong>
         </h3>
         <h3>
-          {client?.name} {client?.lastname}
+          {client.name} {client.lastname}
         </h3>
       </CardHeader>
       <CardBody className="text-center">
@@ -79,8 +79,7 @@ export const CardReserva = ({ reserva = {} }) => {
           </li>
           {anticipo && (
             <li>
-              <i className="fa-solid fa-money-check" />
-              Anticipo:
+              <i className="fa-solid fa-money-check" /> Anticipo:
               <Badge color={getEstadoAnticipoColor()} pill>
                 {anticipo?.estado_anticipo ?? 'No informado'}
               </Badge>

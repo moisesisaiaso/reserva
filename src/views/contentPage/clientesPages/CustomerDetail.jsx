@@ -1,30 +1,51 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axiosInstance from "api/axiosInstance";
 import myStyles from "../../../assets/css/myStyles.module.css";
-// reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
 
+
 export const CustomerDetail = () => {
-    const { id } = useParams(); /* este es el id del cliente en la base de datos */
+    const { id } = useParams();
+    const [customer, setCustomer] = useState(null);
+
+    useEffect(() => {
+        const fetchCustomerDetails = async () => {
+            try {
+                const response = await axiosInstance.get(`/intimar/client/${id}`);
+                setCustomer(response.data.client);
+            } catch (error) {
+                console.error("Error fetching customer details:", error);
+            }
+        };
+
+        fetchCustomerDetails();
+    }, [id]);
+
     return (
         <>
-            {/* Page content */}
             <Container className={myStyles.content} fluid>
                 <Row>
-                    <div className="col">
+                    <Col>
                         <Card className="shadow">
                             <CardHeader>
                                 <h1>Detalle del cliente</h1>
                             </CardHeader>
                             <CardBody>
-                                <h2>Nicole</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-                                    ut rerum autem ad, animi neque quasi et quisquam illum debitis
-                                    odit voluptas ipsa assumenda cum. Porro ad eius commodi autem.
-                                </p>
+                                {customer ? (
+                                    <>
+                                        <h2>{customer.name} {customer.lastname}</h2>
+                                        <p><strong>Email:</strong> {customer.email}</p>
+                                        <p><strong>Teléfono:</strong> {customer.cellphone}</p>
+                                        <p><strong>Edad:</strong> {customer.age}</p>
+                                        {/* Aquí puedes mostrar otros detalles del cliente */}
+                                    </>
+                                ) : (
+                                    <p>Cargando detalles del cliente...</p>
+                                )}
                             </CardBody>
                         </Card>
-                    </div>
+                    </Col>
                 </Row>
             </Container>
         </>
