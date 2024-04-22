@@ -2,9 +2,7 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import React, { useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
-import { useNavigate } from "react-router-dom";
-import { format } from 'date-fns';
-import es from 'date-fns/locale/es'; 
+import { useNavigate } from "react-router-dom"; 
 
 export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
     const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client, estado_reserva, anticipo } = reserva;
@@ -13,7 +11,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
 
     let estadoAnticipo = anticipo ? anticipo.estado_anticipo : "-";
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const [stateModal, setStateModal] = useState(false);
 
@@ -24,7 +22,6 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
     const handleDetail = () => {
         navigate("/admin/reservas/detail", { state: id });
     };
-
     const handleEdit = () => {
         navigate(`/admin/reservas/create/${id}`);
     };
@@ -38,6 +35,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         toggleModal();
     };
 
+/* items reservas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -53,9 +51,6 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         }
     };
 
-    const fechaFormateada = format(new Date(fecha_reserva), 'dd-MM-yyyy', { locale: es });
-    const horaFormateada = format(new Date(`1970-01-01T${hora_reserva}Z`), 'HH:mm');
-
     return (
         <>
             <tr>
@@ -63,8 +58,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <td>
                     {client?.name} {client?.lastname}
                 </td>
-                <td>{fechaFormateada}</td>
-                <td>{horaFormateada}</td>
+                <td>{fecha_reserva} </td>
+                <td>{hora_reserva}</td>
                 <td>{cant_adultos}</td>
                 <td>{cant_ninos}</td>
                 <td>
@@ -73,6 +68,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                     </Badge>
                 </td>
                 <td>{estadoAnticipo}</td>
+                {/* <td>{motivo_reserva}</td> */}
                 <td className={myStyles.actions}>
                     <a onClick={handleMesa} className={myStyles.btnReserva}>
                         Asignar Mesa
@@ -80,21 +76,21 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
 
                     <div>
                         <a onClick={handleDetail} className={myStyles.btnDetail}>
-                            <i className="fa-regular fa-eye fa-2x"></i>
+                            <i class="fa-regular fa-eye fa-2x"></i>
                         </a>
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
-                            <i className="fa-regular fa-pen-to-square fa-2x"></i>
+                            <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
 
                         <a href="#" className={myStyles.btnDelete} onClick={toggleModal}>
-                            <i className="fa-regular fa-trash-can fa-2x"></i>
+                            <i class="fa-regular fa-trash-can fa-2x"></i>
                         </a>
                     </div>
                 </td>
             </tr>
 
-            {/* Modal */}
-            <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
+        {/* Modal */}
+        <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
                 <div className="modal-header">
                     <h5 className="modal-title" id="exampleModalLabel" color="warning">
                         ⚠️ Advertencia !!!

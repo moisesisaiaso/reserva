@@ -92,6 +92,7 @@ const Reserva = () => {
                                                     <TableComponent
                                                         key={reserva.id}
                                                         reserva={reserva}
+                                                        lengthId={i}
                                                         deleteReserva={deleteReserva}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
