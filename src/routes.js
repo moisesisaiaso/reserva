@@ -16,15 +16,18 @@ import Reserva from "views/contentPage/reservasPages/Reserva";
 import { CreateReserva } from "views/contentPage/reservasPages/CreateReserva";
 import { ReservaDetail } from "views/contentPage/reservasPages/ReservaDetail";
 
+//? pivote asignación de mesas
+import AsignacionMesa from "views/contentPage/asignacionMesasPages/AsignacionMesa";
+import { CreateAsignacion } from "views/contentPage/asignacionMesasPages/CreateAsignacion";
+
 //? mesas
-import  Mesa  from "views/contentPage/mesasPages/Mesa";
-import {CreateMesa} from "views/contentPage/mesasPages/CreateMesa"
+import Mesa from "views/contentPage/mesasPages/Mesa";
+import { CreateMesa } from "views/contentPage/mesasPages/CreateMesa";
 
 //? employee
 import Employee from "views/contentPage/empleadosPages/Employee";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
 import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
-
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -66,6 +69,19 @@ let routes = [
         component: <ReservaDetail />,
         layout: "/admin",
     },
+
+    //^ ASIGNACION DE MESA
+    {
+        path: "/asignar-mesa",
+        component: <AsignacionMesa />,
+        layout: "/admin",
+    },
+    {
+        path: "/asignar-mesa/create",
+        component: <CreateAsignacion />,
+        layout: "/admin",
+    },
+
     //^MESAS
     {
         path: "/mesas",

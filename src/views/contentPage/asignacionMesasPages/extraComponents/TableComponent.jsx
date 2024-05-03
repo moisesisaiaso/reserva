@@ -1,50 +1,40 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Badge, Button, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-// reactstrap components
-import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
-    const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
+export const TableComponent = ({
+    reserva,
+    removeAsignacion,
+    lengthId,
+    itemsPerPage,
+    currentPage,
+}) => {
+    const { id, client, fecha_reserva, hora_reserva, mesas, mozo } = reserva;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
-    const [isDisable, setIsDisable] = useState(false);
 
-    useEffect(() => {
-        const estado = mesa.estado_mesa;
-        setIsDisable(!estado);
-    }, []);
-    let buttonDisable = {};
-    if (isDisable) {
-        buttonDisable = {
-            opacity: 0.5,
-        };
-    }
-
-    const handleMesa = () => {
-        if (!isDisable) {
-            /* aquí enviamos a asignar mesa */
-            navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
-        }
+    const handleMozo = () => {
+        /* navigate("/admin/mesas/create", { state: id }); */
     };
 
-    const handleEdit = () => {
-        navigate("/admin/mesas/create/", { state: id });
+    const handleDetail = () => {
+        // navigate("/admin/mesas/detail", { state: id });
     };
 
     const toggleModal = () => {
         setStateModal(!stateModal);
     };
 
-    const handleDelete = () => {
-        deleteMesa("/intimar/mesa", id);
+    const handleDelete = async () => {
+        await removeAsignacion(`/intimar/reserva/${id}/mesa`);
         toggleModal();
     };
 
-    /* items mesas */
+    /* items asignaciones */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -52,17 +42,34 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
         <>
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
-                <td>{ubicacion_mesa}</td>
-                <td>{numero_mesa} </td>
-                <td>{mesa.estado_mesa ? "Disponible" : "No disponible"}</td>
+                <td>
+                    {client?.name} {client?.lastname}
+                </td>
+                <td>{fecha_reserva}</td>
+                <td>{hora_reserva}</td>
+                <td>
+                    <ul>
+                        {mesas?.map((mesa) => (
+                            <li>{mesa.ubicacion_mesa}</li>
+                        ))}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {mesas?.map((mesa) => (
+                            <li>{mesa.numero_mesa}</li>
+                        ))}
+                    </ul>
+                </td>
+                <td>{`${mozo.name} ${mozo.lastname}`}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleMesa} className={myStyles.btnReserva} style={buttonDisable}>
-                        Asignar mesa
+                    <a onClick={handleMozo} className={myStyles.btnReserva}>
+                        Asignar Mezo
                     </a>
 
                     <div>
-                        <a onClick={handleEdit} className={myStyles.btnEdit}>
-                            <i class="fa-regular fa-pen-to-square fa-2x"></i>
+                        <a onClick={handleDetail} className={myStyles.btnDetail}>
+                            <i class="fa-regular fa-eye fa-2x"></i>
                         </a>
 
                         <a href="#" className={myStyles.btnDelete} onClick={toggleModal}>
@@ -91,8 +98,10 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguró que desea eliminar la mesa
-                        <strong># {numero_mesa}</strong>
+                        Está seguro que desea eliminar la asignacion de la mesa del cliente:
+                        <strong>
+                            {client?.name} {client?.lastname}
+                        </strong>
                     </p>
                 </div>
                 <div className="modal-footer">

@@ -175,7 +175,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
                 // Primero, maneja el objeto anidado 'anticipo' si existe
                 if (data.anticipo) {
-                    formData.append("anticipo", JSON.stringify(data.anticipo));
+                    const anticipoConArchivo = {
+                        ...data.anticipo,
+                        file: currentFile,
+                    };
+                    formData.append("anticipo", JSON.stringify(anticipoConArchivo));
                 }
 
                 // Luego, maneja todas las demás claves que no están anidadas
@@ -185,10 +189,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     }
                 }
 
-                // Finalmente, añade el archivo si existe
+                /*  // Finalmente, añade el archivo si existe
                 if (currentFile) {
                     formData.append("file", currentFile);
-                }
+                } */
 
                 requestData = formData;
 
@@ -294,7 +298,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 }}
                                 type="select"
                                 {...register("clienteId")}
-                                required
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option

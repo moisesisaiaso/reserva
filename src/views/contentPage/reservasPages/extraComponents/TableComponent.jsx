@@ -2,21 +2,31 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import React, { useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
-    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client, estado_reserva, anticipo } = reserva;
+    const {
+        id,
+        fecha_reserva,
+        hora_reserva,
+        cant_adultos,
+        cant_ninos,
+        motivo_reserva,
+        client,
+        estado_reserva,
+        anticipo,
+    } = reserva;
 
     console.log("data client ", client?.name);
 
     let estadoAnticipo = anticipo ? anticipo.estado_anticipo : "-";
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
     const handleMesa = () => {
-        navigate("/admin/mesas/create", { state: id });
+        navigate("/admin/asignar-mesa/create", { state: { id, type: "reserva" } });
     };
 
     const handleDetail = () => {
@@ -35,7 +45,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         toggleModal();
     };
 
-/* items reservas */
+    /* items reservas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -89,8 +99,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 </td>
             </tr>
 
-        {/* Modal */}
-        <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
+            {/* Modal */}
+            <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
                 <div className="modal-header">
                     <h5 className="modal-title" id="exampleModalLabel" color="warning">
                         ⚠️ Advertencia !!!

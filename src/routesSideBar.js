@@ -38,7 +38,7 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/mesas",
+        path: "/asignar-mesa",
         name: "Mesas asignadas",
         icon: "ni ni-support-16 text-info",
         layout: "/admin",

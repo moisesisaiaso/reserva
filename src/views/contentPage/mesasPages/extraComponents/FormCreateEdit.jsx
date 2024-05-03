@@ -38,13 +38,13 @@ export const FormCreateEdit = ({ id }) => {
             reset({
                 ubicacion_mesa,
                 numero_mesa,
-                estado_mesa: estado_mesa.toString(), 
+                estado_mesa: estado_mesa.toString(),
             });
         }
     }, [mesa]);
 
     const submit = async (data) => {
-        data.estado_mesa = data.estado_mesa === "true"; 
+        data.estado_mesa = data.estado_mesa === "true";
 
         console.log(data);
 
@@ -58,7 +58,7 @@ export const FormCreateEdit = ({ id }) => {
         reset({
             ubicacion_mesa: "",
             numero_mesa: "",
-            estado_mesa: "", 
+            estado_mesa: "",
         });
 
         window.location.href = "/admin/mesas";
@@ -116,7 +116,6 @@ export const FormCreateEdit = ({ id }) => {
                     </Col>
                 </Row>
             </div>
-            <hr className="my-4" />
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
             </Button>

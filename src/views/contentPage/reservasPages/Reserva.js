@@ -33,6 +33,7 @@ const Reserva = () => {
     console.log("paginaActual: ", currentPage);
 
     useEffect(() => {
+        console.log("reservasList: ", reservas);
         // Función para obtener los datos paginados
         const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
         setReservaList(cutArray);
@@ -83,7 +84,6 @@ const Reserva = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
                                                 {reservaList?.map((reserva, i) => (
                                                     <TableComponent
                                                         key={reserva.id}

@@ -11,6 +11,7 @@ import { Filters } from "./extraComponents/Filters";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
+import { FilterSearch } from "./extraComponents/FilterSearch";
 
 const Mesa = () => {
     const [isTable, setIsTable] = useState(true);
@@ -62,7 +63,11 @@ const Mesa = () => {
 
                                 {/* filtros */}
                                 <section>
-                                    <Filters mesas={mesas} setMesaList={setMesaList} />
+                                    {isTable ? (
+                                        <FilterSearch mesas={mesas} setMesaList={setMesaList} />
+                                    ) : (
+                                        <Filters mesas={mesas} setMesaList={setMesaList} />
+                                    )}
                                 </section>
 
                                 {/* tabla */}

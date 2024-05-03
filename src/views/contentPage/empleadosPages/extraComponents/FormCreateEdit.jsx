@@ -1,11 +1,4 @@
-import {
-    FormGroup,
-    Form,
-    Input,
-    Col,
-    Row,
-    Button,
-} from "reactstrap";
+import { FormGroup, Form, Input, Col, Row, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect } from "react";
@@ -31,13 +24,13 @@ export const FormCreateEdit = ({ id }) => {
                 lastname,
                 email,
                 cellphone,
-                roles: roles.map((role) => role.name), 
+                roles: roles.map((role) => role.name),
             });
         }
     }, [employee]);
 
     const submit = (data) => {
-            createEmployee("/intimar/auth/signup", data);
+        createEmployee("/intimar/auth/signup", data);
 
         reset({
             name: "",
@@ -48,7 +41,6 @@ export const FormCreateEdit = ({ id }) => {
             roles: [],
         });
     };
-
 
     return (
         <Form onSubmit={handleSubmit(submit)}>
@@ -111,7 +103,7 @@ export const FormCreateEdit = ({ id }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg="6">
+                    <Col lg="12">
                         <label className="form-control-label" htmlFor="input-cellphone">
                             Teléfono
                         </label>
@@ -124,17 +116,14 @@ export const FormCreateEdit = ({ id }) => {
                             />
                         </FormGroup>
                     </Col>
-                    <Col lg="6">
+                </Row>
+                <Row>
+                    <Col lg="12">
                         <label className="form-control-label" htmlFor="input-roles">
                             Roles
                         </label>
                         <FormGroup>
-                            <Input
-                                id="input-roles"
-                                type="select"
-                                multiple 
-                                {...register("roles")}
-                            >
+                            <Input id="input-roles" type="select" multiple {...register("roles")}>
                                 {/* Opciones de roles */}
                                 <option value="anfitrion">Anfitrión</option>
                                 <option value="recepcionista">Recepcionista</option>
