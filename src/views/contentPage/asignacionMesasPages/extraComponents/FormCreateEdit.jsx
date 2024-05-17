@@ -3,7 +3,7 @@ import { FormGroup, Input, Col, Row, Button, Form } from "reactstrap";
 
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const FormCreateEdit = ({ id, type }) => {
     const { handleSubmit, register, reset } = useForm();
@@ -12,13 +12,16 @@ export const FormCreateEdit = ({ id, type }) => {
 
     const [mesas, getMesas] = useCrud();
     const [reservas, getReservas, setMesas] = useCrud();
+    const [employees, getEmployees, setMozo] = useCrud();
     const [mesasList, setMesaList] = useState();
+    const employee = useRef();
 
     console.log("id: ", id);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
         getReservas("/intimar/reserva");
+        getEmployees("/intimar/employee");
     }, []);
 
     /* prueba  */
@@ -71,6 +74,10 @@ export const FormCreateEdit = ({ id, type }) => {
             reservaId: "",
             mesas: "",
         });
+
+        const mozoId = employee.current.value;
+        let dataMozo = { mozoId };
+        await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
 
         console.log(`id: ${id} --- mesas: ${data}`);
 
@@ -151,6 +158,37 @@ export const FormCreateEdit = ({ id, type }) => {
                                             </option>
                                         );
                                     }
+                                })}
+                            </select>
+                        </FormGroup>
+                    </Col>
+                </Row>
+            </div>
+            {/* Mozo */}
+            <div className="pl-lg-4">
+                <Row>
+                    <Col md="12">
+                        <label className="form-control-label" htmlFor="input-reserva">
+                            Asignar Mozo
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                type="select"
+                                ref={employee}
+                            >
+                                {employees?.map((employee) => {
+                                    const { name, id, lastName } = employee;
+
+                                    return (
+                                        <option key={id} value={id}>
+                                            {`${employee?.name} ${employee?.lastname}`}
+                                        </option>
+                                    );
                                 })}
                             </select>
                         </FormGroup>
