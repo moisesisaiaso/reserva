@@ -1,11 +1,5 @@
-import {
-    FormGroup,
-    Form,
-    Input,
-    Col,
-    Row,
-    Button,
-} from "reactstrap";
+import myStyles from "../../../../assets/css/myStyles.module.css";
+import { FormGroup, Form, Input, Col, Row, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect } from "react";
@@ -31,13 +25,13 @@ export const FormCreateEdit = ({ id }) => {
                 lastname,
                 email,
                 cellphone,
-                roles: roles.map((role) => role.name), 
+                roles: roles.map((role) => role.name),
             });
         }
     }, [employee]);
 
     const submit = (data) => {
-            createEmployee("/intimar/auth/signup", data);
+        createEmployee("/intimar/auth/signup", data);
 
         reset({
             name: "",
@@ -47,8 +41,9 @@ export const FormCreateEdit = ({ id }) => {
             cellphone: "",
             roles: [],
         });
-    };
 
+        window.location.href = "/admin/employees";
+    };
 
     return (
         <Form onSubmit={handleSubmit(submit)}>
@@ -59,9 +54,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-name">
                             Nombre
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-name"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Nombre"
                                 type="text"
                                 {...register("name")}
@@ -72,9 +67,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-lastname">
                             Apellido
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-lastname"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Apellido"
                                 type="text"
                                 {...register("lastname")}
@@ -84,50 +79,12 @@ export const FormCreateEdit = ({ id }) => {
                 </Row>
                 <Row>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-cellphone">
-                            Teléfono
-                        </label>
-                        <FormGroup>
-                            <Input
-                                id="input-cellphone"
-                                placeholder="Ingrese el Teléfono"
-                                type="text"
-                                {...register("cellphone")}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-roles">
-                            Roles
-                        </label>
-                        <FormGroup>
-                            <Input
-                                id="input-roles"
-                                type="select"
-                                multiple 
-                                {...register("roles")}
-                            >
-                                {/* Opciones de roles */}
-                                <option value="anfitrion">Anfitrión</option>
-                                <option value="recepcionista">Recepcionista</option>
-                                <option value="administrador">Administrador</option>
-                                <option value="mesero">Mesero</option>
-                            </Input>
-                        </FormGroup>
-                    </Col>
-                </Row>
-                </div>
-                <hr className="my-4" />
-            <h6 className="heading-small text-muted mb-4"> Crear usuario </h6>
-            <div className="pl-lg-4">
-            <Row>
-                    <Col lg="6">
                         <label className="form-control-label" htmlFor="input-email">
                             Correo Electrónico
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-email"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Correo Electrónico"
                                 type="email"
                                 {...register("email")}
@@ -138,9 +95,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-password">
                             Contraseña
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-password"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese la Contraseña"
                                 type="password"
                                 {...register("password")}
@@ -148,10 +105,49 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
+                <Row>
+                    <Col lg="12">
+                        <label className="form-control-label" htmlFor="input-cellphone">
+                            Teléfono
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
+                                placeholder="Ingrese el Teléfono"
+                                type="text"
+                                {...register("cellphone")}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg="12">
+                        <label className="form-control-label" htmlFor="input-roles">
+                            Roles
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                type="select"
+                                multiple
+                                {...register("roles")}
+                            >
+                                {/* Opciones de roles */}
+                                <option value="anfitrion">Anfitrión</option>
+                                <option value="recepcionista">Recepcionista</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="mesero">Mesero</option>
+                            </select>
+                        </FormGroup>
+                    </Col>
+                </Row>
             </div>
-
             <Button block color="primary" size="lg" type="submit">
-                <i className="ni ni-send" /> Crear Empleado
+                <i className="ni ni-send" /> Registrar Empleado
             </Button>
         </Form>
     );

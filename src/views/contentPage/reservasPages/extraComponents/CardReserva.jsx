@@ -86,9 +86,11 @@ export const CardReserva = ({ reserva = {} }) => {
               </Badge>
             </li>
           )}
-          <li>
-            <i className="fa-solid fa-circle-exclamation" /> {motivo_reserva}
-          </li>
+          {motivo_reserva && ( 
+            <li>
+              <i className="fa-solid fa-circle-exclamation" /> {motivo_reserva}
+            </li>
+          )}
         </ul>
         <Button
           color="warning"

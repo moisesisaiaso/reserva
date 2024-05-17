@@ -1,55 +1,45 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
-export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
-    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client, estado_reserva, anticipo } = reserva;
+export const TableComponent = ({
+    reserva,
+    removeAsignacion,
+    lengthId,
+    itemsPerPage,
+    currentPage,
+    setActualizar,
+    actualizar,
+}) => {
+    const { id, client, fecha_reserva, hora_reserva, mesas, mozo } = reserva;
 
-    console.log("data client ", client?.name);
-
-    let estadoAnticipo = anticipo ? anticipo.estado_anticipo : "-";
-
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
-    const handleMesa = () => {
-        navigate("/admin/mesas/create", { state: id });
+    const handleMozo = () => {
+        /* navigate("/admin/mesas/create", { state: id }); */
     };
 
     const handleDetail = () => {
-        navigate("/admin/reservas/detail", { state: id });
-    };
-    const handleEdit = () => {
-        navigate(`/admin/reservas/create/${id}`);
+        // navigate("/admin/mesas/detail", { state: id });
     };
 
     const toggleModal = () => {
         setStateModal(!stateModal);
     };
 
-    const handleDelete = () => {
-        deleteReserva("/intimar/reserva", id);
+    const handleDelete = async () => {
+        await removeAsignacion(`/intimar/reserva/${id}/mesa`);
         toggleModal();
+        setActualizar(!actualizar);
     };
 
-/* items reservas */
+    /* items asignaciones */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
-
-    const getEstadoReservaColor = () => {
-        if (estado_reserva === "Pendiente a confirmar") {
-            return "warning";
-        } else if (estado_reserva === "Cancelada") {
-            return "danger";
-        } else if (estado_reserva === "Confirmada") {
-            return "success";
-        } else {
-            return "primary";
-        }
-    };
 
     return (
         <>
@@ -58,28 +48,31 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <td>
                     {client?.name} {client?.lastname}
                 </td>
-                <td>{fecha_reserva} </td>
+                <td>{fecha_reserva}</td>
                 <td>{hora_reserva}</td>
-                <td>{cant_adultos}</td>
-                <td>{cant_ninos}</td>
                 <td>
-                    <Badge color={getEstadoReservaColor()} pill>
-                        {estado_reserva}
-                    </Badge>
+                    <ul>
+                        {mesas?.map((mesa) => (
+                            <li>{mesa.ubicacion_mesa}</li>
+                        ))}
+                    </ul>
                 </td>
-                <td>{estadoAnticipo}</td>
-                {/* <td>{motivo_reserva}</td> */}
+                <td>
+                    <ul>
+                        {mesas?.map((mesa) => (
+                            <li>{mesa.numero_mesa}</li>
+                        ))}
+                    </ul>
+                </td>
+                <td>{`${mozo?.name} ${mozo?.lastname}`}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleMesa} className={myStyles.btnReserva}>
-                        Asignar Mesa
+                    <a onClick={handleMozo} className={myStyles.btnReserva}>
+                        Asignar Mezo
                     </a>
 
                     <div>
                         <a onClick={handleDetail} className={myStyles.btnDetail}>
                             <i class="fa-regular fa-eye fa-2x"></i>
-                        </a>
-                        <a onClick={handleEdit} className={myStyles.btnEdit}>
-                            <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
 
                         <a href="#" className={myStyles.btnDelete} onClick={toggleModal}>
@@ -89,8 +82,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 </td>
             </tr>
 
-        {/* Modal */}
-        <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
+            {/* Modal */}
+            <Modal className="modal-dialog-centered" isOpen={stateModal} toggle={toggleModal}>
                 <div className="modal-header">
                     <h5 className="modal-title" id="exampleModalLabel" color="warning">
                         ⚠️ Advertencia !!!
@@ -108,9 +101,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguro que desea eliminar la reserva del cliente:
+                        Está seguro que desea eliminar la asignacion de la mesa del cliente:
                         <strong>
-                            {" "}
                             {client?.name} {client?.lastname}
                         </strong>
                     </p>

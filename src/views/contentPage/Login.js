@@ -80,9 +80,9 @@ const Login = () => {
                                 id="customCheckLogin"
                                 type="checkbox"
                             />
-                            <label className="custom-control-label" htmlFor="customCheckLogin">
+                            {/* <label className="custom-control-label" htmlFor="customCheckLogin">
                                 <span className="text-muted">Recordarme</span>
-                            </label>
+                            </label> */}
                         </div>
                         <div className="text-center">
                             <Button className="my-4" color="primary" type="submit">

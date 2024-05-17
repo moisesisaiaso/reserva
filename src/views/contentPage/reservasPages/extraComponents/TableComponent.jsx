@@ -54,8 +54,6 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
     };
 
     const fechaFormateada = format(new Date(fecha_reserva), 'dd-MM-yyyy', { locale: es });
-    const horaFormateada = format(new Date(`1970-01-01T${hora_reserva}Z`), 'HH:mm');
-
     return (
         <>
             <tr>
@@ -64,7 +62,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
                     {client?.name} {client?.lastname}
                 </td>
                 <td>{fechaFormateada}</td>
-                <td>{horaFormateada}</td>
+                <td>{hora_reserva}</td>
                 <td>{cant_adultos}</td>
                 <td>{cant_ninos}</td>
                 <td>

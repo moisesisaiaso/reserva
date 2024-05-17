@@ -5,8 +5,8 @@ export const useCrud = () => {
     const [apiData, setApiData] = useState();
 
     /* Read */
-    const getApi = (path) => {
-        return axiosInstance
+    const getApi = async (path) => {
+        return await axiosInstance
             .get(path)
             .then(({ data }) => {
                 setApiData(data.data);
@@ -27,9 +27,9 @@ export const useCrud = () => {
     }; */
 
     /* Create */
-    const postApi = (path, data) => {
+    const postApi = async (path, data) => {
         console.log(data);
-        return axiosInstance
+        return await axiosInstance
             .post(path, data)
             .then(() => {
                 console.log("Data enviada");
@@ -42,8 +42,8 @@ export const useCrud = () => {
     };
 
     /* DELETE */
-    const deleteApi = (path, id) => {
-        return axiosInstance
+    const deleteApi = async (path, id) => {
+        return await axiosInstance
             .delete(`${path}/${id}`)
             .then(() => {
                 const newData = apiData.filter((element) => element.id !== id);
@@ -55,8 +55,8 @@ export const useCrud = () => {
     };
 
     /* UPDATE */
-    const updateApi = (path, id, data) => {
-        return axiosInstance
+    const updateApi = async (path, id, data) => {
+        return await axiosInstance
             .put(`${path}/${id}`, data)
             .then(() => {
                 const newData = apiData.map((element) => {
@@ -71,9 +71,20 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
+    /* REMOVE PIVOTE */
+    const removeApi = async (path) => {
+        console.log(path);
+        return await axiosInstance
+            .delete(path)
+            .then(() => {
+                console.log("Data desasociada");
+            })
+            .catch((error) => console.log(error));
+    };
+
     useEffect(() => {
         console.log("un elemento:", apiData);
     }, [apiData]);
 
-    return [apiData, getApi, postApi, deleteApi, updateApi];
+    return [apiData, getApi, postApi, deleteApi, updateApi, removeApi];
 };

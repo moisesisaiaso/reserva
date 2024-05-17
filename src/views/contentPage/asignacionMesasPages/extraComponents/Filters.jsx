@@ -1,16 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
-import {
-    FormGroup,
-    Form,
-    Input,
-    Col,
-    Row,
-    Button,
-    Label,
-} from "reactstrap";
+import { FormGroup, Form, Input, Col, Row, Button, Label } from "reactstrap";
+import { useCrud } from "hooks/useCrud";
 
-export const Filters = ({ reservas, setReservaList }) => {
+export const Filters = ({ mesasAsignadas, setMesaList }) => {
     const inputMes = useRef();
     const inputDia = useRef();
     const inputEstado = useRef();
@@ -19,18 +12,18 @@ export const Filters = ({ reservas, setReservaList }) => {
     const [mesSeleccionado, setMesSeleccionado] = useState("");
 
     // Función para buscar reservas según los criterios de búsqueda
-    function searchReserva() {
+    function searchMesa() {
         const mes = mesSeleccionado;
         const dia = inputDia.current?.value;
         const estadoReserva = inputEstado.current?.value;
 
-        // Verificar si reservas está definido
-        if (!reservas) {
+        // Verificar si mesasAsignadas está definido
+        if (!mesasAsignadas) {
             return;
         }
 
         // Filtrar por mes, día, hora y estado de reserva
-        const filteredReservas = reservas.filter((reserva) => {
+        const filteredMesa = mesasAsignadas.filter((mesa) => {
             let mesMatch = true;
             let diaMatch = true;
             let horaMatch = true;
@@ -38,17 +31,17 @@ export const Filters = ({ reservas, setReservaList }) => {
 
             // Verificar si el mes coincide
             if (mes !== "") {
-                mesMatch = reserva.fecha_reserva.includes(`-${mes}-`);
+                mesMatch = mesa.reserva.fecha_reserva.includes(`-${mes}-`);
             }
 
             // Verificar si se proporciona un día específico y coincide
             if (dia !== "") {
-                diaMatch = reserva.fecha_reserva.includes(`-${mes}-${dia}`);
+                diaMatch = mesa.reserva.fecha_reserva.includes(`-${mes}-${dia}`);
             }
 
             // Verificar si la hora seleccionada coincide
             if (horaSeleccionada !== "") {
-                const horaReserva = parseInt(reserva.hora_reserva.split(":")[0]);
+                const horaReserva = parseInt(mesa.reserva.hora_reserva.split(":")[0]);
                 const horaInicio = parseInt(horaSeleccionada.split(":")[0]);
                 const horaFin = horaInicio + 1;
 
@@ -57,18 +50,18 @@ export const Filters = ({ reservas, setReservaList }) => {
 
             // Verificar si el estado de reserva coincide
             if (estadoReserva !== "") {
-                estadoMatch = reserva.estado_reserva === estadoReserva;
+                estadoMatch = mesa.reserva.estado_reserva === estadoReserva;
             }
 
             return mesMatch && diaMatch && horaMatch && estadoMatch;
         });
 
-        setReservaList(filteredReservas);
+        setMesaList(filteredMesa);
     }
 
-    // Función para reiniciar la tabla y mostrar todas las reservas
+    // Función para reiniciar la tabla y mostrar todas las mesasAsignadas
     function resetTable() {
-        setReservaList(reservas);
+        setMesaList(mesasAsignadas);
         // Reiniciar valores de los campos de búsqueda
         inputMes.current.value = "";
         inputDia.current.value = "";
@@ -80,7 +73,7 @@ export const Filters = ({ reservas, setReservaList }) => {
 
     // UseEffect para invocar la función de búsqueda al cambiar las opciones de búsqueda
     useEffect(() => {
-        searchReserva();
+        searchMesa();
     }, [mesSeleccionado, diaEspecifico, horaSeleccionada]);
 
     return (
@@ -122,8 +115,8 @@ export const Filters = ({ reservas, setReservaList }) => {
                                 onChange={(e) => setDiaEspecifico(e.target.value)}
                                 innerRef={inputDia}
                                 onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        searchReserva();
+                                    if (e.key === "Enter") {
+                                        searchMesa();
                                     }
                                 }}
                             />
@@ -151,22 +144,26 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
+                            <Label for="estado_reserva">Buscar por Mesa</Label>
                             <Input
                                 type="select"
                                 id="estado_reserva"
                                 innerRef={inputEstado}
-                                onChange={searchReserva} 
+                                onChange={searchMesa}
                             >
-                                <option value="">Todos los estados</option>
-                                <option value="Pendiente a confirmar">Pendiente a confirmar</option>
-                                <option value="Confirmada">Confirmada</option>
-                                <option value="Cancelada">Cancelada</option>
+                                <option value="">Todas las mesas</option>
+                                {mesasAsignadas?.map((mesa) => {
+                                    return (
+                                        <option key={mesa.id} value={mesa.numero_mesa}>
+                                            {mesa.ubicacion_mesa} {mesa.numero_mesa}
+                                        </option>
+                                    );
+                                })}
                             </Input>
                         </FormGroup>
                     </Col>
                     <Col xs={12} className="d-flex justify-content-end">
-                        {/*<Button color="primary" onClick={searchReserva} className="mr-2 mb-2">  Buscar</Button>*/}
+                        {/*<Button color="primary" onClick={searchMesa} className="mr-2 mb-2">  Buscar</Button>*/}
                         <Button color="secondary" onClick={resetTable} className="mb-2">
                             Reiniciar
                         </Button>

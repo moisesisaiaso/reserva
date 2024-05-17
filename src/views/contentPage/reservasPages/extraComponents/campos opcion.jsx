@@ -16,7 +16,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [ninos, setNinos] = useState();
 
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-    const [showSelectDropdown, setShowSelectDropdown] = useState(true); 
 
     const handleTotalPeople = () => {
         let numberAdultos = parseInt(adultosString?.current?.value) || 0;
@@ -45,8 +44,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [clients, getClients] = useCrud();
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
     const [reserva, setReserva] = useState();
-    const [filePreview, setFilePreview] = useState(null);
-    const [imageHeight, setImageHeight] = useState(null);
+
     const [clientName, setClientName] = useState();
 
     console.log(parameterId);
@@ -258,21 +256,14 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     };
 
     /* datos de lo que viene en el campo file */
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        // Verifica si el tamaño del archivo es menor o igual a 10 MB
-        if (file && file.size <= 10 * 1024 * 1024) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFilePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            // Si el tamaño excede los 10 MB, muestra una alerta
-            alert("El tamaño del archivo no puede superar los 10 MB.");
+    const handleFileChange = () => {
+        const selectedFile = infoFile.current.files[0];
+
+        if (selectedFile) {
+            setCurrentFile(selectedFile);
         }
     };
-    
+
     /* Validando la HORA */
     const validarHora = (e) => {
         const hora = e.target.value; //formato 'HH:MM'
@@ -486,7 +477,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.moneda")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
+                                         <option value="">Seleccionar banco</option>
                                          <option value="PEN">PEN</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
@@ -507,39 +498,43 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.estado_anticipo")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
+                                         <option value="">Seleccionar banco</option>
                                         <option value="Pendiente">Pendiente</option>
                                         <option value="Aprobado">Aprobado</option>
                                         <option value="Rechazado">Rechazado</option>
                                     </select>
                                 </FormGroup>
                             </Col>
-
-
                             <Col md="12">
                                 <label className="form-control-label">Subir Comprobante</label>
-                                <FormGroup className="input-group">
-                                    {filePreview ? (
-                                        <img src={filePreview} alt="File Preview" style={{ maxWidth: "100px" }} />
+                                <FormGroup
+                                    className={
+                                        myStyles.inputSearch +
+                                        " " +
+                                        myStyles.Inputgroup +
+                                        " " +
+                                        myStyles.inputFileGroup
+                                    }
+                                >
+                                    {currentFile ? (
+                                        <p>
+                                            {currentFile.name} {currentFile.size} Kb
+                                        </p>
                                     ) : (
                                         <p>No se ha seleccionado ningún archivo.</p>
                                     )}
-                                    <div className="custom-file">
-                                        <input
-                                            className="custom-file-input"
-                                            id="customFile"
-                                            type="file"
-                                            {...register("file")}
-                                            onChange={handleFileChange}
-                                            required={collapseIsOpen}
-                                        />
-                                        <label className="custom-file-label" htmlFor="customFile">
-                                            Seleccione el archivo
-                                        </label>
-                                    </div>
+
+                                    <input
+                                        className={`form-control-alternative ${myStyles.inputFile}`}
+                                        placeholder="Seleccione el archivo"
+                                        type="file"
+                                        {...register("file")}
+                                        ref={infoFile}
+                                        onChange={handleFileChange}
+                                        required={collapseIsOpen}
+                                    />
                                 </FormGroup>
                             </Col>
- 
                         </Row>
                     </div>
                 </Collapse>

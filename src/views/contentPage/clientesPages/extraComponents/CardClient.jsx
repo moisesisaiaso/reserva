@@ -33,7 +33,7 @@ export const CardClient = ({ client }) => {
                                 <i class="fa-solid fa-phone"></i> {cellphone}
                             </li>
                             <li>
-                                <i class="fa-solid fa-circle-exclamation"></i>Alergias: {allergies}
+                                <i className="fa-solid fa-circle-exclamation"></i> Alergias: {allergies ? allergies : "Ninguna"}
                             </li>
                         </ul>
                     </CardText>

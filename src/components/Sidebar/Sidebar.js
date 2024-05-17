@@ -183,28 +183,28 @@ const Sidebar = (props) => {
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem className="noti-title" header tag="div">
-                                <h6 className="text-overflow m-0">Welcome!</h6>
+                                <h6 className="text-overflow m-0">Bienvenido!</h6>
                             </DropdownItem>
                             <DropdownItem to="/admin/user-profile" tag={Link}>
                                 <i className="ni ni-single-02" />
-                                <span>My profile</span>
+                                <span>Mi perfil</span>
                             </DropdownItem>
                             <DropdownItem to="/admin/user-profile" tag={Link}>
                                 <i className="ni ni-settings-gear-65" />
-                                <span>Settings</span>
+                                <span>Configuración</span>
                             </DropdownItem>
                             <DropdownItem to="/admin/user-profile" tag={Link}>
                                 <i className="ni ni-calendar-grid-58" />
-                                <span>Activity</span>
+                                <span>Calendario</span>
                             </DropdownItem>
-                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                            {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                                 <i className="ni ni-support-16" />
                                 <span>Support</span>
-                            </DropdownItem>
+                            </DropdownItem> */}
                             <DropdownItem divider />
                             <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                                 <i className="ni ni-user-run" />
-                                <span>Logout</span>
+                                <span>Cerrar sesión</span>
                             </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
@@ -243,18 +243,18 @@ const Sidebar = (props) => {
                     {/* Navegación */}
                     <Nav navbar>{createLinks(routes)}</Nav>
                     {/* Divider */}
-                    <hr className="my-3" />
+                    {/* <hr className="my-3" /> */}
                     {/* Encabezado */}
-                    <h6 className="navbar-heading text-muted">Documentation</h6>
+                    {/* <h6 className="navbar-heading text-muted">Documentation</h6> */}
                     {/* Enlaces de documentación */}
-                    <Nav className="mb-md-3" navbar>
+                    {/* <Nav className="mb-md-3" navbar>
                         <NavItem>
                             <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
                                 <i className="ni ni-spaceship" />
                                 Getting started
                             </NavLink>
                         </NavItem>
-                    </Nav>
+                    </Nav> */}
                 </Collapse>
             </Container>
         </Navbar>

@@ -95,10 +95,11 @@ export const Filters = ({ reservas, setReservaList }) => {
     return (
         <div className={myStyles.inputFilters}>
             <Form>
+                <label for = "buscar">Buscar por: </label>
                 <Row>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="nombre_cliente">Buscar por Nombre del Cliente</Label> 
+                            <Label for="nombre_cliente"> Nombre del Cliente</Label> 
                             <Input
                                 type="text"
                                 id="nombre_cliente"
@@ -110,7 +111,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="mes_reserva">Buscar por Mes</Label>
+                            <Label for="mes_reserva"> Mes</Label>
                             <Input
                                 type="select"
                                 id="mes_reserva"
@@ -135,7 +136,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="dia_reserva">Buscar por Día</Label>
+                            <Label for="dia_reserva"> Día</Label>
                             <Input
                                 type="text"
                                 id="dia_reserva"
@@ -147,7 +148,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="hora_reserva">Buscar por Hora</Label>
+                            <Label for="hora_reserva"> Hora</Label>
                             <Input
                                 type="select"
                                 id="hora_reserva"
@@ -165,7 +166,7 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
+                            <Label for="estado_reserva"> Estado de Reserva</Label>
                             <Input
                                 type="select"
                                 id="estado_reserva"

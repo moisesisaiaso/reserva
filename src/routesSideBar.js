@@ -8,7 +8,7 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/tables",
+        path: "/calendario",
         name: "Calendario",
         icon: "ni ni-calendar-grid-58 text-red",
         layout: "/admin",
@@ -38,7 +38,7 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/mesas",
+        path: "/asignar-mesa",
         name: "Mesas asignadas",
         icon: "ni ni-support-16 text-info",
         layout: "/admin",
@@ -50,7 +50,7 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/login",
+        path: "/graficas",
         name: "Graficas",
         icon: "ni ni-chart-bar-32 text-orange",
         layout: "/admin",
@@ -62,10 +62,10 @@ export let routesSideBar = [
         layout: "/admin",
     },
     {
-        path: "/register",
-        name: "Ajustes",
+        path: "/configuracion",
+        name: "Configuracion",
         icon: "ni ni-settings text-info",
-        layout: "/auth",
+        layout: "/admin",
     },
     // {
     //     path: "/tables",
