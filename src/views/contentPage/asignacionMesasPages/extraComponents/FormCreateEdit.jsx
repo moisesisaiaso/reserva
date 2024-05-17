@@ -21,6 +21,28 @@ export const FormCreateEdit = ({ id, type }) => {
         getReservas("/intimar/reserva");
     }, []);
 
+    /* prueba  */
+    const ubicaciones = [
+        "patio",
+        "terraza",
+        "patio",
+        "frente",
+        "patio",
+        "piscina",
+        "barco",
+        "piscina",
+        "frente",
+    ];
+
+    ubicaciones.forEach((ubicacion, indice) => {
+        if (ubicaciones.lastIndexOf(ubicacion) !== ubicaciones.indexOf(ubicacion)) {
+            ubicaciones.splice(indice, 1);
+        }
+    });
+
+    console.log("ubicaciones: ", ubicaciones);
+    for (let i = 0; i < ubicaciones.length; i++) {}
+
     useEffect(() => {
         let parseId = parseInt(id);
         /* cuando el id es de reservaId */
@@ -66,8 +88,16 @@ export const FormCreateEdit = ({ id, type }) => {
                         <label className="form-control-label" htmlFor="input-reserva">
                             Reservas en espera
                         </label>
-                        <FormGroup>
-                            <Input id="input-reservas" type="select" {...register("reservaId")}>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                type="select"
+                                {...register("reservaId")}
+                            >
                                 {/*cuando la reserva viene por id o selecciono la reserva*/}
                                 {id && type === "reserva" && reserva ? (
                                     <option
@@ -84,7 +114,7 @@ export const FormCreateEdit = ({ id, type }) => {
                                         );
                                     })
                                 )}
-                            </Input>
+                            </select>
                         </FormGroup>
                     </Col>
                 </Row>
@@ -96,10 +126,18 @@ export const FormCreateEdit = ({ id, type }) => {
                         <label className="form-control-label" htmlFor="input-mesas">
                             Mesas
                         </label>
-                        <FormGroup>
-                            <Input id="input-mesas" type="select" multiple {...register("mesas")}>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                type="select"
+                                multiple
+                                {...register("mesas")}
+                            >
                                 {mesasList?.map((mesa) => {
-                                    const { ubicacion_mesa, numero_mesa } = mesa;
                                     if (id && type === "mesa" && id === mesa.id) {
                                         return (
                                             <option key={mesa.id} value={mesa.id} selected>
@@ -114,7 +152,7 @@ export const FormCreateEdit = ({ id, type }) => {
                                         );
                                     }
                                 })}
-                            </Input>
+                            </select>
                         </FormGroup>
                     </Col>
                 </Row>

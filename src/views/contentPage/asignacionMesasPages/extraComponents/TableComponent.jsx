@@ -61,7 +61,7 @@ export const TableComponent = ({
                         ))}
                     </ul>
                 </td>
-                <td>{`${mozo.name} ${mozo.lastname}`}</td>
+                <td>{`${mozo?.name} ${mozo?.lastname}`}</td>
                 <td className={myStyles.actions}>
                     <a onClick={handleMozo} className={myStyles.btnReserva}>
                         Asignar Mezo

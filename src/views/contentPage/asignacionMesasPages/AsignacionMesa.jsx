@@ -16,6 +16,8 @@ const AsignacionMesa = () => {
     const [reservaList, setReservaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [mesas, getMesas] = useCrud();
+    const [mesasAsignadas, setMesasAsignadas] = useState();
+    const [reservasAsignadas, setReservasAsignadas] = useState();
     const [reservas, getReservas, , , , removeAsignacion] = useCrud();
 
     useEffect(() => {
@@ -23,29 +25,38 @@ const AsignacionMesa = () => {
         getReservas("/intimar/reserva");
     }, []);
 
-    /* obtener solo las mesas con asignacion de mesa */
-    const mesasAsignadas = mesas?.filter((mesa) => mesa.estado_mesa === false);
+    console.log("paginaActual: ", currentPage);
 
-    /* obtener solo las reservas con asignaciones */
-    const reservasAsignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
     let itemsPerPage = 5;
+
+    useEffect(() => {
+        /* obtener solo las mesas con asignacion de mesa */
+        if (mesas) {
+            const asignadas = mesas?.filter((mesa) => mesa.estado_mesa === false);
+            setMesasAsignadas(asignadas);
+        }
+
+        if (reservas) {
+            /* obtener solo las reservas con asignaciones */
+            const asignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
+            setReservasAsignadas(asignadas);
+        }
+
+        // Función para obtener los datos paginados
+        if (reservasAsignadas) {
+            const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
+            console.log("array cortado", cutArray);
+            setReservaList(cutArray);
+        }
+    }, [mesas, currentPage, reservas]);
 
     let pages = Math.ceil(
         reservasAsignadas?.length / itemsPerPage
     ); /* este dato es para utilizarlo en la paginación */
 
-    console.log("paginaActual: ", currentPage);
-
-    useEffect(() => {
-        // Función para obtener los datos paginados
-        if (reservasAsignadas) {
-            const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
-            setReservaList(cutArray);
-        }
-    }, [mesas, currentPage, reservas]);
-
+    console.log("lista de reserva con mesa:", reservasAsignadas);
     return (
         <>
             {/* Page content */}
@@ -65,7 +76,7 @@ const AsignacionMesa = () => {
                                     <OptionBtn setIsTable={setIsTable} />
                                 </section>
                                 <h2 className={myStyles.clientsH2}>
-                                    Lista de Mesas Asignadas x Reserva ({mesasAsignadas?.length}{" "}
+                                    Lista de Mesas Asignadas x Reserva ({mesasAsignadas?.length}
                                     mesas)
                                 </h2>
 

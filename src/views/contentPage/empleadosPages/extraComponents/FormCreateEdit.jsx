@@ -1,3 +1,4 @@
+import myStyles from "../../../../assets/css/myStyles.module.css";
 import { FormGroup, Form, Input, Col, Row, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
@@ -40,6 +41,8 @@ export const FormCreateEdit = ({ id }) => {
             cellphone: "",
             roles: [],
         });
+
+        window.location.href = "/admin/employees";
     };
 
     return (
@@ -51,9 +54,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-name">
                             Nombre
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-name"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Nombre"
                                 type="text"
                                 {...register("name")}
@@ -64,9 +67,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-lastname">
                             Apellido
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-lastname"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Apellido"
                                 type="text"
                                 {...register("lastname")}
@@ -79,9 +82,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-email">
                             Correo Electrónico
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-email"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Correo Electrónico"
                                 type="email"
                                 {...register("email")}
@@ -92,9 +95,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-password">
                             Contraseña
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-password"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese la Contraseña"
                                 type="password"
                                 {...register("password")}
@@ -107,9 +110,9 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-cellphone">
                             Teléfono
                         </label>
-                        <FormGroup>
-                            <Input
-                                id="input-cellphone"
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
                                 placeholder="Ingrese el Teléfono"
                                 type="text"
                                 {...register("cellphone")}
@@ -122,14 +125,23 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-roles">
                             Roles
                         </label>
-                        <FormGroup>
-                            <Input id="input-roles" type="select" multiple {...register("roles")}>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                type="select"
+                                multiple
+                                {...register("roles")}
+                            >
                                 {/* Opciones de roles */}
                                 <option value="anfitrion">Anfitrión</option>
                                 <option value="recepcionista">Recepcionista</option>
                                 <option value="administrador">Administrador</option>
                                 <option value="mesero">Mesero</option>
-                            </Input>
+                            </select>
                         </FormGroup>
                     </Col>
                 </Row>
