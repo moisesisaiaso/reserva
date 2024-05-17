@@ -19,11 +19,12 @@ const AsignacionMesa = () => {
     const [mesasAsignadas, setMesasAsignadas] = useState();
     const [reservasAsignadas, setReservasAsignadas] = useState();
     const [reservas, getReservas, , , , removeAsignacion] = useCrud();
+    const [actualizar, setActualizar] = useState(false);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
         getReservas("/intimar/reserva");
-    }, []);
+    }, [actualizar]);
 
     console.log("paginaActual: ", currentPage);
 
@@ -43,14 +44,16 @@ const AsignacionMesa = () => {
             const asignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
             setReservasAsignadas(asignadas);
         }
+    }, [mesas, reservas, actualizar]);
 
+    useEffect(() => {
         // Función para obtener los datos paginados
         if (reservasAsignadas) {
             const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
             console.log("array cortado", cutArray);
             setReservaList(cutArray);
         }
-    }, [mesas, currentPage, reservas]);
+    }, [reservasAsignadas, currentPage]);
 
     let pages = Math.ceil(
         reservasAsignadas?.length / itemsPerPage
@@ -113,6 +116,8 @@ const AsignacionMesa = () => {
                                                         lengthId={i}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
+                                                        setActualizar={setActualizar}
+                                                        actualizar={actualizar}
                                                     />
                                                 ))}
                                                 {reservaList?.length === 0 && (
