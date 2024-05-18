@@ -3,8 +3,8 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 import React, { useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { format } from 'date-fns';
-import es from 'date-fns/locale/es'; 
+import { format } from "date-fns";
+import es from "date-fns/locale/es";
 
 export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
     const {
@@ -63,7 +63,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         }
     };
 
-    const fechaFormateada = format(new Date(fecha_reserva), 'dd-MM-yyyy', { locale: es });
+    const fechaFormateada = format(new Date(fecha_reserva), "dd-MM-yyyy", { locale: es });
     return (
         <>
             <tr>

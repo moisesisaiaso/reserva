@@ -31,21 +31,20 @@ export const FormCreateEdit = ({ id }) => {
         let parseId = parseInt(id);
         if (id && mesa) {
             let mesaEdit = mesa?.filter((element) => element.id === parseId);
-    
+
             // Verificar que mesaEdit no esté vacío antes de desestructurar
             if (mesaEdit.length > 0) {
                 const { ubicacion_mesa, numero_mesa, estado_mesa } = mesaEdit[0];
                 reset({
                     ubicacion_mesa,
                     numero_mesa,
-                    estado_mesa: estado_mesa.toString(), 
+                    estado_mesa: estado_mesa.toString(),
                 });
             } else {
                 console.warn(`No se encontró ninguna mesa con el ID: ${id}`);
             }
         }
     }, [mesa, id, reset]);
-    
 
     const submit = async (data) => {
         data.estado_mesa = data.estado_mesa === "true";
@@ -62,7 +61,6 @@ export const FormCreateEdit = ({ id }) => {
         reset({
             ubicacion_mesa: "",
             numero_mesa: "",
-            estado_mesa: "",
         });
 
         window.location.href = "/admin/mesas";
@@ -99,23 +97,6 @@ export const FormCreateEdit = ({ id }) => {
                                 type="text"
                                 {...register("numero_mesa")}
                             />
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="12">
-                        <label className="form-control-label" htmlFor="input-estado-mesa">
-                            Estado
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-estado-mesa"
-                                {...register("estado_mesa")}
-                            >
-                                <option value="true">Disponible</option>
-                                <option value="false">No disponible</option>
-                            </select>
                         </FormGroup>
                     </Col>
                 </Row>
