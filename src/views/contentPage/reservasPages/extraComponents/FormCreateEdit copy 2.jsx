@@ -251,7 +251,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
             setCollapseIsOpen(false);
 
-            // window.location.href = "/admin/reservas";
+            window.location.href = "/admin/reservas";
         } catch (error) {
             console.log(error);
         }

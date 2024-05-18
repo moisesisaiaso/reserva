@@ -34,7 +34,7 @@ export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPag
     };
 
     const handleDelete = () => {
-        deleteEmployee("/intimar/employee/", id);
+        deleteEmployee("/intimar/employee", id);
         toggleModal();
     };
 
