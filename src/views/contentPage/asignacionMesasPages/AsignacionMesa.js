@@ -51,12 +51,11 @@ const AsignacionMesa = () => {
 
     useEffect(() => {
         // Función para obtener los datos paginados para reservas
-        if (reservasAsignadas) {
+        if (reservasAsignadas && isTable) {
             const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
             console.log("array cortado", cutArray);
             setReservaList(cutArray);
-        }
-        if (mesas) {
+        } else if (mesas && !isTable) {
             // Función para obtener los datos paginados para mesas
             const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
             setMesaList(cutArray);
@@ -94,7 +93,10 @@ const AsignacionMesa = () => {
                                 {/* filtros */}
                                 <section>
                                     {isTable ? (
-                                        <Filters mesas={mesas} setMesaList={setMesaList} />
+                                        <Filters
+                                            mesasAsignadas={mesasAsignadas}
+                                            setMesaList={setMesaList}
+                                        />
                                     ) : (
                                         <FilterSearch mesas={mesas} setMesaList={setMesaList} />
                                     )}
