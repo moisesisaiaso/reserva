@@ -26,7 +26,6 @@ const Reserva = () => {
     useEffect(() => {
         const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
         setReservaList(cutArray);
-        setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
     }, [reservas, currentPage]);
 
     const handleFilter = (filteredReservas) => {

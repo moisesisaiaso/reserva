@@ -4,7 +4,8 @@ import Index from "views/Index.js";
 import Profile from "views/contentPage/Profile.js";
 import Register from "views/contentPage/Register.js";
 import Login from "views/contentPage/Login.js";
-import Tables from "views/contentPage/Tables.js";
+import Calendario from "views/contentPage/Calendario";
+import Graficas from "views/contentPage/Graficas";
 
 //? Client
 import Client from "views/contentPage/clientesPages/Client";
@@ -28,6 +29,10 @@ import { CreateMesa } from "views/contentPage/mesasPages/CreateMesa";
 import Employee from "views/contentPage/empleadosPages/Employee";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
 import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
+
+//? Configuracion
+import Configuracion from "views/contentPage/Configuracion";
+
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -109,7 +114,18 @@ let routes = [
         component: <CreateEmployee />,
         layout: "/admin",
     },
-
+    //^GRAFICAS
+    {
+        path: "/graficas",
+        component: <Graficas />,
+        layout: "/admin",
+    },
+    //^CONFIGURACION
+    {
+        path: "/configuracion",
+        component: <Configuracion />,
+        layout: "/admin",
+    },
     //^AUTH
     {
         path: "/user-profile",
@@ -117,8 +133,8 @@ let routes = [
         layout: "/admin",
     },
     {
-        path: "/tables",
-        component: <Tables />,
+        path: "/calendario",
+        component: <Calendario />,
         layout: "/admin",
     },
     {

@@ -14,39 +14,41 @@ export const Filters = ({ reservas, setReservaList }) => {
     const inputMes = useRef();
     const inputDia = useRef();
     const inputEstado = useRef();
+    const inputCliente = useRef();
     const [horaSeleccionada, setHoraSeleccionada] = useState("");
     const [diaEspecifico, setDiaEspecifico] = useState("");
     const [mesSeleccionado, setMesSeleccionado] = useState("");
+    const [nombreCliente, setNombreCliente] = useState(""); 
 
-    // Función para buscar reservas según los criterios de búsqueda
+        // Función para buscar reservas según los criterios de búsqueda
     function searchReserva() {
         const mes = mesSeleccionado;
         const dia = inputDia.current?.value;
         const estadoReserva = inputEstado.current?.value;
-
-        // Verificar si reservas está definido
+        const nombre = nombreCliente.toLowerCase(); 
+  // Verificar si reservas está definido
         if (!reservas) {
             return;
         }
 
-        // Filtrar por mes, día, hora y estado de reserva
+  // Filtrar por mes, día, hora, estado de reserva, cliente
         const filteredReservas = reservas.filter((reserva) => {
             let mesMatch = true;
             let diaMatch = true;
             let horaMatch = true;
             let estadoMatch = true;
+            let clienteMatch = true;
 
-            // Verificar si el mes coincide
+             // Verificar si el mes coincide
             if (mes !== "") {
                 mesMatch = reserva.fecha_reserva.includes(`-${mes}-`);
             }
-
             // Verificar si se proporciona un día específico y coincide
             if (dia !== "") {
                 diaMatch = reserva.fecha_reserva.includes(`-${mes}-${dia}`);
             }
-
             // Verificar si la hora seleccionada coincide
+
             if (horaSeleccionada !== "") {
                 const horaReserva = parseInt(reserva.hora_reserva.split(":")[0]);
                 const horaInicio = parseInt(horaSeleccionada.split(":")[0]);
@@ -60,7 +62,12 @@ export const Filters = ({ reservas, setReservaList }) => {
                 estadoMatch = reserva.estado_reserva === estadoReserva;
             }
 
-            return mesMatch && diaMatch && horaMatch && estadoMatch;
+            if (nombre !== "") { 
+                const clienteNombreCompleto = `${reserva.client?.name} ${reserva.client?.lastname}`.toLowerCase();
+                clienteMatch = clienteNombreCompleto.includes(nombre);
+            }
+
+            return mesMatch && diaMatch && horaMatch && estadoMatch && clienteMatch;
         });
 
         setReservaList(filteredReservas);
@@ -69,27 +76,42 @@ export const Filters = ({ reservas, setReservaList }) => {
     // Función para reiniciar la tabla y mostrar todas las reservas
     function resetTable() {
         setReservaList(reservas);
-        // Reiniciar valores de los campos de búsqueda
         inputMes.current.value = "";
         inputDia.current.value = "";
         inputEstado.current.value = "";
+        inputCliente.current.value = "";
         setHoraSeleccionada("");
         setDiaEspecifico("");
         setMesSeleccionado("");
+        setNombreCliente("");
     }
 
-    // UseEffect para invocar la función de búsqueda al cambiar las opciones de búsqueda
+        // UseEffect para invocar la función de búsqueda al cambiar las opciones de búsqueda
+
     useEffect(() => {
         searchReserva();
-    }, [mesSeleccionado, diaEspecifico, horaSeleccionada]);
+    }, [mesSeleccionado, diaEspecifico, horaSeleccionada, nombreCliente]); 
 
     return (
         <div className={myStyles.inputFilters}>
             <Form>
+                <label for = "buscar">Buscar por: </label>
                 <Row>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="mes_reserva">Buscar por Mes</Label>
+                            <Label for="nombre_cliente"> Nombre del Cliente</Label> 
+                            <Input
+                                type="text"
+                                id="nombre_cliente"
+                                placeholder="Nombre del cliente"
+                                onChange={(e) => setNombreCliente(e.target.value)}
+                                innerRef={inputCliente}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={12} sm={6} md={2}>
+                        <FormGroup>
+                            <Label for="mes_reserva"> Mes</Label>
                             <Input
                                 type="select"
                                 id="mes_reserva"
@@ -112,32 +134,25 @@ export const Filters = ({ reservas, setReservaList }) => {
                             </Input>
                         </FormGroup>
                     </Col>
-                    <Col xs={12} sm={6} md={3}>
+                    <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="dia_reserva">Buscar por Día</Label>
+                            <Label for="dia_reserva"> Día</Label>
                             <Input
                                 type="text"
                                 id="dia_reserva"
                                 placeholder="Día específico"
-                                onChange={(e) => setDiaEspecifico(e.target.value)}
                                 innerRef={inputDia}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        searchReserva();
-                                    }
-                                }}
+                                onChange={(e) => setDiaEspecifico(e.target.value)}
                             />
                         </FormGroup>
                     </Col>
-                    <Col xs={12} sm={6} md={3}>
+                    <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="hora_reserva">Buscar por Hora</Label>
+                            <Label for="hora_reserva"> Hora</Label>
                             <Input
                                 type="select"
                                 id="hora_reserva"
-                                onChange={(e) => {
-                                    setHoraSeleccionada(e.target.value);
-                                }}
+                                onChange={(e) => setHoraSeleccionada(e.target.value)}
                             >
                                 <option value="">Todas las horas</option>
                                 <option value="11:00">11:00 am</option>
@@ -151,12 +166,12 @@ export const Filters = ({ reservas, setReservaList }) => {
                     </Col>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
+                            <Label for="estado_reserva"> Estado de Reserva</Label>
                             <Input
                                 type="select"
                                 id="estado_reserva"
                                 innerRef={inputEstado}
-                                onChange={searchReserva} 
+                                onChange={searchReserva}
                             >
                                 <option value="">Todos los estados</option>
                                 <option value="Pendiente a confirmar">Pendiente a confirmar</option>
@@ -166,7 +181,6 @@ export const Filters = ({ reservas, setReservaList }) => {
                         </FormGroup>
                     </Col>
                     <Col xs={12} className="d-flex justify-content-end">
-                        {/*<Button color="primary" onClick={searchReserva} className="mr-2 mb-2">  Buscar</Button>*/}
                         <Button color="secondary" onClick={resetTable} className="mb-2">
                             Reiniciar
                         </Button>

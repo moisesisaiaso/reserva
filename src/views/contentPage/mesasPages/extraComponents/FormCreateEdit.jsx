@@ -31,17 +31,21 @@ export const FormCreateEdit = ({ id }) => {
         let parseId = parseInt(id);
         if (id && mesa) {
             let mesaEdit = mesa?.filter((element) => element.id === parseId);
-
-            console.log(mesaEdit);
-
-            const { ubicacion_mesa, numero_mesa, estado_mesa } = mesaEdit[0];
-            reset({
-                ubicacion_mesa,
-                numero_mesa,
-                estado_mesa: estado_mesa.toString(),
-            });
+    
+            // Verificar que mesaEdit no esté vacío antes de desestructurar
+            if (mesaEdit.length > 0) {
+                const { ubicacion_mesa, numero_mesa, estado_mesa } = mesaEdit[0];
+                reset({
+                    ubicacion_mesa,
+                    numero_mesa,
+                    estado_mesa: estado_mesa.toString(), 
+                });
+            } else {
+                console.warn(`No se encontró ninguna mesa con el ID: ${id}`);
+            }
         }
-    }, [mesa]);
+    }, [mesa, id, reset]);
+    
 
     const submit = async (data) => {
         data.estado_mesa = data.estado_mesa === "true";

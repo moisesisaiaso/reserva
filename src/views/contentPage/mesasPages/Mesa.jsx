@@ -72,43 +72,45 @@ const Mesa = () => {
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>
-                                    {isTable ? (
-                                        <Table striped responsive>
-                                            <thead>
+                                {isTable ? (
+                                    <Table striped responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Ubicación de Mesa</th>
+                                                <th>Número de Mesa</th>
+                                                <th>Estado de Mesa</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {mesaList?.map((mesa, i) => (
+                                                <TableComponent
+                                                    key={mesa.id}
+                                                    mesa={mesa}
+                                                    lengthId={i}
+                                                    deleteMesa={deleteMesa}
+                                                    currentPage={currentPage}
+                                                    itemsPerPage={itemsPerPage}
+                                                />
+                                            ))}
+                                            {mesaList?.length === 0 && (
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Ubicación de Mesa</th>
-                                                    <th>Número de Mesa</th>
-                                                    <th>Estado de Mesa</th>
-                                                    <th>Acciones</th>
+                                                    <td colSpan="5" className="text-center">
+                                                        No hay mesas para mostrar
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {mesaList?.map((mesa, i) => (
-                                                    <TableComponent
-                                                        key={mesa.id}
-                                                        mesa={mesa}
-                                                        lengthId={i}
-                                                        deleteMesa={deleteMesa}
-                                                        currentPage={currentPage}
-                                                        itemsPerPage={itemsPerPage}
-                                                    />
-                                                ))}
-                                                {mesaList?.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan="5">
-                                                            No hay mesas para mostrar
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </Table>
-                                    ) : (
-                                        mesaList?.map((mesa) => (
-                                            <CardMesa key={mesa.id} mesa={mesa} />
-                                        ))
-                                    )}
-                                </section>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                ) : mesaList?.length === 0 ? (
+                                    <p className="text-center">No hay mesas para mostrar</p>
+                                ) : (
+                                    mesaList?.map((mesa) => (
+                                        <CardMesa key={mesa.id} mesa={mesa} />
+                                    ))
+                                )}
+                            </section>
 
                                 {/* Paginación */}
                                 <section>
