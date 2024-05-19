@@ -5,6 +5,7 @@ import { FormGroup, Col, Row, Button, Collapse } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
+import { json } from "react-router-dom";
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
@@ -148,8 +149,12 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* varible a la que se le asigna la data puede ser (form data u objeto json) */
     let requestData;
 
+
+
     const submit = async (data) => {
-        try {
+        try { 
+           console.log("data: ", data.file[0]);
+           data.file= data.file[0]
             if (reservarWithClientId) {
                 data.clienteId = reservarWithClientId;
             } else {
@@ -181,15 +186,14 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 // }
                 if (data.anticipo) {
                     const anticipoConArchivo = {
-                        ...data.anticipo,
-                        file: currentFile,
+                        ...data.anticipo, 
                     };
                     formData.append("anticipo", JSON.stringify(anticipoConArchivo));
                 }
 
                 // Luego, maneja todas las demás claves que no están anidadas
                 for (const key in data) {
-                    if (data.hasOwnProperty(key) && key !== "anticipo" && key !== "file") {
+                    if (data.hasOwnProperty(key) && key !== "anticipo" ) {
                         formData.append(key, data[key]);
                     }
                 }
@@ -251,7 +255,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
             setCollapseIsOpen(false);
 
-            window.location.href = "/admin/reservas";
+            // window.location.href = "/admin/reservas";
         } catch (error) {
             console.log(error);
         }
@@ -457,6 +461,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 >
                                     <select
                                         className={`form-control-alternative ${myStyles.input}`}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
                                         id="input-city"
                                         {...register("anticipo.banco")}
                                         required={collapseIsOpen}
@@ -482,6 +490,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 >
                                     <select
                                         className={`form-control-alternative ${myStyles.input}`}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
                                         id="input-city"
                                         {...register("anticipo.moneda")}
                                         required={collapseIsOpen}
@@ -503,6 +515,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 >
                                     <select
                                         className={`form-control-alternative ${myStyles.input}`}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
                                         id="input-city"
                                         {...register("anticipo.estado_anticipo")}
                                         required={collapseIsOpen}

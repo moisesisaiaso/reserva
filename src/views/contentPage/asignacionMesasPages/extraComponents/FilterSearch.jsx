@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
 import {
@@ -50,6 +50,10 @@ export const FilterSearch = ({ mesas, setMesaList }) => {
         setSelectedFilter("Todos");
         setMesaList(mesas);
     };
+
+    /*  useEffect(() => {
+        setMesaList(mesas);
+    }, []); */
 
     const getButtonClass = (zona) => {
         // Asignar estilo adicional si es el filtro activo

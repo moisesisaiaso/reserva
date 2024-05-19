@@ -42,7 +42,7 @@ export const CardMesa = ({ mesa }) => {
                     <CardText>
                         <ul className={myStyles.cardList}>
                             <li>
-                                <i className="ni ni-pin-3" /> {mesa?.ubicacion_mesa}
+                                <i className="ni ni-pin-3" /> {ubicacion_mesa}
                             </li>
                             <li>
                                 <i class="ni ni-bulb-61"></i> {estado}
