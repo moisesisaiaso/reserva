@@ -43,7 +43,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     }}
                     className={activeTabla}
                 >
-                    Tabla
+                    Asignadas
                 </Button>
                 <Button
                     color="info"
@@ -56,7 +56,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     }}
                     className={activeTarjeta}
                 >
-                    Tarjetas
+                    Mesas
                 </Button>
             </div>
         </>
