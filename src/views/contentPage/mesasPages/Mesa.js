@@ -15,13 +15,14 @@ import { FilterSearch } from "./extraComponents/FilterSearch";
 
 const Mesa = () => {
     const [isTable, setIsTable] = useState(true);
-    const [mesas, getMesas, , deleteMesa] = useCrud();
+    const [mesas, getMesas, , deleteMesa, updateMesa] = useCrud();
     const [mesaList, setMesaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+    const [updated, setUpdated] = useState(false);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
-    }, []);
+    }, [updated]);
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
@@ -120,7 +121,13 @@ const Mesa = () => {
                                         <p className="text-center">No hay mesas para mostrar</p>
                                     ) : (
                                         mesaList?.map((mesa) => (
-                                            <CardMesa key={mesa.id} mesa={mesa} />
+                                            <CardMesa
+                                                key={mesa.id}
+                                                mesa={mesa}
+                                                updateMesa={updateMesa}
+                                                updated={updated}
+                                                setUpdated={setUpdated}
+                                            />
                                         ))
                                     )}
                                 </section>

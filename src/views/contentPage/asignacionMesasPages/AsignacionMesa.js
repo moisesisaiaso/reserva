@@ -18,16 +18,18 @@ const AsignacionMesa = () => {
     const [reservaList, setReservaList] = useState();
     const [mesaList, setMesaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-    const [mesas, getMesas] = useCrud();
+    const [mesas, getMesas, , , updateMesa] = useCrud();
     const [mesasAsignadas, setMesasAsignadas] = useState();
     const [reservasAsignadas, setReservasAsignadas] = useState();
     const [reservas, getReservas, , , , removeAsignacion] = useCrud();
-    const [actualizar, setActualizar] = useState(false);
+    const [updated, setUpdated] = useState(false);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
         getReservas("/intimar/reserva");
-    }, [actualizar]);
+    }, [updated]);
+
+    console.log("liberado;", updated);
 
     console.log("paginaActual: ", currentPage);
 
@@ -47,7 +49,7 @@ const AsignacionMesa = () => {
             const asignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
             setReservasAsignadas(asignadas);
         }
-    }, [mesas, reservas, actualizar]);
+    }, [mesas, reservas, updated]);
 
     useEffect(() => {
         // Función para obtener los datos paginados para reservas
@@ -61,7 +63,7 @@ const AsignacionMesa = () => {
             const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
             setMesaList(cutArray);
         }
-    }, [reservasAsignadas, currentPage, mesas, isTable]);
+    }, [reservasAsignadas, currentPage, mesas, isTable, updated]);
 
     let pages = 1;
 
@@ -136,8 +138,8 @@ const AsignacionMesa = () => {
                                                         lengthId={i}
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
-                                                        setActualizar={setActualizar}
-                                                        actualizar={actualizar}
+                                                        setUpdated={setUpdated}
+                                                        updated={updated}
                                                     />
                                                 ))}
                                                 {reservaList?.length === 0 && (
@@ -154,7 +156,13 @@ const AsignacionMesa = () => {
                                         <p className="text-center">No hay mesas para mostrar</p>
                                     ) : (
                                         mesaList?.map((mesa) => (
-                                            <CardMesa key={mesa.id} mesa={mesa} />
+                                            <CardMesa
+                                                key={mesa.id}
+                                                mesa={mesa}
+                                                updateMesa={updateMesa}
+                                                setUpdated={setUpdated}
+                                                updated={updated}
+                                            />
                                         ))
                                     )}
                                 </section>

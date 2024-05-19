@@ -388,6 +388,11 @@
     color: black;
 }
 
+.cardButtonMesa:active {
+    background-color: #d2e3ee !important;
+    color: black !important;
+}
+
 .mesa.mesa__noDisponible {
     background-color: #c3102f;
 }

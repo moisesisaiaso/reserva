@@ -2,28 +2,31 @@ import { useEffect, useState } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
 import { Button, Card, CardBody, CardHeader, CardText, CardTitle } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { useCrud } from "hooks/useCrud";
 
-export const CardMesa = ({ mesa }) => {
+export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
     const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
-    const [estado, setEstado] = useState();
+    const [estado, setEstado] = useState(estado_mesa ? "Disponible" : "No disponible");
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (estado_mesa && estado_mesa === true) {
+        if (estado_mesa) {
             setEstado("Disponible");
         } else {
             setEstado("No disponible");
         }
-    }, []);
+    }, [updated]);
 
     const handleMesaAsignar = () => {
         /* aquí enviamos a asignar mesa */
         navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
     };
 
-    const handleMesaLiberar = () => {
+    const handleMesaLiberar = async () => {
+        const data = { estado_mesa: true };
         /* aquí enviamos a liberar mesa */
-        // window.location.href = `/admin/clients/detail/${id}`;
+        await updateMesa("intimar/mesa", id, data);
+        setUpdated(!updated);
     };
 
     return (
@@ -42,7 +45,7 @@ export const CardMesa = ({ mesa }) => {
                     <CardText>
                         <ul className={myStyles.cardList}>
                             <li>
-                                <i className="ni ni-pin-3" /> {mesa?.ubicacion_mesa}
+                                <i className="ni ni-pin-3" /> {ubicacion_mesa}
                             </li>
                             <li>
                                 <i class="ni ni-bulb-61"></i> {estado}

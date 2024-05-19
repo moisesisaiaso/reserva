@@ -10,8 +10,8 @@ export const TableComponent = ({
     lengthId,
     itemsPerPage,
     currentPage,
-    setActualizar,
-    actualizar,
+    setUpdated,
+    updated,
 }) => {
     const { id, client, fecha_reserva, hora_reserva, mesas, mozo } = reserva;
 
@@ -34,7 +34,7 @@ export const TableComponent = ({
     const handleDelete = async () => {
         await removeAsignacion(`/intimar/reserva/${id}/mesa`);
         toggleModal();
-        setActualizar(!actualizar);
+        setUpdated(!updated);
     };
 
     /* items asignaciones */
