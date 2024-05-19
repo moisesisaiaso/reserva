@@ -1,32 +1,25 @@
-import React, { useState } from "react";
-import { Button, Modal } from "reactstrap";
-import { useNavigate } from "react-router-dom";
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPage, currentPage }) => {
-    const navigate = useNavigate(); // Llama a useNavigate fuera de la estructura condicional
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+// reactstrap components
+import { Button, Modal } from "reactstrap";
 
-    // Define stateModal fuera de la estructura condicional
+export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
+    const { id, ubicacion_mesa, numero_mesa, estado_mesa} = mesa;
+
+    const navigate = useNavigate();
+
     const [stateModal, setStateModal] = useState(false);
 
-    // Verificar si employee está definido antes de desestructurarlo
-    if (!employee) {
-        return null; // O cualquier otro comportamiento deseado
-    }
-
-    // Desestructurar employee si está definido
-    const { id, name, lastname, email, cellphone, roles } = employee;
-
-    const handleEmployee = () => {
-        navigate("/admin/employees/create", { state: id });
+    const handleMesa = () => {
+        /* aquí enviamos a asignar mesa */
+        // navigate("/admin/reservas/create", { state: id });
     };
 
-    const handleDetail = () => {
-        window.location.href = `/admin/employees/detail/${id}`;
-        
-    };
+   
     const handleEdit = () => {
-        window.location.href = `/admin/employees/create/${id}`;
+        navigate("/admin/mesas/create/",{state: id});
     };
 
     const toggleModal = () => {
@@ -34,41 +27,35 @@ export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPag
     };
 
     const handleDelete = () => {
-        deleteEmployee("/intimar/employee", id);
+        deleteMesa("/intimar/mesa", id);
         toggleModal();
     };
 
-    /* items clients */
+    /* items mesas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
     return (
         <>
             <tr>
-                {/* <th scope="row">{lengthId + 1 + groupPage}</th> */}
-                <td>{id}</td>
-                <td> {name}</td>
-                <td> {lastname}</td>
-                <td>{email} </td>
-                <td>{cellphone}</td>
-                <td>                 
-                <ul>{employee.roles.map((role, index) => (
-                <li key={index}>{role.name}</li>
-                ))}
-                </ul>
+                <th scope="row">{lengthId + 1 + groupPage}</th>
+                <td>
+                    {ubicacion_mesa}
                 </td>
-                {/* <td> {roles}</td>  */}
+                <td>{numero_mesa} </td>
+                <td>{mesa.estado_mesa ? 'Disponible' : 'No disponible'}</td>
                 <td className={myStyles.actions}>
+                    <a onClick={handleMesa} className={myStyles.btnReserva}>
+                       Asignar mesa
+                    </a>
+
                     <div>
-                        <a onClick={handleDetail} className={myStyles.btnDetail}>
-                            <i className="fa-regular fa-eye fa-2x"></i>
-                        </a>
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
-                            <i className="fa-regular fa-pen-to-square fa-2x"></i>
+                            <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
 
                         <a href="#" className={myStyles.btnDelete} onClick={toggleModal}>
-                            <i className="fa-regular fa-trash-can fa-2x"></i>
+                            <i class="fa-regular fa-trash-can fa-2x"></i>
                         </a>
                     </div>
                 </td>
@@ -93,9 +80,9 @@ export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPag
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguró que desea eliminar al Empleado con nombre{" "}
+                        Está seguró que desea eliminar la mesa 
                         <strong>
-                            {name} {lastname}
+                            # {numero_mesa}
                         </strong>
                     </p>
                 </div>

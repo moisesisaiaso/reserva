@@ -10,6 +10,7 @@ import {
     InputGroup,
     Col,
     Row,
+    Button,
 } from "reactstrap";
 
 export const Filters = ({ clients, setClientList }) => {
@@ -41,6 +42,18 @@ export const Filters = ({ clients, setClientList }) => {
 
         setClientList(filteredClients);
     }
+
+        // Función para reiniciar la tabla
+        function resetTable() {
+            // Reiniciar la tabla aquí
+            // Por ejemplo:
+            setClientList(clients); // Esto reinicia la lista de clientes al estado original
+            inputName.current.value = ""; // Limpia el campo de búsqueda por nombre
+            inputEmail.current.value = ""; // Limpia el campo de búsqueda por email
+            inputCellphone.current.value = ""; // Limpia el campo de búsqueda por teléfono
+        }
+    
+    
 
     return (
         <div className={myStyles.inputFilters}>
@@ -123,6 +136,11 @@ export const Filters = ({ clients, setClientList }) => {
                             </InputGroup>
                         </FormGroup>
                     </Col>
+                    <Col xs={12} className="d-flex justify-content-end">
+                    <Button color="secondary" onClick={resetTable} className="mb-2">
+                        Reiniciar
+                    </Button>
+                </Col>
                 </Row>
             </Form>
         </div>

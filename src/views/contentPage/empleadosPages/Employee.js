@@ -18,7 +18,7 @@ import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 const Employee = () => {
     // Estados
     const [isTable, setIsTable] = useState(true); // Estado para alternar entre tabla y tarjetas
-    const [employees, getEmployees, , , deleteEmployee] = useCrud(); // CRUD para empleados
+    const [employees, getEmployees, , deleteEmployee] = useCrud(); // CRUD para empleados
     const [employeeList, setEmployeeList] = useState([]); // Lista de empleados a mostrar
     const [currentPage, setCurrentPage] = useState(1); // Página actual
 

@@ -1,3 +1,4 @@
+import myStyles from "../../assets/css/myStyles.module.css";
 import React, { useState, useEffect } from "react";
 import {
     Container,
@@ -18,7 +19,6 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import Header from "components/Headers/Header.js";
 import { useCrud } from "hooks/useCrud";
-import myStyles from "../../assets/css/myStyles.module.css";
 import { useNavigate } from "react-router-dom"; 
 
 const Calendario = () => {
@@ -39,9 +39,9 @@ const Calendario = () => {
         }
     };
 
-    const reservasDelDia = reservas ? reservas.filter(
+    const reservasDelDia = reservas ? reservas?.filter(
         (reserva) => {
-            const fechaReserva = new Date(reserva.fecha_reserva);
+            const fechaReserva = new Date(reserva?.fecha_reserva);
             const selected = new Date(selectedDate);
 
             const fechaReservaUTC = new Date(fechaReserva.getTime() + fechaReserva.getTimezoneOffset() * 60000);
@@ -70,9 +70,9 @@ const Calendario = () => {
         navigate("/admin/reservas/create");  
     };
 
-    // const handleDetail = (id) => {
-    //     navigate(`/admin/reservas/detail/${id}`); 
-    // };
+    const handleDetail = (id) => {
+        navigate("/admin/reservas/detail", { state: id });
+    };
 
     const handleClientDetail = (id) => {
         navigate(`/admin/clients/detail/${id}`);  
@@ -81,6 +81,7 @@ const Calendario = () => {
     return (
         <>
             <Header />
+
             <Container className="mt--7" fluid>
                 <Row>
                     <Col md="6">
@@ -122,16 +123,16 @@ const Calendario = () => {
                                 </Form>
                                 <ListGroup>
                                     {reservasDelDia.length > 0 ? (
-                                        reservasDelDia.map((reserva, index) => (
+                                        reservasDelDia?.map((reserva, index) => (
                                             <ListGroupItem key={index} className={myStyles.reservationItem}>
                                                 <div>
-                                                    <strong>{reserva.hora_reserva}</strong> - {reserva.client.name} {reserva.client.lastname}
+                                                    <strong>{reserva?.hora_reserva}</strong> - {reserva?.client?.name} {reserva?.client?.lastname}
                                                 </div>
                                                 <div>
-                                                    Adultos: {reserva.cant_adultos}, Niños: {reserva.cant_ninos}
+                                                    Adultos: {reserva?.cant_adultos}, Niños: {reserva?.cant_ninos}
                                                 </div>
-                                                {/* <Button color="info" size="sm" onClick={() => handleDetail(reserva.id)}>Ver detalle</Button> */}
-                                                <Button color="info" size="sm" onClick={() => handleClientDetail(reserva.client.id)}>Detalle Cliente</Button>
+                                                <Button color="info" size="sm" onClick={() => handleDetail(reserva.id)}>Ver detalle</Button>
+                                                {/* <Button color="info" size="sm" onClick={() => handleClientDetail(reserva?.client.id)}>Detalle Cliente</Button> */}
                                             </ListGroupItem>
                                         ))
                                     ) : (
