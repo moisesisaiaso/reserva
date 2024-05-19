@@ -547,7 +547,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                             type="file"
                                             {...register("file")}
                                             onChange={handleFileChange}
-                                            required={collapseIsOpen}
+                                            
                                         />
                                         <label className="custom-file-label" htmlFor="customFile">
                                             Seleccione el archivo
