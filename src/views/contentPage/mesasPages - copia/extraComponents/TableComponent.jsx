@@ -1,43 +1,37 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import React, { useEffect, useState } from "react";
-import { Badge, Button, Modal } from "reactstrap";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// reactstrap components
+import { Button, Modal } from "reactstrap";
 
-export const TableComponent = ({
-    reserva,
-    removeAsignacion,
-    lengthId,
-    itemsPerPage,
-    currentPage,
-    setUpdated,
-    updated,
-}) => {
-    const { id, client, fecha_reserva, hora_reserva, mesas, mozo } = reserva;
+export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
+    const { id, ubicacion_mesa, numero_mesa, estado_mesa} = mesa;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
-    const handleMozo = () => {
-        /* navigate("/admin/mesas/create", { state: id }); */
+    const handleMesa = () => {
+        /* aquí enviamos a asignar mesa */
+        // navigate("/admin/reservas/create", { state: id });
     };
 
-    const handleDetail = () => {
-        // navigate("/admin/mesas/detail", { state: id });
+   
+    const handleEdit = () => {
+        navigate("/admin/mesas/create/",{state: id});
     };
 
     const toggleModal = () => {
         setStateModal(!stateModal);
     };
 
-    const handleDelete = async () => {
-        await removeAsignacion(`/intimar/reserva/${id}/mesa`);
+    const handleDelete = () => {
+        deleteMesa("/intimar/mesa", id);
         toggleModal();
-        setUpdated(!updated);
     };
 
-    /* items asignaciones */
+    /* items mesas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
 
@@ -46,33 +40,18 @@ export const TableComponent = ({
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
                 <td>
-                    {client?.name} {client?.lastname}
+                    {ubicacion_mesa}
                 </td>
-                <td>{fecha_reserva}</td>
-                <td>{hora_reserva}</td>
-                <td>
-                    <ul>
-                        {mesas?.map((mesa) => (
-                            <li>{mesa.ubicacion_mesa}</li>
-                        ))}
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        {mesas?.map((mesa) => (
-                            <li>{mesa.numero_mesa}</li>
-                        ))}
-                    </ul>
-                </td>
-                <td>{`${mozo?.name} ${mozo?.lastname}`}</td>
+                <td>{numero_mesa} </td>
+                <td>{mesa.estado_mesa ? 'Disponible' : 'No disponible'}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleMozo} className={myStyles.btnReserva}>
-                        Asignar Mezo
+                    <a onClick={handleMesa} className={myStyles.btnReserva}>
+                       Asignar mesa
                     </a>
 
                     <div>
-                        <a onClick={handleDetail} className={myStyles.btnDetail}>
-                            <i class="fa-regular fa-eye fa-2x"></i>
+                        <a onClick={handleEdit} className={myStyles.btnEdit}>
+                            <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
 
                         <a href="#" className={myStyles.btnDelete} onClick={toggleModal}>
@@ -101,9 +80,9 @@ export const TableComponent = ({
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguro que desea eliminar la asignacion de la mesa del cliente:
+                        Está seguró que desea eliminar la mesa 
                         <strong>
-                            {client?.name} {client?.lastname}
+                            # {numero_mesa}
                         </strong>
                     </p>
                 </div>

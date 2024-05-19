@@ -54,7 +54,7 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Playa")}
-                                className={getButtonClass("Playa")} // Aplicar clase condicional
+                                className={getButtonClass("Playa")} 
                             >
                                 Playa
                             </Button>
@@ -71,7 +71,7 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Terraza")}
-                                className={getButtonClass("Terraza")} // Aplicar clase condicional
+                                className={getButtonClass("Terraza")} 
                             >
                                 Terraza
                             </Button>
@@ -88,7 +88,7 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Comedor")}
-                                className={getButtonClass("Comedor")} // Aplicar clase condicional
+                                className={getButtonClass("Comedor")}
                             >
                                 Comedor
                             </Button>
@@ -105,7 +105,7 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Bar")}
-                                className={getButtonClass("Bar")} // Aplicar clase condicional
+                                className={getButtonClass("Bar")} 
                             >
                                 Bar
                             </Button>
@@ -121,10 +121,10 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 type="button"
                                 size="lg"
                                 aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Portronas")}
-                                className={getButtonClass("Portronas")} // Aplicar clase condicional
+                                onClick={(e) => filterByUbicacion(e, "Poltrona")}
+                                className={getButtonClass("Poltrona")}
                             >
-                                Portronas
+                                Poltrona
                             </Button>
                         </InputGroup>
                     </FormGroup>

@@ -40,7 +40,7 @@ export const FormCreateEdit = ({ id }) => {
 
     const submit = async (data) => {
         if (!client) {
-            // Handle the case where client is not yet initialized
+          // Manejar el caso donde el cliente aún no está inicializado
             return;
         }
 

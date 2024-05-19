@@ -6,7 +6,13 @@ import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 
 export const FormCreateEdit = ({ id, type }) => {
-    const { handleSubmit, register, reset } = useForm();
+    const { handleSubmit, register, reset } = useForm({
+        // Establece aquí los valores por defecto
+        defaultValues: {
+            reservaId: id && type === "reserva" ? [id] : [],
+            mesas: id && type === "mesa" ? [id] : [],
+        },
+    });
     /* cuando reserva llega por id */
     const [reserva, setReserva] = useState();
 

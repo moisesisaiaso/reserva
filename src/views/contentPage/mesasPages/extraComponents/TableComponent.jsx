@@ -1,25 +1,38 @@
 import myStyles from "../../../../assets/css/myStyles.module.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // reactstrap components
 import { Button, Modal } from "reactstrap";
 
 export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, currentPage }) => {
-    const { id, ubicacion_mesa, numero_mesa, estado_mesa} = mesa;
+    const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
+    const [isDisable, setIsDisable] = useState(false);
+
+    useEffect(() => {
+        const estado = mesa.estado_mesa;
+        setIsDisable(!estado);
+    }, []);
+    let buttonDisable = {};
+    if (isDisable) {
+        buttonDisable = {
+            opacity: 0.5,
+        };
+    }
 
     const handleMesa = () => {
-        /* aquí enviamos a asignar mesa */
-        // navigate("/admin/reservas/create", { state: id });
+        if (!isDisable) {
+            /* aquí enviamos a asignar mesa */
+            navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
+        }
     };
 
-   
     const handleEdit = () => {
-        navigate("/admin/mesas/create/",{state: id});
+        navigate("/admin/mesas/create/", { state: id });
     };
 
     const toggleModal = () => {
@@ -39,14 +52,12 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
         <>
             <tr>
                 <th scope="row">{lengthId + 1 + groupPage}</th>
-                <td>
-                    {ubicacion_mesa}
-                </td>
+                <td>{ubicacion_mesa}</td>
                 <td>{numero_mesa} </td>
-                <td>{mesa.estado_mesa ? 'Disponible' : 'No disponible'}</td>
+                <td>{mesa.estado_mesa ? "Disponible" : "No disponible"}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleMesa} className={myStyles.btnReserva}>
-                       Asignar mesa
+                    <a onClick={handleMesa} className={myStyles.btnReserva} style={buttonDisable}>
+                        Asignar mesa
                     </a>
 
                     <div>
@@ -80,10 +91,8 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
                 <div className="modal-body">
                     <h3>Se eliminará 1 registro</h3>
                     <p>
-                        Está seguró que desea eliminar la mesa 
-                        <strong>
-                            # {numero_mesa}
-                        </strong>
+                        Está seguró que desea eliminar la mesa
+                        <strong># {numero_mesa}</strong>
                     </p>
                 </div>
                 <div className="modal-footer">
