@@ -203,7 +203,7 @@ const Graficas = () => {
     return (
         <>
             <Header />
-            <Container className={myStyles.content} fluid>
+            <Container className="mt--7" fluid>
                 <Row>
                     <Col xl="8">
                         <Card className="bg-gradient-default shadow">
