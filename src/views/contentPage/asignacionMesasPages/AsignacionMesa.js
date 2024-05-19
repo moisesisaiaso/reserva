@@ -36,7 +36,7 @@ const AsignacionMesa = () => {
     let itemsPerPage = 5;
 
     useEffect(() => {
-        /* obtener solo las mesas con asignacion de mesa */
+        /* obtener solo las mesas con asignacion de mesa, este dato es para saber solo la cantidad de mesas asignadas */
         if (mesas) {
             const asignadas = mesas?.filter((mesa) => mesa.estado_mesa === false);
             setMesasAsignadas(asignadas);
@@ -55,16 +55,25 @@ const AsignacionMesa = () => {
             const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
             console.log("array cortado", cutArray);
             setReservaList(cutArray);
-        } else if (mesas && !isTable) {
+        }
+        if (mesas && !isTable) {
             // Función para obtener los datos paginados para mesas
             const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
             setMesaList(cutArray);
         }
-    }, [reservasAsignadas, currentPage, mesas]);
+    }, [reservasAsignadas, currentPage, mesas, isTable]);
 
-    let pages = Math.ceil(
-        reservasAsignadas?.length / itemsPerPage
-    ); /* este dato es para utilizarlo en la paginación */
+    let pages = 1;
+
+    if (isTable) {
+        pages = Math.ceil(
+            reservasAsignadas?.length / itemsPerPage
+        ); /* este dato es para utilizarlo en la paginación */
+    } else {
+        pages = Math.ceil(
+            mesas?.length / itemsPerPage
+        ); /* este dato es para utilizarlo en la paginación */
+    }
 
     console.log("lista de reserva con mesa:", reservasAsignadas);
     return (
@@ -94,8 +103,8 @@ const AsignacionMesa = () => {
                                 <section>
                                     {isTable ? (
                                         <Filters
-                                            mesasAsignadas={mesasAsignadas}
-                                            setMesaList={setMesaList}
+                                            reservasAsignadas={reservasAsignadas}
+                                            setReservaList={setReservaList}
                                         />
                                     ) : (
                                         <FilterSearch mesas={mesas} setMesaList={setMesaList} />

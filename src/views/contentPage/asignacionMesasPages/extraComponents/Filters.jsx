@@ -3,7 +3,7 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 import { FormGroup, Form, Input, Col, Row, Button, Label } from "reactstrap";
 import { useCrud } from "hooks/useCrud";
 
-export const Filters = ({ mesasAsignadas, setMesaList }) => {
+export const Filters = ({ reservasAsignadas, setReservaList }) => {
     const inputMes = useRef();
     const inputDia = useRef();
     const inputEstado = useRef();
@@ -17,13 +17,13 @@ export const Filters = ({ mesasAsignadas, setMesaList }) => {
         const dia = inputDia.current?.value;
         const estadoReserva = inputEstado.current?.value;
 
-        // Verificar si mesasAsignadas está definido
-        if (!mesasAsignadas) {
+        // Verificar si reservasAsignadas está definido
+        if (!reservasAsignadas) {
             return;
         }
 
         // Filtrar por mes, día, hora y estado de reserva
-        const filteredMesa = mesasAsignadas.filter((mesa) => {
+        const filteredMesa = reservasAsignadas.filter((mesa) => {
             let mesMatch = true;
             let diaMatch = true;
             let horaMatch = true;
@@ -56,12 +56,12 @@ export const Filters = ({ mesasAsignadas, setMesaList }) => {
             return mesMatch && diaMatch && horaMatch && estadoMatch;
         });
 
-        setMesaList(filteredMesa);
+        setReservaList(filteredMesa);
     }
 
-    // Función para reiniciar la tabla y mostrar todas las mesasAsignadas
+    // Función para reiniciar la tabla y mostrar todas las reservasAsignadas
     function resetTable() {
-        setMesaList(mesasAsignadas);
+        setReservaList(reservasAsignadas);
         // Reiniciar valores de los campos de búsqueda
         inputMes.current.value = "";
         inputDia.current.value = "";
@@ -152,7 +152,7 @@ export const Filters = ({ mesasAsignadas, setMesaList }) => {
                                 onChange={searchMesa}
                             >
                                 <option value="">Todas las mesas</option>
-                                {mesasAsignadas?.map((mesa) => {
+                                {reservasAsignadas?.map((mesa) => {
                                     return (
                                         <option key={mesa.id} value={mesa.numero_mesa}>
                                             {mesa.ubicacion_mesa} {mesa.numero_mesa}
