@@ -31,23 +31,24 @@ export const FormCreateEdit = ({ id }) => {
         let parseId = parseInt(id);
         if (id && mesa) {
             let mesaEdit = mesa?.filter((element) => element.id === parseId);
-
+    
             // Verificar que mesaEdit no esté vacío antes de desestructurar
             if (mesaEdit.length > 0) {
                 const { ubicacion_mesa, numero_mesa, estado_mesa } = mesaEdit[0];
                 reset({
                     ubicacion_mesa,
                     numero_mesa,
-                    estado_mesa: estado_mesa.toString(),
+                    estado_mesa: estado_mesa.toString(), 
                 });
             } else {
                 console.warn(`No se encontró ninguna mesa con el ID: ${id}`);
             }
         }
     }, [mesa, id, reset]);
+    
 
     const submit = async (data) => {
-        data.estado_mesa = "true";
+        data.estado_mesa = data.estado_mesa === "true"; 
 
         console.log(data);
 
@@ -61,6 +62,7 @@ export const FormCreateEdit = ({ id }) => {
         reset({
             ubicacion_mesa: "",
             numero_mesa: "",
+            estado_mesa: "", 
         });
 
         window.location.href = "/admin/mesas";
@@ -76,13 +78,23 @@ export const FormCreateEdit = ({ id }) => {
                             Ubicación
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
+                            <select
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id=""
-                                placeholder="Ingrese la Ubicación"
-                                type="text"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                id="input-ubicacion-mesa"
                                 {...register("ubicacion_mesa")}
-                            />
+                            >
+                                <option value="">Seleccione la Ubicación</option>
+                                <option value="Playa">Playa</option>
+                                <option value="Terraza">Terraza</option>
+                                <option value="Comedor">Comedor</option>
+                                <option value="Bar">Bar</option>
+                                <option value="Poltrona">Poltrona</option>
+                                <option value="Embarcación">Embarcación</option>
+                            </select>
                         </FormGroup>
                     </Col>
                     <Col md="12">
@@ -92,7 +104,7 @@ export const FormCreateEdit = ({ id }) => {
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id=""
+                                id="input-numero-mesa"
                                 placeholder="Ingrese el Número"
                                 type="text"
                                 {...register("numero_mesa")}
@@ -100,7 +112,25 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
+                {/* <Row>
+                    <Col md="12">
+                        <label className="form-control-label" htmlFor="input-estado-mesa">
+                            Estado
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                id="input-estado-mesa"
+                                {...register("estado_mesa")}
+                            >
+                                <option value="true">Disponible</option>
+                                <option value="false">No disponible</option>
+                            </select>
+                        </FormGroup>
+                    </Col>
+                </Row> */}
             </div>
+            <hr className="my-4" />
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
             </Button>
