@@ -314,7 +314,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 }}
                                 type="select"
                                 {...register("clienteId")}
-                                required
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option

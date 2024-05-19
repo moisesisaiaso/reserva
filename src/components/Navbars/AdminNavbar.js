@@ -69,6 +69,7 @@ const AdminNavbar = (props) => {
                             >
                                 {props.brandText}
                             </Link>
+
                             {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
                                 <FormGroup className="mb-0">
                                     <InputGroup className="input-group-alternative">

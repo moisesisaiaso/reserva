@@ -3,11 +3,21 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 import React, { useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { format } from 'date-fns';
-import es from 'date-fns/locale/es'; 
+import { format } from "date-fns";
+import es from "date-fns/locale/es";
 
 export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage, currentPage }) => {
-    const { id, fecha_reserva, hora_reserva, cant_adultos, cant_ninos, motivo_reserva, client, estado_reserva, anticipo } = reserva;
+    const {
+        id,
+        fecha_reserva,
+        hora_reserva,
+        cant_adultos,
+        cant_ninos,
+        motivo_reserva,
+        client,
+        estado_reserva,
+        anticipo,
+    } = reserva;
 
     console.log("data client ", client?.name);
 
@@ -18,7 +28,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
     const [stateModal, setStateModal] = useState(false);
 
     const handleMesa = () => {
-        navigate("/admin/mesas/create", { state: id });
+        navigate("/admin/asignar-mesa/create", { state: { id, type: "reserva" } });
     };
 
     const handleDetail = () => {
@@ -53,7 +63,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         }
     };
 
-    const fechaFormateada = format(new Date(fecha_reserva), 'dd-MM-yyyy', { locale: es });
+    const fechaFormateada = format(new Date(fecha_reserva), "dd-MM-yyyy", { locale: es });
     return (
         <>
             <tr>

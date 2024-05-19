@@ -17,7 +17,12 @@ import {
 } from "reactstrap";
 
 const Login = () => {
-    const { handleSubmit, register, reset, formState: { errors } } = useForm();
+    const {
+        handleSubmit,
+        register,
+        reset,
+        formState: { errors },
+    } = useForm();
 
     const onSubmit = async (data) => {
         try {
@@ -56,7 +61,9 @@ const Login = () => {
                                     {...register("email", { required: true })}
                                 />
                             </InputGroup>
-                            {errors.email && <span className="text-danger">Este campo es requerido</span>}
+                            {errors.email && (
+                                <span className="text-danger">Este campo es requerido</span>
+                            )}
                         </FormGroup>
                         <FormGroup>
                             <InputGroup className="input-group-alternative">
@@ -72,7 +79,9 @@ const Login = () => {
                                     {...register("password", { required: true })}
                                 />
                             </InputGroup>
-                            {errors.password && <span className="text-danger">Este campo es requerido</span>}
+                            {errors.password && (
+                                <span className="text-danger">Este campo es requerido</span>
+                            )}
                         </FormGroup>
                         <div className="custom-control custom-control-alternative custom-checkbox">
                             <input
