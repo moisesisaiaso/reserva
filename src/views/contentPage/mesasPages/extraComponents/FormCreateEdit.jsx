@@ -78,13 +78,19 @@ export const FormCreateEdit = ({ id }) => {
                             Ubicación
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
+                            <select
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id=""
-                                placeholder="Ingrese la Ubicación"
-                                type="text"
+                                id="input-ubicacion-mesa"
                                 {...register("ubicacion_mesa")}
-                            />
+                            >
+                                <option value="">Seleccione la Ubicación</option>
+                                <option value="Playa">Playa</option>
+                                <option value="Terraza">Terraza</option>
+                                <option value="Comedor">Comedor</option>
+                                <option value="Bar">Bar</option>
+                                <option value="Poltrona">Poltrona</option>
+                                <option value="Embarcación">Embarcación</option>
+                            </select>
                         </FormGroup>
                     </Col>
                     <Col md="12">
@@ -94,7 +100,7 @@ export const FormCreateEdit = ({ id }) => {
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
-                                id=""
+                                id="input-numero-mesa"
                                 placeholder="Ingrese el Número"
                                 type="text"
                                 {...register("numero_mesa")}
@@ -102,7 +108,7 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                     <Col md="12">
                         <label className="form-control-label" htmlFor="input-estado-mesa">
                             Estado
@@ -118,7 +124,7 @@ export const FormCreateEdit = ({ id }) => {
                             </select>
                         </FormGroup>
                     </Col>
-                </Row>
+                </Row> */}
             </div>
             <hr className="my-4" />
             <Button block color="primary" size="lg" type="submit">

@@ -16,6 +16,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [ninos, setNinos] = useState();
 
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
+    const [showSelectDropdown, setShowSelectDropdown] = useState(true); 
 
     const handleTotalPeople = () => {
         let numberAdultos = parseInt(adultosString?.current?.value) || 0;
@@ -44,7 +45,8 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [clients, getClients] = useCrud();
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
     const [reserva, setReserva] = useState();
-
+    const [filePreview, setFilePreview] = useState(null);
+    const [imageHeight, setImageHeight] = useState(null);
     const [clientName, setClientName] = useState();
 
     console.log(parameterId);
@@ -174,6 +176,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 console.log("data anticipo: ", data.anticipo);
 
                 // Primero, maneja el objeto anidado 'anticipo' si existe
+                // if (data.anticipo) {
+                //     formData.append("anticipo", JSON.stringify(data.anticipo));
+                // }
                 if (data.anticipo) {
                     const anticipoConArchivo = {
                         ...data.anticipo,
@@ -189,10 +194,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     }
                 }
 
-                /*  // Finalmente, añade el archivo si existe
-                if (currentFile) {
-                    formData.append("file", currentFile);
-                } */
+                // Finalmente, añade el archivo si existe
+                // if (currentFile) {
+                //     formData.append("file", currentFile);
+                // }
 
                 requestData = formData;
 
@@ -253,14 +258,21 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     };
 
     /* datos de lo que viene en el campo file */
-    const handleFileChange = () => {
-        const selectedFile = infoFile.current.files[0];
-
-        if (selectedFile) {
-            setCurrentFile(selectedFile);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        // Verifica si el tamaño del archivo es menor o igual a 10 MB
+        if (file && file.size <= 10 * 1024 * 1024) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFilePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Si el tamaño excede los 10 MB, muestra una alerta
+            alert("El tamaño del archivo no puede superar los 10 MB.");
         }
     };
-
+    
     /* Validando la HORA */
     const validarHora = (e) => {
         const hora = e.target.value; //formato 'HH:MM'
@@ -298,6 +310,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 }}
                                 type="select"
                                 {...register("clienteId")}
+                                required
                             >
                                 {parameterId || reservarWithClientId ? (
                                     <option
@@ -442,16 +455,24 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 <FormGroup
                                     className={myStyles.inputSearch + " " + myStyles.Inputgroup}
                                 >
-                                    <input
+                                    <select
                                         className={`form-control-alternative ${myStyles.input}`}
                                         id="input-city"
-                                        placeholder="Ingrese el Banco"
-                                        type="text"
                                         {...register("anticipo.banco")}
                                         required={collapseIsOpen}
-                                    />
+                                    >
+                                        <option value="">Seleccionar banco</option>
+                                        <option value="yaoe">Yape</option>
+                                        <option value="Plin">Plin</option>
+                                        <option value="BCP">BCP</option>
+                                        <option value="Interbank">Interbank</option>
+                                        <option value="Scotiabank">Scotiabank</option>
+                                        <option value="BBVA">BBVA</option>
+                                        <option value="BanBif">BanBif</option>
+                                    </select>
                                 </FormGroup>
                             </Col>
+
                             <Col lg="6">
                                 <label className="form-control-label" htmlFor="input-city">
                                     Moneda
@@ -459,14 +480,18 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 <FormGroup
                                     className={myStyles.inputSearch + " " + myStyles.Inputgroup}
                                 >
-                                    <input
+                                    <select
                                         className={`form-control-alternative ${myStyles.input}`}
                                         id="input-city"
-                                        placeholder="Ingrese la moneda"
-                                        type="text"
                                         {...register("anticipo.moneda")}
                                         required={collapseIsOpen}
-                                    />
+                                    >
+                                         <option value="">Seleccionar ...</option>
+                                         <option value="PEN">PEN</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                    </select>
                                 </FormGroup>
                             </Col>
                             <Col lg="6">
@@ -476,46 +501,45 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 <FormGroup
                                     className={myStyles.inputSearch + " " + myStyles.Inputgroup}
                                 >
-                                    <input
+                                    <select
                                         className={`form-control-alternative ${myStyles.input}`}
                                         id="input-city"
-                                        placeholder="Ingrese el estado del anticipo"
-                                        type="text"
                                         {...register("anticipo.estado_anticipo")}
                                         required={collapseIsOpen}
-                                    />
+                                    >
+                                         <option value="">Seleccionar ...</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Aprobado">Aprobado</option>
+                                        <option value="Rechazado">Rechazado</option>
+                                    </select>
                                 </FormGroup>
                             </Col>
+
+
                             <Col md="12">
                                 <label className="form-control-label">Subir Comprobante</label>
-                                <FormGroup
-                                    className={
-                                        myStyles.inputSearch +
-                                        " " +
-                                        myStyles.Inputgroup +
-                                        " " +
-                                        myStyles.inputFileGroup
-                                    }
-                                >
-                                    {currentFile ? (
-                                        <p>
-                                            {currentFile.name} {currentFile.size} Kb
-                                        </p>
+                                <FormGroup className="input-group">
+                                    {filePreview ? (
+                                        <img src={filePreview} alt="File Preview" style={{ maxWidth: "100px" }} />
                                     ) : (
                                         <p>No se ha seleccionado ningún archivo.</p>
                                     )}
-
-                                    <input
-                                        className={`form-control-alternative ${myStyles.inputFile}`}
-                                        placeholder="Seleccione el archivo"
-                                        type="file"
-                                        {...register("file")}
-                                        ref={infoFile}
-                                        onChange={handleFileChange}
-                                        required={collapseIsOpen}
-                                    />
+                                    <div className="custom-file">
+                                        <input
+                                            className="custom-file-input"
+                                            id="customFile"
+                                            type="file"
+                                            {...register("file")}
+                                            onChange={handleFileChange}
+                                            required={collapseIsOpen}
+                                        />
+                                        <label className="custom-file-label" htmlFor="customFile">
+                                            Seleccione el archivo
+                                        </label>
+                                    </div>
                                 </FormGroup>
                             </Col>
+ 
                         </Row>
                     </div>
                 </Collapse>
