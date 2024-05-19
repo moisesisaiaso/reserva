@@ -47,7 +47,7 @@ export const FormCreateEdit = ({ id }) => {
     }, [mesa, id, reset]);
 
     const submit = async (data) => {
-        data.estado_mesa = data.estado_mesa === "true";
+        data.estado_mesa = "true";
 
         console.log(data);
 

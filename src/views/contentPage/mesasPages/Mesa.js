@@ -34,8 +34,21 @@ const Mesa = () => {
     console.log("paginaActual: ", currentPage);
 
     useEffect(() => {
+        /* Obtengo la frecuencia de cada ubicación */
+        const frecuencia = {};
+
+        mesas?.forEach((mesa) => {
+            frecuencia[mesa.ubicacion_mesa] = (frecuencia[mesa.ubicacion_mesa] || 0) + 1;
+        });
+
+        console.log(frecuencia);
+        /* obtengo el array por frecuencia */
+        const ordenado = mesas?.sort((a, b) => {
+            return frecuencia[b] - frecuencia[a];
+        });
+
         // Función para obtener los datos paginados
-        const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
+        const cutArray = getPaginatedData(ordenado, currentPage, itemsPerPage);
         setMesaList(cutArray);
     }, [mesas, currentPage]);
 
@@ -72,45 +85,45 @@ const Mesa = () => {
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>
-                                {isTable ? (
-                                    <Table striped responsive>
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Ubicación de Mesa</th>
-                                                <th>Número de Mesa</th>
-                                                <th>Estado de Mesa</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {mesaList?.map((mesa, i) => (
-                                                <TableComponent
-                                                    key={mesa.id}
-                                                    mesa={mesa}
-                                                    lengthId={i}
-                                                    deleteMesa={deleteMesa}
-                                                    currentPage={currentPage}
-                                                    itemsPerPage={itemsPerPage}
-                                                />
-                                            ))}
-                                            {mesaList?.length === 0 && (
+                                    {isTable ? (
+                                        <Table striped responsive>
+                                            <thead>
                                                 <tr>
-                                                    <td colSpan="5" className="text-center">
-                                                        No hay mesas para mostrar
-                                                    </td>
+                                                    <th>#</th>
+                                                    <th>Ubicación de Mesa</th>
+                                                    <th>Número de Mesa</th>
+                                                    <th>Estado de Mesa</th>
+                                                    <th>Acciones</th>
                                                 </tr>
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                ) : mesaList?.length === 0 ? (
-                                    <p className="text-center">No hay mesas para mostrar</p>
-                                ) : (
-                                    mesaList?.map((mesa) => (
-                                        <CardMesa key={mesa.id} mesa={mesa} />
-                                    ))
-                                )}
-                            </section>
+                                            </thead>
+                                            <tbody>
+                                                {mesaList?.map((mesa, i) => (
+                                                    <TableComponent
+                                                        key={mesa.id}
+                                                        mesa={mesa}
+                                                        lengthId={i}
+                                                        deleteMesa={deleteMesa}
+                                                        currentPage={currentPage}
+                                                        itemsPerPage={itemsPerPage}
+                                                    />
+                                                ))}
+                                                {mesaList?.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan="5" className="text-center">
+                                                            No hay mesas para mostrar
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </Table>
+                                    ) : mesaList?.length === 0 ? (
+                                        <p className="text-center">No hay mesas para mostrar</p>
+                                    ) : (
+                                        mesaList?.map((mesa) => (
+                                            <CardMesa key={mesa.id} mesa={mesa} />
+                                        ))
+                                    )}
+                                </section>
 
                                 {/* Paginación */}
                                 <section>
