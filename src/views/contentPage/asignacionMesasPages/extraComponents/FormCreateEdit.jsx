@@ -78,6 +78,7 @@ export const FormCreateEdit = ({ id, type }) => {
                                     label: `${reserva?.client.name} ${reserva?.client.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`
                                 } : null}
                                 onChange={(option) => setValue('reservaId', option)}
+                                placeholder="Seleccionar Reserva"
                             />
                         </FormGroup>
                     </Col>

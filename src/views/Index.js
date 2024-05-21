@@ -78,18 +78,23 @@ const Index = (props) => {
                 <Row>
                     <Col className="mb-12 mb-xl-0" xl="12">
                         <Card className="shadow">
-                            <CardHeader className="bg-transparent">
-                                <Row className="align-items-center">
-                                    <h2>Mesas asignacion</h2>
-                                </Row>
-                            </CardHeader>
-                            <CardBody>
-                            <section style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                    <FilterSearch mesas={mesas} setMesaList={setMesaList} />
+                        <CardHeader className="bg-transparent">
+                            <Row className="align-items-center">
+                                <Col>
+                                    <h2 className="ms-3">Mesas asignacion</h2>
+                                </Col>
+                                <Col className="d-flex justify-content-end">
                                     <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreate}>
                                         <i className="ni ni-fat-add fa-2x" />
                                         <span>Asignar Mesa</span>
                                     </Button>
+                                </Col>
+                            </Row>
+                        </CardHeader>
+                            <CardBody>
+                            <section style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                    <FilterSearch mesas={mesas} setMesaList={setMesaList} />
+
                                 </section>
 
                                 <Row>

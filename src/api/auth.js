@@ -1,10 +1,23 @@
 import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
-// Inicializa una variable de control para evitar múltiples solicitudes de actualización de token simultáneas.
+const apiUrl = process.env.REACT_APP_API_URL;
+
+// Agrega un interceptor para las solicitudes
+axiosInstance.interceptors.request.use((config) => {
+    // Obtén el token de localStorage
+    const token = localStorage.getItem('access_token');
+    
+    // Si el token existe, agrega el encabezado 'x-access-token'
+    if (token) {
+        config.headers['x-access-token'] = token;
+    }
+    
+    // Devuelve la configuración modificada
+    return config;
+});
+
 let isRefreshing = false;
-
-// Configura el encabezado 'x-access-token' en la instancia de axios con el token de acceso almacenado en el almacenamiento local del navegador.
-axiosInstance.defaults.headers.common["x-access-token"] = localStorage.getItem("access_token");
 
 // Configura un interceptor de respuesta. Los interceptores son funciones que se ejecutan antes de que la promesa de la solicitud se resuelva o rechace.
 axiosInstance.interceptors.response.use(
@@ -12,36 +25,40 @@ axiosInstance.interceptors.response.use(
     (resp) => resp,
     // Si hay un error, esta función se ejecuta.
     async (error) => {
-        // Si el estado de la respuesta es 401 (no autorizado) y no se está actualizando el token, se intenta actualizar el token de acceso.
-        if (error.response.status === 401 && !isRefreshing) {
-            isRefreshing = true;
-            try {
-                // Llama a la función refreshAccessToken para obtener un nuevo token de acceso.
-                const response = await refreshAccessToken();
-                const { data } = response;
-                const { accessToken, refreshToken } = data;
+        try{
+			const originalConfig = error.config;
+            if (
+				error.response?.status === 401 &&
+				error.response.data.message === 'Unauthorized! Access Token was expired!'
+			) {
+				if (!isRefreshing) {
+					isRefreshing = true;
+					try {
+						const refreshResponse = await refreshAccessToken()
+						const { data } = refreshResponse;
+                        const { accessToken, refreshToken } = data;
 
-                // Si la respuesta es exitosa (estado 200), se actualizan los tokens de acceso y actualización en el almacenamiento local y en los encabezados predeterminados de axios.
-                // También se almacena la información del usuario en el almacenamiento local. Luego, se vuelve a intentar la solicitud original.
-                if (response.status === 200) {
-                    axiosInstance.defaults.headers.common["x-access-token"] = accessToken;
-                    localStorage.setItem("access_token", accessToken);
-                    localStorage.setItem("refresh_token", refreshToken);
+						if (!accessToken || !refreshToken) return Promise.reject(error);
 
-                    return axiosInstance(error.config);
-                }
-            } catch (refreshError) {
-                // Si la actualización del token falla y el estado de la respuesta es 403 (prohibido), se redirige al usuario a la página de inicio de sesión.
-                if (refreshError.response && refreshError.response.status === 403) {
-                    window.location.href = "/login";
-                }
-            } finally {
-                isRefreshing = false;
-            }
+						error.config.headers['x-access-token'] = accessToken;
+
+						axiosInstance.defaults.headers.common["x-access-token"] = accessToken;
+                        localStorage.setItem("access_token", accessToken);
+                        localStorage.setItem("refresh_token", refreshToken);
+
+						return axiosInstance(originalConfig);
+					} catch (_err) {
+						localStorage.clear();
+						window.location.href = '/authentication/sign-in';
+						return Promise.reject(error);
+					} finally {
+						isRefreshing = false;
+					}
+				}
+			}
+        }catch(err){
+            return Promise.reject(error);
         }
-
-        // Si la respuesta fue un error y no se pudo actualizar el token, se rechaza la promesa con el error.
-        return Promise.reject(error);
     }
 );
 
@@ -50,7 +67,7 @@ export async function login(credentials) {
     console.log(credentials);
 
     try {
-        const response = await axiosInstance.post("/intimar/auth/signin", credentials);
+        const response = await axios.post(`${apiUrl}intimar/auth/signin`, credentials);
         const { data } = response;
         const { accessToken, refreshToken } = data;
 
@@ -67,8 +84,8 @@ export async function login(credentials) {
 // Función para refrescar el token de acceso. Hace una solicitud POST a la ruta de actualización del token con el token de actualización almacenado en el almacenamiento local del navegador y devuelve la respuesta.
 async function refreshAccessToken() {
     try {
-        const response = await axiosInstance.post(
-            "/intimar/auth/refreshtoken",
+        const response = await axios.post(
+            `${apiUrl}intimar/auth/refreshtoken`,
             {
                 refreshToken: localStorage.getItem("refresh_token"),
             },
