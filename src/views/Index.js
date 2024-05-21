@@ -1,34 +1,60 @@
-import { useState } from "react";
-// node.js library that concatenates classes (strings)
-import classnames from "classnames";
-// javascipt plugin for creating charts
-import Chart from "chart.js";
-// react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
-// reactstrap components
+import myStyles from "../assets/css/myStyles.module.css";
+import Header from "components/Headers/Header.js";
+
+import { useEffect, useState } from "react";
+import { CardMesa } from "./contentPage/asignacionMesasPages/extraComponents/CardMesa";
+import { PaginationComponent } from "views/generalComponents/PaginationComponent";
+import { FilterSearch } from "./contentPage/asignacionMesasPages/extraComponents/FilterSearch";
+import { getPaginatedData } from "views/generalComponents/getPaginatedData";
+import { useCrud } from "hooks/useCrud";
+import { useNavigate } from "react-router-dom";
+
+import { chartOptions, parseOptions, chartExample1, chartExample2 } from "variables/charts.js";
+import Chart from 'chart.js';
+
+import AsignacionMesa from "views/contentPage/asignacionMesasPages/AsignacionMesa";
+
 import {
     Button,
     Card,
     CardHeader,
     CardBody,
-    NavItem,
-    NavLink,
-    Nav,
-    Progress,
-    Table,
     Container,
     Row,
     Col,
 } from "reactstrap";
 
-// core components
-import { chartOptions, parseOptions, chartExample1, chartExample2 } from "variables/charts.js";
-
-import Header from "components/Headers/Header.js";
 
 const Index = (props) => {
     const [activeNav, setActiveNav] = useState(1);
     const [chartExample1Data, setChartExample1Data] = useState("data1");
+    const [mesas, setMesas] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
+    const [apiData, getApi, postApi, deleteApi, updateApi, removeApi] = useCrud();
+    const [mesaList, setMesaList] = useState([]);
+    const [updated, setUpdated] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getApi("/intimar/mesa");
+        };
+        fetchData();
+    }, [updated]);
+
+    useEffect(() => {
+        if (apiData) {
+            setMesas(apiData);
+        }
+    }, [apiData]);
+
+    useEffect(() => {
+        if (mesas) {
+            const paginatedData = getPaginatedData(mesas, currentPage, itemsPerPage);
+            setMesaList(paginatedData);
+        }
+    }, [mesas, currentPage, itemsPerPage]);
 
     if (window.Chart) {
         parseOptions(Chart, chartOptions());
@@ -39,93 +65,63 @@ const Index = (props) => {
         setActiveNav(index);
         setChartExample1Data("data" + index);
     };
+
+    const totalPages = mesas ? Math.ceil(mesas.length / itemsPerPage) : 0;
+    const handleBtnCreate = () => {
+        navigate("/admin/asignar-mesa/create");
+    };
+
     return (
         <>
             <Header />
-            {/* Page content */}
             <Container className="mt--7" fluid>
                 <Row>
-                    <Col className="mb-5 mb-xl-0" xl="8">
-                        <Card className="bg-gradient-default shadow">
-                            <CardHeader className="bg-transparent">
-                                <Row className="align-items-center">
-                                    <div className="col">
-                                        <h6 className="text-uppercase text-light ls-1 mb-1">
-                                            resumen
-                                        </h6>
-                                        <h2 className="text-white mb-0">Reserva por meses</h2>
-                                    </div>
-                                    <div className="col">
-                                        <Nav className="justify-content-end" pills>
-                                            <NavItem>
-                                                <NavLink
-                                                    className={classnames("py-2 px-3", {
-                                                        active: activeNav === 1,
-                                                    })}
-                                                    href="#pablo"
-                                                    onClick={(e) => toggleNavs(e, 1)}
-                                                >
-                                                    <span className="d-none d-md-block">Meses</span>
-                                                    <span className="d-md-none">M</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    className={classnames("py-2 px-3", {
-                                                        active: activeNav === 2,
-                                                    })}
-                                                    data-toggle="tab"
-                                                    href="#pablo"
-                                                    onClick={(e) => toggleNavs(e, 2)}
-                                                >
-                                                    <span className="d-none d-md-block">semana</span>
-                                                    <span className="d-md-none">W</span>
-                                                </NavLink>
-                                            </NavItem>
-                                        </Nav>
-                                    </div>
-                                </Row>
-                            </CardHeader>
-                            <CardBody>
-                                {/* Chart */}
-                                <div className="chart">
-                                    <Line
-                                        data={chartExample1[chartExample1Data]}
-                                        options={chartExample1.options}
-                                        getDatasetAtEvent={(e) => console.log(e)}
-                                    />
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col xl="4">
+                    <Col className="mb-12 mb-xl-0" xl="12">
                         <Card className="shadow">
                             <CardHeader className="bg-transparent">
                                 <Row className="align-items-center">
-                                    <div className="col">
-                                        <h6 className="text-uppercase text-muted ls-1 mb-1">
-                                            Resumen
-                                        </h6>
-                                        <h2 className="mb-0">Clientes por meses</h2>
-                                    </div>
+                                    <h2>Mesas asignacion</h2>
                                 </Row>
                             </CardHeader>
                             <CardBody>
-                                {/* Chart */}
-                                <div className="chart">
-                                    <Bar
-                                        data={chartExample2.data}
-                                        options={chartExample2.options}
+                            <section style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                    <FilterSearch mesas={mesas} setMesaList={setMesaList} />
+                                    <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreate}>
+                                        <i className="ni ni-fat-add fa-2x" />
+                                        <span>Asignar Mesa</span>
+                                    </Button>
+                                </section>
+
+                                <Row>
+                                    {mesaList && mesaList.length > 0 ? (
+                                        mesaList.map((mesa) => (
+                                            <Col lg="4" key={mesa.id}>
+                                                <CardMesa
+                                                    mesa={mesa}
+                                                    updateMesa={updateApi}
+                                                    updated={updated}
+                                                    setUpdated={setUpdated}
+                                                />
+                                            </Col>
+                                        ))
+                                    ) : (
+                                        <Col>
+                                            <p className="text-center">No hay mesas para mostrar</p>
+                                        </Col>
+                                    )}
+                                </Row>
+
+                                <section className={myStyles.tableSpacing}>
+                                    <PaginationComponent
+                                        currentPage={currentPage}
+                                        setCurrentPage={setCurrentPage}
+                                        pages={totalPages}
                                     />
-                                </div>
+                                </section>
+
+                                {/* Other components */}
+                                {/* <AsignacionMesa /> */}
                             </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row className="mt-5">
-                    <Col className="mb-5 mb-xl-0" xl="8">
-                        <Card className="shadow">
-                           
                         </Card>
                     </Col>
                 </Row>

@@ -159,10 +159,10 @@ export const FilterSearch = ({ mesas, setMesaList }) => {
                                 type="button"
                                 size="lg"
                                 aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Portronas")}
-                                className={getButtonClass("Portronas")} // Aplicar clase condicional
+                                onClick={(e) => filterByUbicacion(e, "Poltrona")}
+                                className={getButtonClass("Poltrona")} // Aplicar clase condicional
                             >
-                                Portronas
+                                Poltrona
                             </Button>
                         </InputGroup>
                     </FormGroup>

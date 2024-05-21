@@ -396,3 +396,30 @@
 .mesa.mesa__noDisponible {
     background-color: #c3102f;
 }
+
+
+/* ASIGNACION CAMPOS */
+.selectContainer {
+    max-height: 300px; 
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+
+  /* WHATSAPP background-color: #208846;*/
+  .btnWhatsApp {
+    background-color: #208846;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btnWhatsApp:hover {
+    background-color: #128c7e;
+}

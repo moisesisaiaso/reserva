@@ -7,7 +7,7 @@ import { useCrud } from "hooks/useCrud";
 
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
 import { CardMesa } from "./extraComponents/CardMesa";
-import { Filters } from "./extraComponents/Filters";
+// import { Filters } from "./extraComponents/Filters";
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 import { OptionBtn } from "./extraComponents/OptionBtn";
@@ -35,7 +35,7 @@ const AsignacionMesa = () => {
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
-    let itemsPerPage = 5;
+    let itemsPerPage = 10;
 
     useEffect(() => {
         /* obtener solo las mesas con asignacion de mesa, este dato es para saber solo la cantidad de mesas asignadas */
@@ -97,21 +97,29 @@ const AsignacionMesa = () => {
                                     <OptionBtn setIsTable={setIsTable} />
                                 </section>
                                 <h2 className={myStyles.clientsH2}>
-                                    Lista de Mesas Asignadas x Reserva ({mesasAsignadas?.length}
+                                    Lista de Mesas Asignadas ({mesasAsignadas?.length}
                                     mesas)
                                 </h2>
 
                                 {/* filtros */}
                                 <section>
+                                    {!isTable && (
+                                        <FilterSearch
+                                            mesas={mesas}
+                                            setMesaList={setMesaList}
+                                        />
+                                    )}
+                                </section>
+                                {/* <section>
                                     {isTable ? (
-                                        <Filters
+                                        <FilterSearch
                                             reservasAsignadas={reservasAsignadas}
                                             setReservaList={setReservaList}
                                         />
                                     ) : (
                                         <FilterSearch mesas={mesas} setMesaList={setMesaList} />
                                     )}
-                                </section>
+                                </section> */}
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>

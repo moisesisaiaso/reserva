@@ -5,260 +5,110 @@ import { FormGroup, Col, Row, Button, Collapse } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
-import { json } from "react-router-dom";
+import Select from "react-select";
+
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
-    /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
+        /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
     cuando parameterId existe significa que este dato viene del parametro de la url cuando accedo a este formulario lo que significa que es para editar un registro, es decir con este parameterId obtengo todo los campos de esta asignación de mesa ya existente para poder mostrarlo en los campos y editar  */
     /* Collapse Anticipo */
     const adultosString = useRef();
     const ninosString = useRef();
     const [adultos, setAdultos] = useState();
     const [ninos, setNinos] = useState();
-
+    
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-    const [showSelectDropdown, setShowSelectDropdown] = useState(true); 
-
-    const handleTotalPeople = () => {
-        let numberAdultos = parseInt(adultosString?.current?.value) || 0;
-        let numberNinos = parseInt(ninosString?.current?.value) || 0;
-
-        setAdultos(numberAdultos);
-        setNinos(numberNinos);
-
-        const totalPeoble = numberAdultos + numberNinos;
-
-        if (totalPeoble >= 8) {
-            setCollapseIsOpen(true);
-        } else {
-            setCollapseIsOpen(false);
-        }
-    };
-
-    /*data input File */
-    const infoFile = useRef();
+   
     const [currentFile, setCurrentFile] = useState();
-
-    const { handleSubmit, register, reset } = useForm();
+    const { handleSubmit, register, reset, setValue } = useForm();
     const [dataClient, setDataClient] = useState();
     const [clienteIdReserva, setClienteIdReserva] = useState();
-
     const [clients, getClients] = useCrud();
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
     const [reserva, setReserva] = useState();
     const [filePreview, setFilePreview] = useState(null);
-    const [imageHeight, setImageHeight] = useState(null);
     const [clientName, setClientName] = useState();
-
-    console.log(parameterId);
+    const [selectedOption, setSelectedOption] = useState(null); // Estado para almacenar la opción seleccionada
 
     useEffect(() => {
-        getClients("/intimar/client");
-
+        getClients("/intimar/client").then((fetchedClients) => {
+            console.log("Fetched clients:", fetchedClients);
+        });
         if (parameterId) {
-            getReservas("/intimar/reserva");
+            getReservas("/intimar/reserva").then((fetchedReservas) => {
+                console.log("Fetched reservas:", fetchedReservas); 
+            });
         }
-    }, [
-        parameterId,
-    ]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
+    }, [parameterId]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
 
-    let idClient = "";
     useEffect(() => {
-        /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
+          /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
         if (reservarWithClientId) {
-            /* obtengo el cliente por su id para crear una reserva */
-            idClient = parseInt(reservarWithClientId);
-            if (clients) {
-                let clientEdit = clients.filter((element) => element.id === idClient);
-                console.log(clientEdit);
-                setDataClient(clientEdit[0]);
+            const idClient = parseInt(reservarWithClientId);
+            if (clients && clients.length > 0) {
+               // Se busca la reserva correspondiente en la lista de reservas utilizando el ID
+                const clientEdit = clients.find((element) => element.id === idClient);
+                if (clientEdit) {
+                    setDataClient(clientEdit);
+                    setSelectedOption({ value: clientEdit.id, label: `${clientEdit.name} ${clientEdit.lastname}` });
+                    setValue("clienteId", idClient); // Se establece el valor del campo "clienteId" en el formulario
+
+                }
+            }
+        } else if (parameterId && reservas && reservas.length > 0) {
+            const idReserva = parseInt(parameterId);
+            const reservaEdit = reservas.find((element) => element.id === idReserva);
+            setReserva(reservaEdit);
+            if (reservaEdit) {
+                const idClient = reservaEdit.clienteId;
+                if (clients && clients.length > 0) {
+                    const clientEdit = clients.find((element) => element.id === idClient);
+                    if (clientEdit) {
+                        setDataClient(clientEdit);
+                        setSelectedOption({ value: clientEdit.id, label: `${clientEdit.name} ${clientEdit.lastname}` });
+                        setValue("clienteId", idClient);
+                    }
+                }
             }
         }
-
-        if (parameterId && reservas) {
-            /* obtengo la reserva por su id (editar la reserva)*/
-            let idReserva = parseInt(parameterId);
-            let reservaEdit = reservas.filter((element) => element.id === idReserva);
-
-            setReserva(reservaEdit[0]);
-        }
-    }, [clients, parameterId, reservas]);
+    }, [clients, parameterId, reservarWithClientId, reservas]);
+    
+    
 
     useEffect(() => {
         if (reserva) {
-            const {
-                fecha_reserva,
-                hora_reserva,
-                cant_adultos,
-                cant_ninos,
-                anticipo_required,
-                motivo_reserva,
-                clienteId,
-                file,
-                client,
-            } = reserva;
-
-            console.log("holaa: ", client);
-
+            const { fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId, file, client } = reserva;
             setClientName(client);
             setClienteIdReserva(clienteId);
             setCollapseIsOpen(anticipo_required);
-
+            
             /* En estos casos se tuvo que mandar directamente los valores a los campos con el atributo value ya que use Form no mostraba estos valores */
             setAdultos(reserva.cant_adultos);
             setNinos(reserva.cant_ninos);
 
             setCurrentFile(file);
-
+            
             /* si al momento de editar una reserva la propiedad anticipo_required es true, me despliega el formulario para editar el anticipo y esta condición me permite rellenar los campos de la reserva a editar solo con los compos que corresponden a cuando la reserva es con anticipo o no */
-
             if (anticipo_required) {
-                setCollapseIsOpen(anticipo_required);
                 const { anticipo } = reserva;
                 const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
                 reset({
-                    fecha_reserva,
-                    hora_reserva,
-                    cant_adultos,
-                    cant_ninos,
-                    anticipo_required,
-                    motivo_reserva,
-                    clienteId,
-                    file,
-                    anticipo: {
-                        monto_anticipo,
-                        banco,
-                        moneda,
-                        estado_anticipo,
-                    },
+                    fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId, file,
+                    anticipo: { monto_anticipo, banco, moneda, estado_anticipo }
                 });
             } else {
-                reset({
-                    fecha_reserva,
-                    hora_reserva,
-                    cant_adultos,
-                    cant_ninos,
-                    anticipo_required,
-                    motivo_reserva,
-                    clienteId,
-                });
+                reset({ fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId });
             }
         }
     }, [reserva]);
 
-    /* varible a la que se le asigna la data puede ser (form data u objeto json) */
-    let requestData;
-
-
-
-    const submit = async (data) => {
-        try { 
-           console.log("data: ", data.file[0]);
-           data.file= data.file[0]
-            if (reservarWithClientId) {
-                data.clienteId = reservarWithClientId;
-            } else {
-                data.clienteId = Number(data.clienteId);
-            }
-
-            data.cant_adultos = Number(adultosString.current.value);
-            data.cant_ninos = Number(ninosString.current.value);
-
-            console.log("valor adultos: ", data.cant_adultos);
-            console.log("valor niños: ", data.cant_ninos);
-
-            data.anticipo_required = collapseIsOpen;
-
-            /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
-
-            if (collapseIsOpen) {
-                data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
-                let fechaHoy = new Date().toISOString().split("T")[0];
-                data.anticipo.fecha_anticipo = fechaHoy;
-
-                const formData = new FormData();
-
-                console.log("data anticipo: ", data.anticipo);
-
-                // Primero, maneja el objeto anidado 'anticipo' si existe
-                // if (data.anticipo) {
-                //     formData.append("anticipo", JSON.stringify(data.anticipo));
-                // }
-                if (data.anticipo) {
-                    const anticipoConArchivo = {
-                        ...data.anticipo, 
-                    };
-                    formData.append("anticipo", JSON.stringify(anticipoConArchivo));
-                }
-
-                // Luego, maneja todas las demás claves que no están anidadas
-                for (const key in data) {
-                    if (data.hasOwnProperty(key) && key !== "anticipo" ) {
-                        formData.append(key, data[key]);
-                    }
-                }
-
-                // Finalmente, añade el archivo si existe
-                // if (currentFile) {
-                //     formData.append("file", currentFile);
-                // }
-
-                requestData = formData;
-
-                for (let [key, value] of requestData.entries()) {
-                    console.log(key, value);
-                }
-            } else {
-                delete data.anticipo;
-                delete data.file;
-                requestData = data;
-            }
-
-            /* peticiones para editar y crear reservas */
-            if (parameterId) {
-                await updateReserva("/intimar/client", parameterId, requestData);
-                console.log("Editar");
-            } else {
-                const crear = await createReserva("/intimar/reserva", requestData);
-                console.log("respuesta de crear", crear?.data);
-                console.log("crear");
-            }
-
-            if (collapseIsOpen) {
-                reset({
-                    fecha_reserva: "",
-                    hora_reserva: "",
-                    cant_adultos: "",
-                    cant_ninos: "",
-                    anticipo_required: "",
-                    motivo_reserva: "",
-                    clienteId: "",
-                    file: "",
-                    anticipo: {
-                        monto_anticipo: "",
-                        banco: "",
-                        moneda: "",
-                        estado_anticipo: "",
-                    },
-                });
-            } else {
-                reset({
-                    fecha_reserva: "",
-                    hora_reserva: "",
-                    cant_adultos: "",
-                    cant_ninos: "",
-                    anticipo_required: "",
-                    motivo_reserva: "",
-                    clienteId: "",
-                });
-            }
-
-            setCollapseIsOpen(false);
-
-            // window.location.href = "/admin/reservas";
-        } catch (error) {
-            console.log(error);
-        }
+    const handleTotalPeople = () => {
+        const numberAdultos = parseInt(adultosString?.current?.value) || 0;
+        const numberNinos = parseInt(ninosString?.current?.value) || 0;
+        setAdultos(numberAdultos);
+        setNinos(numberNinos);
+        const totalPeoble = numberAdultos + numberNinos;
+        setCollapseIsOpen(totalPeoble >= 8);
     };
 
     /* datos de lo que viene en el campo file */
@@ -267,16 +117,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         // Verifica si el tamaño del archivo es menor o igual a 10 MB
         if (file && file.size <= 10 * 1024 * 1024) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setFilePreview(reader.result);
-            };
+            reader.onloadend = () => setFilePreview(reader.result);
             reader.readAsDataURL(file);
         } else {
-            // Si el tamaño excede los 10 MB, muestra una alerta
+         // Si el tamaño excede los 10 MB, muestra una alerta
             alert("El tamaño del archivo no puede superar los 10 MB.");
         }
     };
-    
     /* Validando la HORA */
     const validarHora = (e) => {
         const hora = e.target.value; //formato 'HH:MM'
@@ -294,44 +141,105 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         }
     };
 
-    console.log("typo de dato de id cliente: ", typeof reservarWithClientId);
+    const submit = async (data) => {
+        try {
+            data.file = data.file[0];
+            data.clienteId = reservarWithClientId || (selectedOption ? selectedOption.value : Number(data.clienteId));
+            data.cant_adultos = Number(adultosString.current.value);
+            data.cant_ninos = Number(ninosString.current.value);
+            data.anticipo_required = collapseIsOpen;
+                
+            /* varible a la que se le asigna la data puede ser (form data u objeto json) */
+            let requestData;
+
+            /* cambiar a FORM DATA la data si existe el anticipo (cuando collapseIsOpen es true) de lo contrario mantener la data en formato json */
+            if (collapseIsOpen) {
+                data.anticipo.monto_anticipo = Number(data.anticipo.monto_anticipo);
+                data.anticipo.fecha_anticipo = new Date().toISOString().split("T")[0];
+                const formData = new FormData();
+
+                
+                // Primero, maneja el objeto anidado 'anticipo' si existe
+                // if (data.anticipo) {
+                //     formData.append("anticipo", JSON.stringify(data.anticipo));
+                // }
+                if (data.anticipo) formData.append("anticipo", JSON.stringify(data.anticipo));
+                   // Luego, maneja todas las demás claves que no están anidadas
+                for (const key in data) {
+                    if (data.hasOwnProperty(key) && key !== "anticipo") {
+                        formData.append(key, data[key]);
+                    }
+                }
+                  // Finalmente, añade el archivo si existe
+                // if (currentFile) {
+                //     formData.append("file", currentFile);
+                // }
+                requestData = formData;
+
+                for (let [key, value] of requestData.entries()) {
+                    console.log(key, value);
+                }
+            } else {
+                delete data.anticipo;
+                delete data.file;
+                requestData = data;
+            }
+
+             /* peticiones para editar y crear reservas */
+
+            if (parameterId) {
+                // Edición de reserva existente
+                if (reservarWithClientId) {
+                    // Si hay un cliente específico asociado a la reserva, usar su ID
+                    data.clienteId = reservarWithClientId;
+                } else {
+                    // Si no hay un cliente específico, usar el ID proporcionado en los datos
+                    data.clienteId = Number(data.clienteId);
+                }
+            
+                // Llamada para actualizar la reserva
+                await updateReserva("/intimar/reserva", parameterId, requestData);
+                console.log("Editar");
+            } else {
+                // Creación de una nueva reserva
+                // Aquí puedes mantener el mismo código para la creación de reserva
+                const crear = await createReserva("/intimar/reserva", requestData);
+                console.log("respuesta de crear", crear?.data);
+                console.log("crear");
+            
+            }
+            window.location.href = "/admin/reservas";
+        } catch (error) {
+            console.error("Error al crear la reserva:", error);
+        }
+    };
+    
+            
+    const clientOptions = clients?.map((client) => ({
+        value: client?.id,
+        label: `${client?.name} ${client?.lastname}`,
+    }));
 
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Información requerida</h6>
-            <div className="pl-lg-4">
+            <div className="pl-lg-4"> 
                 <Row>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-username">
-                            Cliente
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
+                <Col lg="6">
+                        <label className="form-control-label" htmlFor="input-username">Cliente</label>
+                        <FormGroup className={ myStyles.Inputgroup}>
+                            <Select
                                 className={`form-control-alternative ${myStyles.input}`}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
+                                options={clientOptions}
+                                value={selectedOption}
+                                onChange={(selectedOption) => {
+                                    console.log("Selected option:", selectedOption);
+                                    setSelectedOption(selectedOption);
+                                    setValue("clienteId", selectedOption ? selectedOption.value : "");
                                 }}
-                                type="select"
-                                {...register("clienteId")}
-                            >
-                                {parameterId || reservarWithClientId ? (
-                                    <option
-                                        value={reservarWithClientId ? idClient : clienteIdReserva}
-                                        selected
-                                    >
-                                        {reservarWithClientId
-                                            ? `${dataClient?.name} ${dataClient?.lastname}`
-                                            : clientName?.name}
-                                    </option>
-                                ) : (
-                                    clients?.map((client) => (
-                                        <option key={client.id} value={client.id}>
-                                            {`${client.name} ${client.lastname}`}
-                                        </option>
-                                    ))
-                                )}
-                            </select>
+                                isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
+                                placeholder="Seleccionar cliente"
+                            />
                         </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -469,7 +377,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         required={collapseIsOpen}
                                     >
                                         <option value="">Seleccionar banco</option>
-                                        <option value="yaoe">Yape</option>
+                                        <option value="Yape">Yape</option>
                                         <option value="Plin">Plin</option>
                                         <option value="BCP">BCP</option>
                                         <option value="Interbank">Interbank</option>

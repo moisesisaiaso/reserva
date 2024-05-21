@@ -61,7 +61,7 @@ export const Filters = ({ employees, setEmployeeList }) => {
                                     type="text"
                                     ref={inputName}
                                 />
-                                <InputGroupAddon >
+                                <InputGroupAddon addonType="prepend" >
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -78,7 +78,7 @@ export const Filters = ({ employees, setEmployeeList }) => {
                                     type="text"
                                     ref={inputEmail}
                                 />
-                                 <InputGroupAddon  className={myStyles.buttonSearch}>
+                                 <InputGroupAddon addonType="prepend">
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -89,14 +89,14 @@ export const Filters = ({ employees, setEmployeeList }) => {
                     </Col>
                     <Col xs="12" sm="6" lg="3" className={myStyles.inputContainer}>
                         <FormGroup>
-                            <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
+                            <InputGroup  className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
-                                    className={`form-control-alternative ${myStyles.input} ${myStyles.inputFilters}`}
+                                    className={`form-control-alternative ${myStyles.input}`}
                                     placeholder="Teléfono"
                                     type="text"
                                     ref={inputCellphone}
                                 />
-                               <InputGroupAddon >
+                               <InputGroupAddon addonType="prepend">
                                    <button>
                                      <i class="fa-solid fa-magnifying-glass"></i>
                                       </button>
@@ -118,7 +118,7 @@ export const Filters = ({ employees, setEmployeeList }) => {
                                     <option key={index} value={role}>{role}</option>
                                 ))}
                             </select>
-                            <InputGroupAddon >
+                            <InputGroupAddon addonType="prepend">
                                 <button style={{ marginRight: "20px" }}>
                                     <i className="fa-solid fa-magnifying-glass"></i>
                                 </button>

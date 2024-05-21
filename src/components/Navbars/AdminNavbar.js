@@ -136,15 +136,15 @@ const AdminNavbar = (props) => {
                                 <DropdownItem className="noti-title" header tag="div">
                                     <h6 className="text-overflow m-0">Bienvenid@!</h6>
                                 </DropdownItem>
-                                <DropdownItem to="/admin/user-profile" tag={Link}>
+                                {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                                     <i className="ni ni-single-02" />
                                     <span>Mi perfil</span>
-                                </DropdownItem>
-                                <DropdownItem to="/admin/user-profile" tag={Link}>
+                                </DropdownItem> */}
+                                <DropdownItem to="/admin/configuracion" tag={Link}>
                                     <i className="ni ni-settings-gear-65" />
                                     <span>Ajustes</span>
                                 </DropdownItem>
-                                <DropdownItem to="/admin/user-profile" tag={Link}>
+                                <DropdownItem to="/admin/calendario" tag={Link}>
                                     <i className="ni ni-calendar-grid-58" />
                                     <span>Calendario</span>
                                 </DropdownItem>

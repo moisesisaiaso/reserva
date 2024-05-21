@@ -203,7 +203,7 @@ const Graficas = () => {
     return (
         <>
             <Header />
-            <Container className={myStyles.content} fluid>
+            <Container className="mt--7" fluid>
                 <Row>
                     <Col xl="8">
                         <Card className="bg-gradient-default shadow">
@@ -216,6 +216,8 @@ const Graficas = () => {
                                     <Bar
                                         data={procesarDatosParaGrafico()}
                                         options={{
+                                            maintainAspectRatio: false,
+                                            responsive: true,
                                             scales: {
                                                 y: {
                                                     beginAtZero: true,
@@ -236,17 +238,19 @@ const Graficas = () => {
                             </CardHeader>
                             <CardBody>
                                 <div className="chart">
-                                    <Bar
-                                        data={procesarClientesPorMes()}
-                                        options={{
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true,
-                                                    stepSize: 1,
-                                                },
+                                <Bar
+                                    data={procesarClientesPorMes()}
+                                    options={{
+                                        maintainAspectRatio: false,
+                                        responsive: true,
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                stepSize: 1,
                                             },
-                                        }}
-                                    />
+                                        },
+                                    }}
+                                />
                                 </div>
                             </CardBody>
                         </Card>
@@ -266,6 +270,8 @@ const Graficas = () => {
                                         <Bar
                                             data={procesarZonasOcupadasPorMes()}
                                             options={{
+                                                maintainAspectRatio: false,
+                                                responsive: true,
                                                 scales: {
                                                     y: {
                                                         beginAtZero: true,
@@ -294,6 +300,8 @@ const Graficas = () => {
                                         <Bar
                                             data={procesarHorariosFrecuentes()}
                                             options={{
+                                                maintainAspectRatio: false,
+                                                responsive: true,
                                                 scales: {
                                                     y: {
                                                         beginAtZero: true,

@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 
 export const ReservaDetail = () => {
     const location = useLocation();
-    const reservaId = location.state; /* Este es el id de la reserva en la base de datos */
+    const reservaId = location.state;
     const [reservaData, setReservaData] = useState(null);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ export const ReservaDetail = () => {
 
     const getEstadoAnticipoColor = () => {
         switch (reservaData?.anticipo?.estado_anticipo) {
-            case 'Cancelado':
+            case 'Rechazado':
                 return 'danger';
             case 'Pendiente':
                 return 'warning';
@@ -96,8 +96,8 @@ export const ReservaDetail = () => {
                                 </p>
                                 {reservaData.anticipo.imagen_anticipo ? (
                                     <div>
-                                        <strong>Imagen del Anticipo:</strong>
-                                        <img src={reservaData.anticipo.imagen_anticipo} alt="Imagen del Anticipo" style={{ width: '100%', height: 'auto' }} />
+                                        <strong>Imagen del Anticipo:</strong><br/>
+                                        <img src={reservaData.anticipo.imagen_anticipo} alt="Imagen del Anticipo" style={{ width: '170px', height: '300px', display: 'block' }} />
                                     </div>
                                 ) : (
                                     <p>No hay imagen del anticipo disponible</p>
@@ -115,19 +115,19 @@ export const ReservaDetail = () => {
                                 <h1>Horario y Mesas</h1>
                             </CardHeader>
                             <CardBody>
-                                <p><strong>Hora de Llegada:</strong> {reservaData.hora_llegada || 'Aún no asignada'}</p>
-                                <p><strong>Hora de Salida:</strong> {reservaData.hora_salida || 'Aún no registrada'}</p>
+                                <p><strong>Hora de Llegada:</strong> {reservaData.hora_llegada || 'Aún no asignada'}</p>                              
                                 <p><strong>Mesas Asignadas:</strong></p>
                                 <ul>
                                     {reservaData.mesas?.length ? (
                                         reservaData.mesas.map((mesa, index) => (
-                                            <li key={index}>{mesa}</li>
+                                            <li key={index}>Mesa {mesa.numero_mesa} - {mesa.ubicacion_mesa}</li>
                                         ))
                                     ) : (
                                         <li>Aún no asignada</li>
                                     )}
                                 </ul>
                                 <p><strong>Mozo Asignado:</strong> {reservaData.mozo?.name || '-'} {reservaData.mozo?.lastname || '-'}</p>
+                                <p><strong>Hora de Salida:</strong> {reservaData.hora_salida || 'Aún no registrada'}</p>
                             </CardBody>
                         </Card>
                     )}

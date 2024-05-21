@@ -24,7 +24,7 @@ export const TableComponent = ({
     };
 
     const handleDetail = () => {
-        // navigate("/admin/mesas/detail", { state: id });
+        navigate("/admin/reservas/detail", { state: id });
     };
 
     const toggleModal = () => {
@@ -66,9 +66,9 @@ export const TableComponent = ({
                 </td>
                 <td>{`${mozo?.name} ${mozo?.lastname}`}</td>
                 <td className={myStyles.actions}>
-                    <a onClick={handleMozo} className={myStyles.btnReserva}>
-                        Asignar Mezo
-                    </a>
+                    {/* <a onClick={handleMozo} className={myStyles.btnReserva}>
+                        Liberar mesa
+                    </a> */}
 
                     <div>
                         <a onClick={handleDetail} className={myStyles.btnDetail}>

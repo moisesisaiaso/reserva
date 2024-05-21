@@ -71,18 +71,18 @@ export const FormCreateEdit = ({ id }) => {
             <h6 className="heading-small text-muted mb-4">Información de mesa</h6>
             <div className="pl-lg-4">
                 <Row>
-                <Col md="12">
+                    <Col md="12">
                         <label className="form-control-label" htmlFor="input-ubicacion-mesa">
                             Ubicación
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
+                        <select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 style={{
                                     display: "flex",
                                     alignItems: "center",
                                 }}
-                                id="input-ubicacion-mesa"
+                                id=""
                                 {...register("ubicacion_mesa")}
                             >
                                 <option value="">Seleccione la Ubicación</option>
@@ -110,23 +110,6 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
-                {/* <Row>
-                    <Col md="12">
-                        <label className="form-control-label" htmlFor="input-estado-mesa">
-                            Estado
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-estado-mesa"
-                                {...register("estado_mesa")}
-                            >
-                                <option value="true">Disponible</option>
-                                <option value="false">No disponible</option>
-                            </select>
-                        </FormGroup>
-                    </Col>
-                </Row> */}
             </div>
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
