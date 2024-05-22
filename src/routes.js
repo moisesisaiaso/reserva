@@ -28,7 +28,8 @@ import { CreateMesa } from "views/contentPage/mesasPages/CreateMesa";
 //? employee
 import Employee from "views/contentPage/empleadosPages/Employee";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
-import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
+// import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
+import EmployeeDetail from 'views/contentPage/empleadosPages/EmployeeDetail';
 
 //? Configuracion
 import Configuracion from "views/contentPage/Configuracion";

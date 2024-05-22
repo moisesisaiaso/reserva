@@ -1,4 +1,4 @@
-import { useState } from "react";
+// reactstrap components
 import { login } from "api/auth";
 import myStyles from "../../assets/css/myStyles.module.css";
 import { useForm } from "react-hook-form";
@@ -12,8 +12,8 @@ import {
     InputGroupAddon,
     InputGroupText,
     InputGroup,
+    Row,
     Col,
-    Spinner,
 } from "reactstrap";
 
 const Login = () => {
@@ -23,10 +23,8 @@ const Login = () => {
         reset,
         formState: { errors },
     } = useForm();
-    const [loading, setLoading] = useState(false); 
 
     const onSubmit = async (data) => {
-        setLoading(true); 
         try {
             await login(data);
             reset({
@@ -38,8 +36,6 @@ const Login = () => {
             }, 2000);
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
-        } finally {
-            setLoading(false); 
         }
     };
 
@@ -98,25 +94,25 @@ const Login = () => {
                             </label> */}
                         </div>
                         <div className="text-center">
-                            <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                                {loading ? <Spinner size="sm" /> : "Iniciar sesión"}
+                            <Button className="my-4" color="primary" type="submit">
+                                Iniciar sesión
                             </Button>
                         </div>
                     </Form>
                 </CardBody>
             </Card>
             {/* <Row className="mt-3">
-                <Col xs="6">
-                    <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <small>Forgot password?</small>
-                    </a>
-                </Col>
-                <Col className="text-right" xs="6">
-                    <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <small>Create new account</small>
-                    </a>
-                </Col>
-            </Row> */}
+                    <Col xs="6">
+                        <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
+                            <small>Forgot password?</small>
+                        </a>
+                    </Col>
+                    <Col className="text-right" xs="6">
+                        <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
+                            <small>Create new account</small>
+                        </a>
+                    </Col>
+                </Row> */}
         </Col>
     );
 };
