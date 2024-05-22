@@ -13,28 +13,17 @@ import {
     Row,
 } from "reactstrap";
 
-export const FilterSearch = ({ mesas, setMesaList }) => {
+export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
     const inputEstado = useRef();
 
-    // Función para buscar por nombre, mesa o teléfono
-
-    let query = "";
     const handleSearch = () => {
         const value = inputEstado.current?.value;
-        if (value === "Disponible") {
-            query = true;
-        } else if (value === "No disponible") {
-            query = false;
-        }
+        const query = value === "Disponible" ? true : value === "No disponible" ? false : "";
 
-        const regex = new RegExp(query, "i"); // 'i' para hacer la búsqueda insensible a mayúsculas/minúsculas
-
-        //filtrar por estado
-        const filteredMesas = mesas?.filter((mesa) => {
-            return regex.test(mesa.estado_mesa);
-        });
+        const filteredMesas = mesas?.filter((mesa) => mesa.estado_mesa === query);
 
         setMesaList(filteredMesas);
+        setFilteredData(filteredMesas);  // Update filtered data state
     };
 
     const [selectedFilter, setSelectedFilter] = useState("Todos");
@@ -43,20 +32,17 @@ export const FilterSearch = ({ mesas, setMesaList }) => {
         setSelectedFilter(zona);
         const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
         setMesaList(filteredMesas);
+        setFilteredData(filteredMesas);  // Update filtered data state
     };
 
     const showAllMesas = (e) => {
         e.preventDefault();
         setSelectedFilter("Todos");
         setMesaList(mesas);
+        setFilteredData(mesas);  // Update filtered data state
     };
 
-    /*  useEffect(() => {
-        setMesaList(mesas);
-    }, []); */
-
     const getButtonClass = (zona) => {
-        // Asignar estilo adicional si es el filtro activo
         return selectedFilter === zona
             ? `${myStyles.button} ${myStyles.selected}`
             : myStyles.button;
