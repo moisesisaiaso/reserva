@@ -7,6 +7,8 @@ import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
@@ -20,7 +22,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
    
     const [currentFile, setCurrentFile] = useState();
-    const { handleSubmit, register, reset, setValue } = useForm();
+    const { handleSubmit, register, reset, setValue, formState: { errors } } = useForm();
     const [dataClient, setDataClient] = useState();
     const [clienteIdReserva, setClienteIdReserva] = useState();
     const [clients, getClients] = useCrud();
@@ -28,7 +30,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [reserva, setReserva] = useState();
     const [filePreview, setFilePreview] = useState(null);
     const [clientName, setClientName] = useState();
-    const [selectedOption, setSelectedOption] = useState(null); // Estado para almacenar la opción seleccionada
+    const [selectedOption, setSelectedOption] = useState(null); 
 
     useEffect(() => {
         getClients("/intimar/client").then((fetchedClients) => {
@@ -77,7 +79,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
     useEffect(() => {
         if (reserva) {
-            const { fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId, file, client } = reserva;
+            const { fecha_reserva, hora_reserva, cant_adultos, cant_ninos, estado_reserva, anticipo_required, motivo_reserva, clienteId, file, client } = reserva;
             setClientName(client);
             setClienteIdReserva(clienteId);
             setCollapseIsOpen(anticipo_required);
@@ -93,11 +95,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 const { anticipo } = reserva;
                 const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
                 reset({
-                    fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId, file,
+                    fecha_reserva, hora_reserva, cant_adultos, cant_ninos, estado_reserva, anticipo_required, motivo_reserva, clienteId, file,
                     anticipo: { monto_anticipo, banco, moneda, estado_anticipo }
                 });
             } else {
-                reset({ fecha_reserva, hora_reserva, cant_adultos, cant_ninos, anticipo_required, motivo_reserva, clienteId });
+                reset({ fecha_reserva, hora_reserva, cant_adultos, cant_ninos,estado_reserva, anticipo_required, motivo_reserva, clienteId });
             }
         }
     }, [reserva]);
@@ -199,18 +201,23 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             
                 // Llamada para actualizar la reserva
                 await updateReserva("/intimar/reserva", parameterId, requestData);
-                console.log("Editar");
+                toast.success("Reserva editada correctamente.");
             } else {
                 // Creación de una nueva reserva
                 // Aquí puedes mantener el mismo código para la creación de reserva
                 const crear = await createReserva("/intimar/reserva", requestData);
+                toast.success("Reserva creada correctamente.");
                 console.log("respuesta de crear", crear?.data);
                 console.log("crear");
             
             }
+
+            setTimeout(() => {
             window.location.href = "/admin/reservas";
+            }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
+            toast.error("Hubo un error al procesar la solicitud");
         }
     };
     
@@ -240,6 +247,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
                                 placeholder="Seleccionar cliente"
                             />
+                             {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
                         </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -272,6 +280,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 onChange={handleTotalPeople}
                                 required
                             />
+                            {errors.cant_adultos && <span className="text-danger">{errors.cant_adultos.message}</span>}                            
                         </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -303,6 +312,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 {...register("fecha_reserva")}
                                 required
                             />
+                            {errors.fecha_reserva && <span className="text-danger">{errors.fecha_reserva.message}</span>}                            
                         </FormGroup>
                     </Col>
                     <Col md="12">
@@ -321,8 +331,36 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 {...register("hora_reserva")}
                                 required
                             />
+                             {errors.hora_reserva && <span className="text-danger">{errors.hora_reserva.message}</span>}                          
                         </FormGroup>
                     </Col>
+
+                    {parameterId && (
+                        <Col lg="12">
+                            <label className="form-control-label" htmlFor="input-city">
+                                Estado de reserva
+                            </label>
+                            <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                                <select
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                    id="input-city"
+                                    {...register("estado_reserva")}
+                                >
+                                    <option value="">Seleccionar estado</option>
+                                    <option value="Pendiente">Pendiente a confirmar</option>
+                                    <option value="Confirmada">Confirmada</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                </select>
+                            </FormGroup>
+                        </Col>
+                    )}
+
+
+
                 </Row>
             </div>
             <hr className="my-4" />
@@ -471,6 +509,8 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> Crear Reserva
             </Button>
+            <ToastContainer position="top-right" autoClose={3000} />
+
         </form>
     );
 };

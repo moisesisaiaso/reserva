@@ -71,8 +71,10 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         *Total de Personas:* ${totalPersonas}
 
 Para confirmar su reserva responda *CONFIRMO*, esto es necesario para validar su reserva.
-
 ¡Gracias por elegirnos!
+
+To confirm your reservation, please reply with *CONFIRM*. This is necessary to validate your booking.
+Thank you for choosing us!
         `;
         const mensajeCodificado = encodeURIComponent(mensajeConfirmacion);
         const whatsappLink = `https://wa.me/${client.countryCode.replace('+', '')}${client.cellphone}?text=${mensajeCodificado}`;

@@ -16,6 +16,8 @@ import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useState } from "react";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const FormCreateEdit = ({ id }) => {
     const { handleSubmit, register, reset } = useForm();
 
@@ -54,16 +56,19 @@ export const FormCreateEdit = ({ id }) => {
         if (id) {
             await updateMesa("/intimar/mesa", id, data);
             console.log("Editado");
+            toast.success("Mesa editada con éxito");
         } else {
             await createMesa("/intimar/mesa", data);
+            toast.success("Mesa creada con éxito");
         }
 
         reset({
             ubicacion_mesa: "",
             numero_mesa: "",
         });
-
+        setTimeout(() => {
         window.location.href = "/admin/mesas";
+    }, 1250);
     };
 
     return (
@@ -114,6 +119,8 @@ export const FormCreateEdit = ({ id }) => {
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
             </Button>
+            <ToastContainer position="top-right" autoClose={3000} />
+
         </form>
     );
 };

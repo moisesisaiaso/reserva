@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const FormCreateEdit = ({ id, type }) => {
     const { handleSubmit, register, reset, setValue } = useForm({
         defaultValues: {
@@ -39,11 +43,12 @@ export const FormCreateEdit = ({ id, type }) => {
     }, [mesas, reservas]);
 
     const submit = async (data) => {
-        const id = data.reservaId.value; // Acceder al valor seleccionado de la reserva
+        const id = data.reservaId.value;
         delete data.reservaId;
         data = data.mesas;
 
         await setMesas(`/intimar/reserva/${id}/mesa`, data);
+        toast.success("Mesa asignada con éxito");
 
         reset({
             reservaId: "",
@@ -54,7 +59,9 @@ export const FormCreateEdit = ({ id, type }) => {
         let dataMozo = { mozoId };
         await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
 
+        setTimeout(() => {
         window.location.href = "/admin/asignar-mesa";
+        }, 1150);
     };
 
     return (
@@ -141,6 +148,8 @@ export const FormCreateEdit = ({ id, type }) => {
                 <i className="ni ni-send" />
                 Asignar mesa
             </Button>
+            <ToastContainer position="top-right" autoClose={3000} />
+
         </form>
     );
 };

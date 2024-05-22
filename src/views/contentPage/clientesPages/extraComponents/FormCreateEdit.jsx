@@ -10,11 +10,13 @@ import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useState } from "react";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const FormCreateEdit = ({ id }) => {
     const { handleSubmit, register, reset, formState: { errors } } = useForm();
     const [client, getClients, createClient, , updateClient] = useCrud();
     const [serverErrors, setServerErrors] = useState({});
-    const [showError, setShowError] = useState(false); // Estado para controlar la visualización del mensaje de error
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         getClients("/intimar/client");
@@ -68,27 +70,36 @@ export const FormCreateEdit = ({ id }) => {
             return;
         }
 
-        if (id) {
-            await updateClient("/intimar/client", id, data);
-            console.log("Editado");
-        } else {
-            await createClient("/intimar/client", data);
+
+        try {
+            if (id) {
+                await updateClient("/intimar/client", id, data);
+                toast.success("Cliente editado correctamente");
+            } else {
+                await createClient("/intimar/client", data);
+                toast.success("Cliente creado correctamente");
+            }
+
+            reset({
+                name: "",
+                lastname: "",
+                age: "",
+                email: "",
+                cellphone: "",
+                address: "",
+                allergies: "",
+            });
+
+            setTimeout(() => {
+                window.location.href = "/admin/clients";
+            }, 1250);
+        } catch (error) {
+            console.error("Error:", error);
+            toast.error("Hubo un error al procesar la solicitud");
         }
-
-
-        reset({
-            name: "",
-            lastname: "",
-            age: "",
-            email: "",
-            cellphone: "",
-            address: "",
-            allergies: "",
-        });
-
-        window.location.href = "/admin/clients";
     };
 
+    
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Información de cliente</h6>
@@ -125,7 +136,7 @@ export const FormCreateEdit = ({ id }) => {
                         </FormGroup>
                     </Col>
                 </Row>
-                {showError && ( // Mostramos el mensaje de error si showError es true
+                {showError && (
                     <Alert color="danger">
                         Este cliente ya existe. Por favor, introduzca un nombre y apellido diferentes.
                     </Alert>
@@ -210,6 +221,7 @@ export const FormCreateEdit = ({ id }) => {
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> Crear Cliente
             </Button>
+            <ToastContainer position="top-right" autoClose={3000} />
         </form>
     );
 };

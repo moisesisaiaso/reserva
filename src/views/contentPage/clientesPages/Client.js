@@ -11,7 +11,8 @@ import { Filters } from "./extraComponents/Filters";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Client = () => {
     const [isTable, setIsTable] = useState(true);
     const [clients, getClients, , deleteClient] = useCrud();
@@ -20,6 +21,11 @@ const Client = () => {
 
     useEffect(() => {
         getClients("/intimar/client");
+        const notification = sessionStorage.getItem("notification");
+        if (notification) {
+            toast.success(notification);
+            sessionStorage.removeItem("notification"); // Limpia el estado
+        }
     }, []);
 
     /* logica para la paginación */

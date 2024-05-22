@@ -60,9 +60,9 @@ export const TableComponent = ({ employee, deleteEmployee, lengthId, itemsPerPag
                 {/* <td> {roles}</td>  */}
                 <td className={myStyles.actions}>
                     <div>
-                        <a onClick={handleDetail} className={myStyles.btnDetail}>
+                        {/* <a onClick={handleDetail} className={myStyles.btnDetail}>
                             <i className="fa-regular fa-eye fa-2x"></i>
-                        </a>
+                        </a> */}
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
                             <i className="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
