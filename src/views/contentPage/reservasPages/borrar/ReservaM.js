@@ -12,11 +12,11 @@ import myStyles from "../../../assets/css/myStyles.module.css";
 const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
     const [reservas, getReservas, , deleteReserva] = useCrud();
-    const [reservaList, setReservaList] = useState([]);
+    const [reservaList, setReservaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredReservasCount, setFilteredReservasCount] = useState(0);
-    const [pages, setPages] = useState(1);
-    const [listaFiltrada, setListaFiltrada] = useState([]);
+    const [pages, setPages] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
     const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
@@ -27,16 +27,17 @@ const Reserva = () => {
 
     /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
-        const totalItems = isFilter ? listaFiltrada?.length || 0 : reservas?.length || 0;
-        setPages(Math.ceil(totalItems / itemsPerPage));
+        if (!isFilter) {
+            setPages(Math.ceil(reservas?.length / itemsPerPage));
+        } else {
+            setPages(Math.ceil(listaFiltrada?.length / itemsPerPage));
+        }
     }, [listaFiltrada, reservas, isFilter]);
 
     // función para obtener la lista cortada segun los items por pagina
     const getDataPaginate = (data) => {
-        if (data) {
-            const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
-            setReservaList(cutArray);
-        }
+        const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
+        setReservaList(cutArray);
     };
 
     // pagina actual vuelve a ser 1 si se ha hecho un filtrado
@@ -46,19 +47,18 @@ const Reserva = () => {
         }
     }, [listaFiltrada]);
 
-   // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
+    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
     useEffect(() => {
-        const data = isFilter ? listaFiltrada : reservas;
-        if (data) {
-            getDataPaginate(data);
-            setFilteredReservasCount(data.length);
+        if (!isFilter) {
+            getDataPaginate(reservas);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        } else {
+            getDataPaginate(listaFiltrada);
+            setFilteredReservasCount(listaFiltrada?.length); // Actualizar el contador al número total de reservas
         }
-    }, [listaFiltrada, reservas, currentPage, isFilter]);
+    }, [listaFiltrada, reservas, currentPage]);
 
-    const handleFilter = (filteredReservas) => {
-        setListaFiltrada(filteredReservas);
-        setIsFilter(true);
-    };
+    console.log("paginas: ", pages);
 
     return (
         <>
@@ -82,10 +82,10 @@ const Reserva = () => {
                                 </h2>
 
                                 <section>
-                                    <Filters 
-                                        reservas={reservas} 
-                                        setListaFiltrada={handleFilter} 
-                                        setIsFilter={setIsFilter} 
+                                    <Filters
+                                        reservas={reservas}
+                                        setIsFilter={setIsFilter}
+                                        setListaFiltrada={setListaFiltrada}
                                     />
                                 </section>
 
@@ -100,9 +100,10 @@ const Reserva = () => {
                                                     <th>Nombre del Cliente</th>
                                                     <th>Fecha de reserva</th>
                                                     <th>Hora de reserva</th>
-                                                    <th>N° adultos</th>
-                                                    <th>N° niños</th>
+                                                    <th>Cant. de adultos</th>
+                                                    <th>Cant. de niños</th>
                                                     <th>Estado de reserva</th>
+                                                    <th>Estado de anticipo</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
