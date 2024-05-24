@@ -13,26 +13,52 @@ const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
     const [reservas, getReservas, , deleteReserva] = useCrud();
     const [reservaList, setReservaList] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+    const [pages, setPages] = useState();
     const [filteredReservasCount, setFilteredReservasCount] = useState(0);
+    const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
         getReservas("/intimar/reserva");
     }, []);
 
     const itemsPerPage = 5;
-    const pages = Math.ceil(reservas?.length / itemsPerPage);
 
     useEffect(() => {
-        const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
-        setReservaList(cutArray);
-        setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        if (!isFilter) {
+            setPages(Math.ceil(reservas?.length / itemsPerPage));
+        } else {
+            console.log("nueva pages");
+            console.log("paginas list: ", listaFiltrada?.length);
+            setPages(Math.ceil(listaFiltrada?.length / itemsPerPage));
+        }
+    }, [listaFiltrada, reservas, reservaList, isFilter]);
+
+    useEffect(() => {
+        if (!isFilter) {
+            const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
+            setReservaList(cutArray);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        }
     }, [reservas, currentPage]);
 
-    const handleFilter = (filteredReservas) => {
-        setReservaList(filteredReservas);
-        setFilteredReservasCount(filteredReservas.length);
-    };
+    useEffect(() => {
+        if (isFilter) {
+            setCurrentPage(1);
+        }
+    }, [listaFiltrada]);
+
+    useEffect(() => {
+        /* paginacióny actualización de reservas cuando se realiza un filtrado */
+        if (isFilter) {
+            const cutArray = getPaginatedData(listaFiltrada, currentPage, itemsPerPage);
+            setReservaList(cutArray);
+            setFilteredReservasCount(listaFiltrada?.length); // Actualizar el contador al número total de reservas
+        }
+    }, [listaFiltrada, currentPage]);
+
+    console.log("paginas: ", pages);
 
     return (
         <>
@@ -56,7 +82,11 @@ const Reserva = () => {
                                 </h2>
 
                                 <section>
-                                    <Filters reservas={reservas} setReservaList={handleFilter} />
+                                    <Filters
+                                        reservas={reservas}
+                                        setIsFilter={setIsFilter}
+                                        setListaFiltrada={setListaFiltrada}
+                                    />
                                 </section>
 
                                 <section className={myStyles.tableSpacing}>

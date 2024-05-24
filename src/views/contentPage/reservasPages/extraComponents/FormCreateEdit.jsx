@@ -17,7 +17,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [ninos, setNinos] = useState();
 
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-    const [showSelectDropdown, setShowSelectDropdown] = useState(true); 
+    const [showSelectDropdown, setShowSelectDropdown] = useState(true);
 
     const handleTotalPeople = () => {
         let numberAdultos = parseInt(adultosString?.current?.value) || 0;
@@ -149,12 +149,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* varible a la que se le asigna la data puede ser (form data u objeto json) */
     let requestData;
 
-
-
     const submit = async (data) => {
-        try { 
-           console.log("data: ", data.file[0]);
-           data.file= data.file[0]
+        try {
+            console.log("data: ", data.file[0]);
+            data.file = data.file[0];
             if (reservarWithClientId) {
                 data.clienteId = reservarWithClientId;
             } else {
@@ -186,14 +184,14 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 // }
                 if (data.anticipo) {
                     const anticipoConArchivo = {
-                        ...data.anticipo, 
+                        ...data.anticipo,
                     };
                     formData.append("anticipo", JSON.stringify(anticipoConArchivo));
                 }
 
                 // Luego, maneja todas las demás claves que no están anidadas
                 for (const key in data) {
-                    if (data.hasOwnProperty(key) && key !== "anticipo" ) {
+                    if (data.hasOwnProperty(key) && key !== "anticipo") {
                         formData.append(key, data[key]);
                     }
                 }
@@ -276,7 +274,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             alert("El tamaño del archivo no puede superar los 10 MB.");
         }
     };
-    
+
     /* Validando la HORA */
     const validarHora = (e) => {
         const hora = e.target.value; //formato 'HH:MM'
@@ -497,8 +495,8 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.moneda")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
-                                         <option value="PEN">PEN</option>
+                                        <option value="">Seleccionar ...</option>
+                                        <option value="PEN">PEN</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="GBP">GBP</option>
@@ -522,7 +520,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.estado_anticipo")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
+                                        <option value="">Seleccionar ...</option>
                                         <option value="Pendiente">Pendiente</option>
                                         <option value="Aprobado">Aprobado</option>
                                         <option value="Rechazado">Rechazado</option>
@@ -530,14 +528,15 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 </FormGroup>
                             </Col>
 
-
                             <Col md="12">
                                 <label className="form-control-label">Subir Comprobante</label>
                                 <FormGroup className="input-group">
-                                    {filePreview ? (
-                                        <img src={filePreview} alt="File Preview" style={{ maxWidth: "100px" }} />
-                                    ) : (
-                                        <p>No se ha seleccionado ningún archivo.</p>
+                                    {filePreview && (
+                                        <img
+                                            src={filePreview}
+                                            alt="File Preview"
+                                            style={{ maxWidth: "100px", marginRight: "2rem" }}
+                                        />
                                     )}
                                     <div className="custom-file">
                                         <input
@@ -546,15 +545,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                             type="file"
                                             {...register("file")}
                                             onChange={handleFileChange}
-                                            
                                         />
                                         <label className="custom-file-label" htmlFor="customFile">
-                                            Seleccione el archivo
+                                            No se ha seleccionado ningún archivo.
                                         </label>
                                     </div>
                                 </FormGroup>
                             </Col>
- 
                         </Row>
                     </div>
                 </Collapse>
