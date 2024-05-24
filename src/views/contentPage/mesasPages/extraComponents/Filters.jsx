@@ -39,7 +39,7 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={showAllMesas}
-                                className={getButtonClass("Todos")} 
+                                className={getButtonClass("Todos")}
                             >
                                 Todos
                             </Button>

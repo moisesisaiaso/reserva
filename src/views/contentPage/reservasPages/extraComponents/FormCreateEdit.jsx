@@ -443,8 +443,8 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.moneda")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
-                                         <option value="PEN">PEN</option>
+                                        <option value="">Seleccionar ...</option>
+                                        <option value="PEN">PEN</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="GBP">GBP</option>
@@ -468,14 +468,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         {...register("anticipo.estado_anticipo")}
                                         required={collapseIsOpen}
                                     >
-                                         <option value="">Seleccionar ...</option>
+                                        <option value="">Seleccionar ...</option>
                                         <option value="Pendiente">Pendiente</option>
                                         <option value="Aprobado">Aprobado</option>
                                         <option value="Rechazado">Rechazado</option>
                                     </select>
                                 </FormGroup>
                             </Col>
-
 
                             <Col md="12">
                                 <label className="form-control-label">Subir Comprobante</label>
@@ -501,7 +500,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     </div>
                                 </FormGroup>
                             </Col>
- 
                         </Row>
                     </div>
                 </Collapse>

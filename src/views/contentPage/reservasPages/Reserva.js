@@ -60,6 +60,26 @@ const Reserva = () => {
         setIsFilter(true);
     };
 
+    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
+    useEffect(() => {
+        if (isFilter) {
+            setCurrentPage(1);
+        }
+    }, [listaFiltrada]);
+
+    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
+    useEffect(() => {
+        if (!isFilter) {
+            getDataPaginate(reservas);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        } else {
+            getDataPaginate(listaFiltrada);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        }
+    }, [listaFiltrada, reservas, currentPage]);
+
+    console.log("paginas: ", pages);
+
     return (
         <>
             <Container className={myStyles.content} fluid>
