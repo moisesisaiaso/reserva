@@ -15,50 +15,24 @@ const Reserva = () => {
     const [reservaList, setReservaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredReservasCount, setFilteredReservasCount] = useState(0);
-    const [pages, setPages] = useState();
-    const [listaFiltrada, setListaFiltrada] = useState();
-    const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
         getReservas("/intimar/reserva");
     }, []);
 
     const itemsPerPage = 5;
+    const pages = Math.ceil(reservas?.length / itemsPerPage);
 
-    /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
-        if (!isFilter) {
-            setPages(Math.ceil(reservas?.length / itemsPerPage));
-        } else {
-            setPages(Math.ceil(listaFiltrada?.length / itemsPerPage));
-        }
-    }, [listaFiltrada, reservas, isFilter]);
-
-    // función para obtener la lista cortada segun los items por pagina
-    const getDataPaginate = (data) => {
-        const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
+        const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
         setReservaList(cutArray);
+        setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+    }, [reservas, currentPage]);
+
+    const handleFilter = (filteredReservas) => {
+        setReservaList(filteredReservas);
+        setFilteredReservasCount(filteredReservas.length);
     };
-
-    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
-    useEffect(() => {
-        if (isFilter) {
-            setCurrentPage(1);
-        }
-    }, [listaFiltrada]);
-
-    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
-    useEffect(() => {
-        if (!isFilter) {
-            getDataPaginate(reservas);
-            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
-        } else {
-            getDataPaginate(listaFiltrada);
-            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
-        }
-    }, [listaFiltrada, reservas, currentPage]);
-
-    console.log("paginas: ", pages);
 
     return (
         <>
@@ -82,15 +56,11 @@ const Reserva = () => {
                                 </h2>
 
                                 <section>
-                                    <Filters
-                                        reservas={reservas}
-                                        setIsFilter={setIsFilter}
-                                        setListaFiltrada={setListaFiltrada}
-                                    />
+                                    <Filters reservas={reservas} setReservaList={handleFilter} />
                                 </section>
 
                                 <section className={myStyles.tableSpacing}>
-                                    {filteredReservasCount === 0 ? (
+                                    {reservaList && reservaList.length === 0 ? (
                                         <p>No hay reservas que mostrar</p>
                                     ) : isTable ? (
                                         <Table striped responsive>
@@ -100,10 +70,10 @@ const Reserva = () => {
                                                     <th>Nombre del Cliente</th>
                                                     <th>Fecha de reserva</th>
                                                     <th>Hora de reserva</th>
-                                                    <th>Cant. de adultos</th>
-                                                    <th>Cant. de niños</th>
+                                                    <th>N° adultos</th>
+                                                    <th>N° niños</th>
                                                     <th>Estado de reserva</th>
-                                                    <th>Estado de anticipo</th>
+                                                    {/* <th>Estado de anticipo</th> */}
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>

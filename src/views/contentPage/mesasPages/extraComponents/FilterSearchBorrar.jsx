@@ -1,65 +1,62 @@
 import { useRef } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
-
 import {
     FormGroup,
     Form,
     Input,
     InputGroupAddon,
-    InputGroupText,
     InputGroup,
     Col,
     Row,
     Button,
 } from "reactstrap";
 
-export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
-    const inputName = useRef();
-    const inputEmail = useRef();
-    const inputCellphone = useRef();
+export const FilterSearch = ({ mesas, setMesaList }) => {
+    const inputUbicacion = useRef();
+    const inputMesa = useRef();
+    const inputEstado = useRef();
 
-    // Función para buscar por nombre, email o teléfono
-    function searchClient(e, type) {
+    // Función para buscar por ubicación, mesa o estado
+    function searchMesa(e, type) {
         e.preventDefault();
         let query = "";
-        if (type === "name") {
-            query = inputName.current.value;
-        } else if (type === "email") {
-            query = inputEmail.current.value;
+        if (type === "ubicacion") {
+            query = inputUbicacion.current.value;
+        } else if (type === "mesa") {
+            query = inputMesa.current.value;
         } else {
-            query = inputCellphone.current.value;
+            query = inputEstado.current.value;
         }
         console.log(query);
 
         const regex = new RegExp(query, "i"); // 'i' para hacer la búsqueda insensible a mayúsculas/minúsculas
 
-        // Filtrar por nombre, email o teléfono
-        const filteredClients = clients.filter((client) => {
-            return (
-                regex.test(client.name) || regex.test(client.email) || regex.test(client.cellphone)
-            );
+        // Filtrar por ubicación, mesa o estado
+        const filteredMesas = mesas.filter((mesa) => {
+            if (type === "ubicacion") {
+                return regex.test(mesa.ubicacion_mesa);
+            } else if (type === "mesa") {
+                return regex.test(mesa.numero_mesa);
+            } else {
+                return regex.test(mesa.estado_mesa);
+            }
         });
 
-        setListaFiltrada(filteredClients);
-        setIsFilter(true);
+        setMesaList(filteredMesas);
     }
 
-    // Función para reiniciar la tabla
     function resetTable() {
-        // Reiniciar la tabla aquí
-        // Por ejemplo:
-        setListaFiltrada(clients); // Esto reinicia la lista de clientes al estado original
-        setIsFilter(false);
-        inputName.current.value = ""; // Limpia el campo de búsqueda por nombre
-        inputEmail.current.value = ""; // Limpia el campo de búsqueda por email
-        inputCellphone.current.value = ""; // Limpia el campo de búsqueda por teléfono
+        setMesaList(mesas);
+        inputUbicacion.current.value = "";
+        inputMesa.current.value = "";
+        inputEstado.current.value = "";
     }
 
     return (
         <div className={myStyles.inputFilters}>
             <Form
                 onSubmit={(e) => {
-                    searchClient(e, "name");
+                    searchMesa(e, "ubicacion");
                 }}
             >
                 <Row>
@@ -70,13 +67,13 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
                             >
                                 <input
                                     className={`form-control-alternative ${myStyles.input}`}
-                                    placeholder="Buscar por nombre"
+                                    placeholder="Buscar por ubicación"
                                     type="text"
-                                    ref={inputName}
+                                    ref={inputUbicacion}
                                 />
                                 <InputGroupAddon addonType="prepend">
-                                    <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    <button type="submit">
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </InputGroupAddon>
                             </InputGroup>
@@ -86,7 +83,7 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
             </Form>
             <Form
                 onSubmit={(e) => {
-                    searchClient(e, "email");
+                    searchMesa(e, "mesa");
                 }}
             >
                 <Row>
@@ -97,13 +94,13 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
                             >
                                 <input
                                     className={`form-control-alternative ${myStyles.input}`}
-                                    placeholder="Buscar por email"
+                                    placeholder="Buscar por mesa"
                                     type="text"
-                                    ref={inputEmail}
+                                    ref={inputMesa}
                                 />
                                 <InputGroupAddon addonType="prepend">
-                                    <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    <button type="submit">
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </InputGroupAddon>
                             </InputGroup>
@@ -113,28 +110,26 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
             </Form>
             <Form
                 onSubmit={(e) => {
-                    searchClient(e, "cellphone");
+                    searchMesa(e, "estado");
                 }}
             >
                 <Row>
                     <Col className={myStyles.inputContainer}>
+                    <InputGroup className={`mb-4 ${myStyles.inputSearch}`}>
+
                         <FormGroup>
-                            <InputGroup
-                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+                            <select
+                                className={`form-select form-select-sm ${myStyles.selectInput} ${myStyles.inputFilters}`}
+
+                                ref={inputEstado}
+                                onChange={(e) => searchMesa(e, "estado")}
                             >
-                                <input
-                                    className={`form-control-alternative ${myStyles.input}`}
-                                    placeholder="Buscar por teléfono"
-                                    type="text"
-                                    ref={inputCellphone}
-                                />
-                                <InputGroupAddon addonType="prepend">
-                                    <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </button>
-                                </InputGroupAddon>
-                            </InputGroup>
+                                <option value="">Seleccione un estado</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="No disponible">No disponible</option>
+                            </select>
                         </FormGroup>
+                    </InputGroup>
                     </Col>
                     <Col xs={12} className="d-flex justify-content-end">
                         <Button color="secondary" onClick={resetTable} className="mb-2">

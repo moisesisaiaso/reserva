@@ -480,10 +480,12 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             <Col md="12">
                                 <label className="form-control-label">Subir Comprobante</label>
                                 <FormGroup className="input-group">
-                                    {filePreview ? (
-                                        <img src={filePreview} alt="File Preview" style={{ maxWidth: "100px" }} />
-                                    ) : (
-                                        <p>No se ha seleccionado ningún archivo.</p>
+                                    {filePreview && (
+                                        <img
+                                            src={filePreview}
+                                            alt="File Preview"
+                                            style={{ maxWidth: "100px", marginRight: "2rem" }}
+                                        />
                                     )}
                                     <div className="custom-file">
                                         <input
@@ -492,10 +494,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                             type="file"
                                             {...register("file")}
                                             onChange={handleFileChange}
-                                            
                                         />
                                         <label className="custom-file-label" htmlFor="customFile">
-                                            Seleccione el archivo
+                                            No se ha seleccionado ningún archivo.
                                         </label>
                                     </div>
                                 </FormGroup>
