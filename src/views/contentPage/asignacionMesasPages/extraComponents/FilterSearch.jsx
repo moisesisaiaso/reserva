@@ -23,7 +23,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
         const filteredMesas = mesas?.filter((mesa) => mesa.estado_mesa === query);
 
         setMesaList(filteredMesas);
-        setFilteredData(filteredMesas);  // Update filtered data state
+        setFilteredData(filteredMesas); 
     };
 
     const [selectedFilter, setSelectedFilter] = useState("Todos");
@@ -32,14 +32,14 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
         setSelectedFilter(zona);
         const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
         setMesaList(filteredMesas);
-        setFilteredData(filteredMesas);  // Update filtered data state
+        setFilteredData(filteredMesas); 
     };
 
     const showAllMesas = (e) => {
         e.preventDefault();
         setSelectedFilter("Todos");
         setMesaList(mesas);
-        setFilteredData(mesas);  // Update filtered data state
+        setFilteredData(mesas); 
     };
 
     const getButtonClass = (zona) => {
@@ -78,7 +78,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Playa")}
-                                className={getButtonClass("Playa")} // Aplicar clase condicional
+                                className={getButtonClass("Playa")} 
                             >
                                 Playa
                             </Button>
@@ -95,7 +95,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Terraza")}
-                                className={getButtonClass("Terraza")} // Aplicar clase condicional
+                                className={getButtonClass("Terraza")} 
                             >
                                 Terraza
                             </Button>
@@ -112,7 +112,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Comedor")}
-                                className={getButtonClass("Comedor")} // Aplicar clase condicional
+                                className={getButtonClass("Comedor")} 
                             >
                                 Comedor
                             </Button>
@@ -129,7 +129,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Bar")}
-                                className={getButtonClass("Bar")} // Aplicar clase condicional
+                                className={getButtonClass("Bar")} 
                             >
                                 Bar
                             </Button>
@@ -146,7 +146,7 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={(e) => filterByUbicacion(e, "Poltrona")}
-                                className={getButtonClass("Poltrona")} // Aplicar clase condicional
+                                className={getButtonClass("Poltrona")} 
                             >
                                 Poltrona
                             </Button>
