@@ -2,25 +2,27 @@ import React, { useRef, useState } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
 import { FormGroup, InputGroup, Col, Row, Button } from "reactstrap";
 
-export const Filters = ({ mesas, setMesaList }) => {
-    const [selectedFilter, setSelectedFilter] = useState("Todos"); 
+export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
+    const [selectedFilter, setSelectedFilter] = useState("Todos");
     const filterByUbicacion = (e, zona) => {
         e.preventDefault();
         setSelectedFilter(zona);
         const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
-        setMesaList(filteredMesas);
+        setListaFiltrada(filteredMesas);
+        setIsFilter(true);
     };
 
     const showAllMesas = (e) => {
         e.preventDefault();
-        setSelectedFilter("Todos"); 
-        setMesaList(mesas);
+        setSelectedFilter("Todos");
+        setListaFiltrada(mesas);
+        setIsFilter(false);
     };
 
     const getButtonClass = (zona) => {
         // Asignar estilo adicional si es el filtro activo
         return selectedFilter === zona
-            ? `${myStyles.button} ${myStyles.selected}` 
+            ? `${myStyles.button} ${myStyles.selected}`
             : myStyles.button;
     };
 
@@ -37,7 +39,7 @@ export const Filters = ({ mesas, setMesaList }) => {
                                 size="lg"
                                 aria-pressed={true}
                                 onClick={showAllMesas}
-                                className={getButtonClass("Todos")} 
+                                className={getButtonClass("Todos")}
                             >
                                 Todos
                             </Button>
@@ -134,8 +136,6 @@ export const Filters = ({ mesas, setMesaList }) => {
     );
 };
 
-
-
 //filtrado por buscar
 // import { useRef } from "react";
 // import myStyles from "../../../../assets/css/myStyles.module.css";
@@ -151,7 +151,7 @@ export const Filters = ({ mesas, setMesaList }) => {
 //     Row,
 // } from "reactstrap";
 
-// export const Filters = ({ mesas, setMesaList }) => {
+// export const Filters = ({ mesas, setListaFiltrada }) => {
 //     const inputUbicacion = useRef();
 //     const inputMesa = useRef();
 //     const inputEstado = useRef();
@@ -180,8 +180,7 @@ export const Filters = ({ mesas, setMesaList }) => {
 //             );
 //         });
 
-
-//         setMesaList(filteredMesas);
+//         setListaFiltrada(filteredMesas);
 //     }
 
 //     return (
@@ -270,4 +269,3 @@ export const Filters = ({ mesas, setMesaList }) => {
 //         </div>
 //     );
 // };
-

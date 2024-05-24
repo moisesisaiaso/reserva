@@ -12,7 +12,7 @@ import {
     Row,
 } from "reactstrap";
 
-export const FilterSearch = ({ mesas, setMesaList }) => {
+export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const inputUbicacion = useRef();
     const inputMesa = useRef();
     const inputEstado = useRef();
@@ -46,7 +46,8 @@ export const FilterSearch = ({ mesas, setMesaList }) => {
             );
         });
 
-        setMesaList(filteredMesas);
+        setListaFiltrada(filteredMesas);
+        setIsFilter(true);
     };
 
     return (

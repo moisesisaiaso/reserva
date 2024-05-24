@@ -13,10 +13,10 @@ const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
     const [reservas, getReservas, , deleteReserva] = useCrud();
     const [reservaList, setReservaList] = useState();
-    const [listaFiltrada, setListaFiltrada] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-    const [pages, setPages] = useState();
     const [filteredReservasCount, setFilteredReservasCount] = useState(0);
+    const [pages, setPages] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
     const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {

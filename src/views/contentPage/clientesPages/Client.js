@@ -16,9 +16,9 @@ const Client = () => {
     const [isTable, setIsTable] = useState(true);
     const [clients, getClients, , deleteClient] = useCrud();
     const [clientList, setClientList] = useState();
-    const [listaFiltrada, setListaFiltrada] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [pages, setPages] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
     const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
