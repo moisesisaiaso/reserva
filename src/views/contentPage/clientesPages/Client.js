@@ -16,7 +16,10 @@ const Client = () => {
     const [isTable, setIsTable] = useState(true);
     const [clients, getClients, , deleteClient] = useCrud();
     const [clientList, setClientList] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+    const [pages, setPages] = useState();
+    const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
         getClients("/intimar/client");
@@ -26,17 +29,43 @@ const Client = () => {
     // Inicializa la página actual y la cantidad de elementos por página
     let itemsPerPage = 5;
 
-    let pages = Math.ceil(
-        clients?.length / itemsPerPage
-    ); /* este dato es para utilizarlo en la paginación */
+    /* obtengo la cantidad de paginas según la lista */
+    useEffect(() => {
+        if (!isFilter) {
+            setPages(
+                Math.ceil(clients?.length / itemsPerPage)
+            ); /* este dato es para utilizarlo en la paginación */
+        } else {
+            setPages(
+                Math.ceil(listaFiltrada?.length / itemsPerPage)
+            ); /* este dato es para utilizarlo en la paginación */
+        }
+    }, [listaFiltrada, clients, isFilter]);
+
+    // función para obtener la lista cortada segun los items por pagina
+    const getDataPaginate = (data) => {
+        const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
+        setClientList(cutArray);
+    };
+
+    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
+    useEffect(() => {
+        if (isFilter) {
+            setCurrentPage(1);
+        }
+    }, [listaFiltrada]);
+
+    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
+    useEffect(() => {
+        /* paginación y actualización de clientes cuando se realiza un filtrado */
+        if (!isFilter) {
+            getDataPaginate(clients);
+        } else {
+            getDataPaginate(listaFiltrada);
+        }
+    }, [listaFiltrada, clients, currentPage]);
 
     console.log("paginaActual: ", currentPage);
-
-    useEffect(() => {
-        // Función para obtener los datos paginados
-        const cutArray = getPaginatedData(clients, currentPage, itemsPerPage);
-        setClientList(cutArray);
-    }, [clients, currentPage]);
 
     return (
         <>
@@ -62,7 +91,11 @@ const Client = () => {
 
                                 {/* filtros */}
                                 <section>
-                                    <Filters clients={clients} setClientList={setClientList} />
+                                    <Filters
+                                        clients={clients}
+                                        setIsFilter={setIsFilter}
+                                        setListaFiltrada={setListaFiltrada}
+                                    />
                                 </section>
 
                                 {/* tabla */}

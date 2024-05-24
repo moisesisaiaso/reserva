@@ -25,38 +25,38 @@ const Reserva = () => {
 
     const itemsPerPage = 5;
 
+    /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
         if (!isFilter) {
             setPages(Math.ceil(reservas?.length / itemsPerPage));
         } else {
-            console.log("nueva pages");
-            console.log("paginas list: ", listaFiltrada?.length);
             setPages(Math.ceil(listaFiltrada?.length / itemsPerPage));
         }
-    }, [listaFiltrada, reservas, reservaList, isFilter]);
+    }, [listaFiltrada, reservas, isFilter]);
 
-    useEffect(() => {
-        if (!isFilter) {
-            const cutArray = getPaginatedData(reservas, currentPage, itemsPerPage);
-            setReservaList(cutArray);
-            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
-        }
-    }, [reservas, currentPage]);
+    // función para obtener la lista cortada segun los items por pagina
+    const getDataPaginate = (data) => {
+        const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
+        setReservaList(cutArray);
+    };
 
+    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
     useEffect(() => {
         if (isFilter) {
             setCurrentPage(1);
         }
     }, [listaFiltrada]);
 
+    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
     useEffect(() => {
-        /* paginacióny actualización de reservas cuando se realiza un filtrado */
-        if (isFilter) {
-            const cutArray = getPaginatedData(listaFiltrada, currentPage, itemsPerPage);
-            setReservaList(cutArray);
-            setFilteredReservasCount(listaFiltrada?.length); // Actualizar el contador al número total de reservas
+        if (!isFilter) {
+            getDataPaginate(reservas);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+        } else {
+            getDataPaginate(listaFiltrada);
+            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
         }
-    }, [listaFiltrada, currentPage]);
+    }, [listaFiltrada, reservas, currentPage]);
 
     console.log("paginas: ", pages);
 
