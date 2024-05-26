@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardBody, Container, Row, Table } from "reactstrap";
 import { useCrud } from "hooks/useCrud";
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
-import { CardReserva } from "./extraComponents/CardReserva";
-import { Filters } from "./extraComponents/Filters";
-import { TableComponent } from "./extraComponents/TableComponent";
+import { CardReserva } from "../extraComponents/CardReserva";
+import { Filters } from "../extraComponents/Filters";
+import { TableComponent } from "../extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
-import { OptionBtn } from "./extraComponents/OptionBtn";
+import { OptionBtn } from "../extraComponents/OptionBtn";
 import myStyles from "../../../assets/css/myStyles.module.css";
 
 const Reserva = () => {
