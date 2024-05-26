@@ -13,7 +13,7 @@ import {
     Row,
 } from "reactstrap";
 
-export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
+export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const inputEstado = useRef();
 
     const handleSearch = () => {
@@ -22,8 +22,8 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
 
         const filteredMesas = mesas?.filter((mesa) => mesa.estado_mesa === query);
 
-        setMesaList(filteredMesas);
-        setFilteredData(filteredMesas);  // Update filtered data state
+        setListaFiltrada(filteredMesas);
+        setIsFilter(true);
     };
 
     const [selectedFilter, setSelectedFilter] = useState("Todos");
@@ -31,15 +31,14 @@ export const FilterSearch = ({ mesas, setMesaList, setFilteredData }) => {
         e.preventDefault();
         setSelectedFilter(zona);
         const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
-        setMesaList(filteredMesas);
-        setFilteredData(filteredMesas);  // Update filtered data state
+        setListaFiltrada(filteredMesas);
+        setIsFilter(true);
     };
 
-    const showAllMesas = (e) => {
-        e.preventDefault();
+    const showAllMesas = () => {
         setSelectedFilter("Todos");
-        setMesaList(mesas);
-        setFilteredData(mesas);  // Update filtered data state
+        setListaFiltrada(mesas);
+        setIsFilter(false);
     };
 
     const getButtonClass = (zona) => {

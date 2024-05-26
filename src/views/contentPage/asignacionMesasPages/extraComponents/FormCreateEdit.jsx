@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const FormCreateEdit = ({ id, type }) => {
     const { handleSubmit, register, reset, setValue } = useForm({
         defaultValues: {
-            reservaId: id && type === "reserva" ? { value: id, label: '' } : null,
+            reservaId: id && type === "reserva" ? { value: id, label: "" } : null,
             mesas: id && type === "mesa" ? [id] : [],
         },
     });
@@ -60,7 +60,7 @@ export const FormCreateEdit = ({ id, type }) => {
         await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
 
         setTimeout(() => {
-        window.location.href = "/admin/asignar-mesa";
+            window.location.href = "/admin/asignar-mesa";
         }, 1150);
     };
 
@@ -75,16 +75,26 @@ export const FormCreateEdit = ({ id, type }) => {
                         </label>
                         <FormGroup>
                             <Select
-                                className={`form-control-alternative ${myStyles.input + " " +  myStyles.inputSearch + " " + myStyles.Inputgroup}`}
+                                className={`form-control-alternative ${
+                                    myStyles.input +
+                                    " " +
+                                    myStyles.inputSearch +
+                                    " " +
+                                    myStyles.Inputgroup
+                                }`}
                                 options={reservas?.map((reserva) => ({
                                     value: reserva.id,
-                                    label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`
+                                    label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
                                 }))}
-                                defaultValue={id && type === "reserva" ? {
-                                    value: id,
-                                    label: `${reserva?.client.name} ${reserva?.client.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`
-                                } : null}
-                                onChange={(option) => setValue('reservaId', option)}
+                                defaultValue={
+                                    id && type === "reserva"
+                                        ? {
+                                              value: id,
+                                              label: `${reserva?.client.name} ${reserva?.client.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
+                                          }
+                                        : null
+                                }
+                                onChange={(option) => setValue("reservaId", option)}
                                 placeholder="Seleccionar Reserva"
                             />
                         </FormGroup>
@@ -149,7 +159,6 @@ export const FormCreateEdit = ({ id, type }) => {
                 Asignar mesa
             </Button>
             <ToastContainer position="top-right" autoClose={3000} />
-
         </form>
     );
 };

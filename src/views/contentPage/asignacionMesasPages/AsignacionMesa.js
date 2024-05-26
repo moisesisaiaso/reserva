@@ -23,6 +23,9 @@ const AsignacionMesa = () => {
     const [reservasAsignadas, setReservasAsignadas] = useState();
     const [reservas, getReservas, , , , removeAsignacion] = useCrud();
     const [updated, setUpdated] = useState(false);
+    const [pages, setPages] = useState();
+    const [listaFiltrada, setListaFiltrada] = useState();
+    const [isFilter, setIsFilter] = useState(false);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
@@ -35,7 +38,7 @@ const AsignacionMesa = () => {
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
-    let itemsPerPage = 10;
+    let itemsPerPage = 5;
 
     useEffect(() => {
         /* obtener solo las mesas con asignacion de mesa, este dato es para saber solo la cantidad de mesas asignadas */
@@ -51,31 +54,64 @@ const AsignacionMesa = () => {
         }
     }, [mesas, reservas, updated]);
 
-    useEffect(() => {
-        // Función para obtener los datos paginados para reservas
-        if (reservasAsignadas && isTable) {
-            const cutArray = getPaginatedData(reservasAsignadas, currentPage, itemsPerPage);
-            console.log("array cortado", cutArray);
-            setReservaList(cutArray);
+    const estados = {
+        reservas,
+        mesas,
+    };
+
+    const isMesaOrReserva = (nombreEstado) => {
+        if (!isFilter) {
+            setPages(
+                Math.ceil(estados[nombreEstado]?.length / itemsPerPage)
+            ); /* este dato es para utilizarlo en la paginación */
+        } else {
+            setPages(
+                Math.ceil(listaFiltrada?.length / itemsPerPage)
+            ); /* este dato es para utilizarlo en la paginación */
         }
-        if (mesas && !isTable) {
-            // Función para obtener los datos paginados para mesas
-            const cutArray = getPaginatedData(mesas, currentPage, itemsPerPage);
+    };
+
+    /* obtengo la cantidad de paginas según la lista */
+    useEffect(() => {
+        if (isTable) {
+            isMesaOrReserva("reservas");
+        } else {
+            isMesaOrReserva("mesas");
+        }
+    }, [listaFiltrada, mesas, isFilter, reservas]);
+
+    // función para obtener la lista cortada segun los items por pagina
+    const getDataPaginate = (nombreEstado) => {
+        /* paginación y actualización de clientes cuando se realiza un filtrado */
+        let cutArray = [];
+        if (!isFilter) {
+            cutArray = getPaginatedData(estados[nombreEstado], currentPage, itemsPerPage);
+        } else {
+            cutArray = getPaginatedData(listaFiltrada, currentPage, itemsPerPage);
+        }
+
+        if (nombreEstado === "reservas") {
+            setReservaList(cutArray);
+        } else {
             setMesaList(cutArray);
         }
-    }, [reservasAsignadas, currentPage, mesas, isTable, updated]);
+    };
 
-    let pages = 1;
+    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
+    useEffect(() => {
+        if (isFilter) {
+            setCurrentPage(1);
+        }
+    }, [listaFiltrada]);
 
-    if (isTable) {
-        pages = Math.ceil(
-            reservasAsignadas?.length / itemsPerPage
-        ); /* este dato es para utilizarlo en la paginación */
-    } else {
-        pages = Math.ceil(
-            mesas?.length / itemsPerPage
-        ); /* este dato es para utilizarlo en la paginación */
-    }
+    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
+    useEffect(() => {
+        if (isTable) {
+            getDataPaginate("reservas");
+        } else {
+            getDataPaginate("mesas");
+        }
+    }, [listaFiltrada, mesas, reservas, currentPage, isTable]);
 
     console.log("lista de reserva con mesa:", reservasAsignadas);
     return (
@@ -106,7 +142,8 @@ const AsignacionMesa = () => {
                                     {!isTable && (
                                         <FilterSearch
                                             mesas={mesas}
-                                            setMesaList={setMesaList}
+                                            setListaFiltrada={setListaFiltrada}
+                                            setIsFilter={setIsFilter}
                                         />
                                     )}
                                 </section>
