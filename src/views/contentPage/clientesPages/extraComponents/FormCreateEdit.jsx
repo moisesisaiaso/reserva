@@ -46,7 +46,7 @@ export const FormCreateEdit = ({ id }) => {
                     allergies,
                 });
                 setValue('countryCode', countryCode);
-                setValue('cellphone', cellphone);
+                setValue('cellphone', countryCode + cellphone);
             }
         }
     }, [client]);
