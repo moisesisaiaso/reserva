@@ -1,17 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import myStyles from "../../../../assets/css/myStyles.module.css";
-import {
-    FormGroup,
-    Col,
-    Row,
-    Button,
-    Alert 
-} from "reactstrap";
+import { FormGroup, Col, Row, Button, Alert } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
-import { useEffect, useState } from "react";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -125,12 +118,18 @@ export const FormCreateEdit = ({ id }) => {
         }
     };
 
+    const handleError = (errors) => {
+        for (const [field, error] of Object.entries(errors)) {
+            toast.error(error.message);
+        }
+    };
+
     return (
-        <form onSubmit={handleSubmit(submit)}>
+        <form onSubmit={handleSubmit(submit, handleError)}>
             <h6 className="heading-small text-muted mb-4">Información de cliente</h6>
             <div className="pl-lg-4">
                 <Row>
-                <Col lg="6">
+                    <Col lg="6">
                         <div className="form-group">
                             <label className="form-control-label" htmlFor="input-username">
                                 Nombre
@@ -187,7 +186,7 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-cellphone">
                             Teléfono
                         </label>
-                        <FormGroup className={ myStyles.Inputgroup}>
+                        <FormGroup className={ myStyles.Inputgroup }>
                             <PhoneInput
                                 country={'pe'}
                                 value={getValues('cellphone')}
@@ -218,9 +217,16 @@ export const FormCreateEdit = ({ id }) => {
                                 id="input-email"
                                 placeholder="Ingrese el correo"
                                 type="email"
-                                {...register("email")}
+                                {...register("email", {
+                                    pattern: {
+                                        value: /^\S+@\S+$/i,
+                                        message: "Correo inválido"
+                                    }
+                                })}
                             />
                         </FormGroup>
+                        <div className="text-danger">{errors.email && errors.email.message}</div>
+                        <div className="text-danger">{serverErrors.email}</div>
                     </Col>
                     
                     <Col md="12">
@@ -249,7 +255,7 @@ export const FormCreateEdit = ({ id }) => {
                                 DNI
                             </label>
                             <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
-                                <input
+                            <input
                                     className={`form-control-alternative ${myStyles.input}`}
                                     id="input-dni"
                                     placeholder="Ingrese el DNI"
@@ -257,6 +263,10 @@ export const FormCreateEdit = ({ id }) => {
                                         pattern: {
                                             value: /^[0-9]*$/,
                                             message: "El DNI solo debe contener números"
+                                        },
+                                        minLength: {
+                                            value: 8,
+                                            message: "El DNI debe tener al menos 8 dígitos"
                                         }
                                     })}
                                 />
@@ -264,6 +274,7 @@ export const FormCreateEdit = ({ id }) => {
                             {errors.dni && <span className="text-danger">{errors.dni.message}</span>}
                         </div>
                     </Col>
+
                     <Col lg="6">
                         <div className="form-group">
                             <label className="form-control-label" htmlFor="input-ruc">
@@ -276,6 +287,10 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese el RUC"
                                     type="text"
                                     {...register("ruc", {
+                                        minLength: {
+                                            value: 10,
+                                            message: "El RUC debe tener al menos 10 dígitos"
+                                        },
                                         pattern: {
                                             value: /^[0-9]*$/,
                                             message: "El RUC solo debe contener números"
@@ -298,11 +313,15 @@ export const FormCreateEdit = ({ id }) => {
                                 id="input-passport"
                                 placeholder="Ingrese el Pasaporte"
                                 type="text"
-                                {...register("numero_pasaporte")}
+                                {...register("numero_pasaporte", {
+                                    minLength: {
+                                        value: 8,
+                                        message: "El pasaporte debe tener al menos 8 caracteres"
+                                    }
+                                })}
                             />
                         </FormGroup>
                     </Col>
-
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-address">
                             Dirección
