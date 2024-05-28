@@ -50,6 +50,11 @@ export const FormCreateEdit = ({ id }) => {
             return;
         }
 
+        if (data.cellphone.length < 10) {
+            toast.error("El número de teléfono debe tener al menos 10 dígitos.");
+            return;
+        }
+
         setServerErrors({});
         setShowError(false);
 
@@ -109,7 +114,7 @@ export const FormCreateEdit = ({ id }) => {
                 });
 
                 setTimeout(() => {
-                    // window.location.href = "/admin/clients";
+                    window.location.href = "/admin/clients";
                 }, 1250);
             }
         } catch (error) {
