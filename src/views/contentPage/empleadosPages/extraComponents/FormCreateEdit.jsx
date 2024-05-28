@@ -63,7 +63,7 @@ export const FormCreateEdit = ({ id }) => {
             roles: [],
         });
 
-        window.location.href = "/admin/employees";
+        // window.location.href = "/admin/employees";
     };
 
     return (
@@ -125,7 +125,7 @@ export const FormCreateEdit = ({ id }) => {
                                 multiple
                                 {...register("roles")}
                             >
-                                <option value="anfitrion">Anfitrión</option>
+                                <option value="anfitrion" >Anfitrión</option>
                                 <option value="recepcionista">Recepcionista</option>
                                 <option value="administrador">Administrador</option>
                                 <option value="mesero">Mesero</option>

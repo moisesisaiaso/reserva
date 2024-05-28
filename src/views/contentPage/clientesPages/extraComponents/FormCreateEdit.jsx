@@ -77,9 +77,14 @@ export const FormCreateEdit = ({ id }) => {
             return;
         }
 
+        const emailnullabel = data.email ? true : false;
         const emailExists = client.some((c) => c.email === data.email && c.id !== parseInt(id));
         const cellphoneExists = client.some((c) => c.cellphone === data.cellphone && c.id !== parseInt(id));
 
+        if (!emailnullabel){
+            delete data.email
+        }
+        
         if (emailExists || cellphoneExists) {
             setServerErrors({
                 email: emailExists ? "Este correo ya existe" : "",
@@ -125,35 +130,51 @@ export const FormCreateEdit = ({ id }) => {
             <h6 className="heading-small text-muted mb-4">Información de cliente</h6>
             <div className="pl-lg-4">
                 <Row>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-username">
-                            Nombre
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-username"
-                                placeholder="Ingrese el Nombre"
-                                type="text"
-                                {...register("name", { required: "Nombre es requerido" })}
-                            />
+                <Col lg="6">
+                        <div className="form-group">
+                            <label className="form-control-label" htmlFor="input-username">
+                                Nombre
+                            </label>
+                            <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    id="input-username"
+                                    placeholder="Ingrese el Nombre"
+                                    type="text"
+                                    {...register("name", {
+                                        required: "Nombre es requerido",
+                                        pattern: {
+                                            value: /^[A-Za-z\s]+$/,
+                                            message: "El nombre solo debe contener letras y espacios"
+                                        }
+                                    })}
+                                />
+                            </div>
                             {errors.name && <span className="text-danger">{errors.name.message}</span>}
-                        </FormGroup>
+                        </div>
                     </Col>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-lastname">
-                            Apellido
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-lastname"
-                                placeholder="Ingrese el Apellido"
-                                type="text"
-                                {...register("lastname", { required: "Apellido es requerido" })}
-                            />
+                        <div className="form-group">
+                            <label className="form-control-label" htmlFor="input-lastname">
+                                Apellido
+                            </label>
+                            <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    id="input-lastname"
+                                    placeholder="Ingrese el Apellido"
+                                    type="text"
+                                    {...register("lastname", {
+                                        required: "Apellido es requerido",
+                                        pattern: {
+                                            value: /^[A-Za-z\s]+$/,
+                                            message: "El apellido solo debe contener letras y espacios"
+                                        }
+                                    })}
+                                />
+                            </div>
                             {errors.lastname && <span className="text-danger">{errors.lastname.message}</span>}
-                        </FormGroup>
+                        </div>
                     </Col>
                 </Row>
                 {showError && (
@@ -221,53 +242,51 @@ export const FormCreateEdit = ({ id }) => {
             <hr className="my-4" />
             <h6 className="heading-small text-muted mb-4">Información adicional</h6>
             <div className="pl-lg-4">
-            <Row>
-                <Col lg="6">
-                    <div className="form-group">
-                        <label className="form-control-label" htmlFor="input-dni">
-                            DNI
-                        </label>
-                        <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-dni"
-                                placeholder="Ingrese el DNI"
-                                {...register("dni", {
-                                    pattern: {
-                                        value: /^[0-9]*$/,
-                                        message: "El DNI solo debe contener números"
-                                    }
-                                })}
-                            />
+                <Row>
+                    <Col lg="6">
+                        <div className="form-group">
+                            <label className="form-control-label" htmlFor="input-dni">
+                                DNI
+                            </label>
+                            <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    id="input-dni"
+                                    placeholder="Ingrese el DNI"
+                                    {...register("dni", {
+                                        pattern: {
+                                            value: /^[0-9]*$/,
+                                            message: "El DNI solo debe contener números"
+                                        }
+                                    })}
+                                />
+                            </div>
+                            {errors.dni && <span className="text-danger">{errors.dni.message}</span>}
                         </div>
-                        {errors.dni && <span className="text-danger">{errors.dni.message}</span>}
-                    </div>
-                </Col>
-
-                <Col lg="6">
-                    <div className="form-group">
-                        <label className="form-control-label" htmlFor="input-ruc">
-                            RUC
-                        </label>
-                        <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-ruc"
-                                placeholder="Ingrese el RUC"
-                                type="text"
-                                {...register("ruc", {
-                                    pattern: {
-                                        value: /^[0-9]*$/,
-                                        message: "El RUC solo debe contener números"
-                                    }
-                                })}
-                            />
+                    </Col>
+                    <Col lg="6">
+                        <div className="form-group">
+                            <label className="form-control-label" htmlFor="input-ruc">
+                                RUC
+                            </label>
+                            <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    id="input-ruc"
+                                    placeholder="Ingrese el RUC"
+                                    type="text"
+                                    {...register("ruc", {
+                                        pattern: {
+                                            value: /^[0-9]*$/,
+                                            message: "El RUC solo debe contener números"
+                                        }
+                                    })}
+                                />
+                            </div>
+                            {errors.ruc && <span className="text-danger">{errors.ruc.message}</span>}
                         </div>
-                        {errors.ruc && <span className="text-danger">{errors.ruc.message}</span>}
-                    </div>
-                </Col>
-            </Row>
-
+                    </Col>
+                </Row>
                 <Row>
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-passport">
