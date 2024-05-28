@@ -123,19 +123,7 @@ export const FormCreateEdit = ({ id }) => {
             toast.error(error.message);
         }
     };
-    function handleKeyDown(event, type) {
-        if (type === "name" || type === "lastname") {
-            // Permitir solo letras y espacios
-            if (!/[A-Za-z\s]/.test(event.key)) {
-                event.preventDefault();
-            }
-        } else if (type === "dni" || type === "ruc") {
-            // Permitir solo números y teclas especiales de borrar
-            if (!/\d/.test(event.key) && event.key !== "Backspace" && event.key !== "Delete") {
-                event.preventDefault();
-            }
-        }
-    }
+
     return (
         <form onSubmit={handleSubmit(submit, handleError)}>
             <h6 className="heading-small text-muted mb-4">Información de cliente</h6>
@@ -152,7 +140,6 @@ export const FormCreateEdit = ({ id }) => {
                                     id="input-username"
                                     placeholder="Ingrese el Nombre"
                                     type="text"
-                                    onKeyDown={(e) => handleKeyDown(e, "name")}
                                     {...register("name", {
                                         required: "Nombre es requerido",
                                         pattern: {
@@ -176,7 +163,6 @@ export const FormCreateEdit = ({ id }) => {
                                     id="input-lastname"
                                     placeholder="Ingrese el Apellido"
                                     type="text"
-                                    onKeyDown={(e) => handleKeyDown(e, "lastname")}
                                     {...register("lastname", {
                                         required: "Apellido es requerido",
                                         pattern: {
@@ -273,7 +259,6 @@ export const FormCreateEdit = ({ id }) => {
                                     className={`form-control-alternative ${myStyles.input}`}
                                     id="input-dni"
                                     placeholder="Ingrese el DNI"
-                                    onKeyDown={(e) => handleKeyDown(e, "dni")}
                                     {...register("dni", {
                                         pattern: {
                                             value: /^[0-9]*$/,
@@ -284,7 +269,11 @@ export const FormCreateEdit = ({ id }) => {
                                             message: "El DNI debe tener al menos 8 dígitos"
                                         }
                                     })}
-                                    
+                                    onKeyDown={(e) => {
+                                        if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                 />
                             </div>
                             {errors.dni && <span className="text-danger">{errors.dni.message}</span>}
@@ -302,7 +291,6 @@ export const FormCreateEdit = ({ id }) => {
                                     id="input-ruc"
                                     placeholder="Ingrese el RUC"
                                     type="text"
-                                    onKeyDown={(e) => handleKeyDown(e, "ruc")}
                                     {...register("ruc", {
                                         minLength: {
                                             value: 10,
