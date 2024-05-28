@@ -17,7 +17,7 @@ const Login = () => {
                                     target="_blank"
                                     rel="noopener"
                                 >
-                                    Creative Tim
+                                    IntiMar Paracas
                                 </a>
                             </div>
                         </Col>
@@ -28,10 +28,10 @@ const Login = () => {
                                         href="https://www.creative-tim.com?ref=adr-auth-footer"
                                         target="_blank"
                                     >
-                                        Creative Tim
+                                        IntiMar Paracas
                                     </NavLink>
                                 </NavItem>
-                                <NavItem>
+                                {/* <NavItem>
                                     <NavLink
                                         href="https://www.creative-tim.com/presentation?ref=adr-auth-footer"
                                         target="_blank"
@@ -54,7 +54,7 @@ const Login = () => {
                                     >
                                         MIT License
                                     </NavLink>
-                                </NavItem>
+                                </NavItem> */}
                             </Nav>
                         </Col>
                     </Row>

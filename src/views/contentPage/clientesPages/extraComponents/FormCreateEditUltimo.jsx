@@ -9,14 +9,11 @@ import {
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useState } from "react";
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 export const FormCreateEdit = ({ id }) => {
-    const { handleSubmit, register, reset, setValue, getValues, formState: { errors } } = useForm();
+    const { handleSubmit, register, reset, formState: { errors } } = useForm();
     const [client, getClients, createClient, , updateClient] = useCrud();
     const [serverErrors, setServerErrors] = useState({});
     const [showError, setShowError] = useState(false);
@@ -30,49 +27,36 @@ export const FormCreateEdit = ({ id }) => {
         if (id && client) {
             let clientEdit = client?.filter((element) => element.id === parseId);
 
-            if (clientEdit.length > 0) {
-                const { name, lastname, age, email, countryCode, cellphone, dni, ruc, numero_pasaporte, address, allergies } = clientEdit[0];
-                reset({
-                    name,
-                    lastname,
-                    age,
-                    email,
-                    cellphone,
-                    dni,
-                    ruc,
-                    numero_pasaporte,
-                    address,
-                    allergies,
-                });
-                setValue('countryCode', countryCode);
-                setValue('cellphone', cellphone);
-            }
+            const { name, lastname, age, email, cellphone, address, allergies } = clientEdit[0];
+            reset({
+                name,
+                lastname,
+                age,
+                email,
+                cellphone,
+                address,
+                allergies,
+            });
         }
     }, [client]);
 
     const submit = async (data) => {
         if (!client) {
+          // Manejar el caso donde el cliente aún no está inicializado
             return;
         }
 
         setServerErrors({});
-        setShowError(false);
+        setShowError(false); // Reiniciamos el estado de showError
 
         data.age = Number(data.age);
 
-        // Separar el código de país del número de teléfono
-        const fullPhoneNumber = getValues('cellphone');
-        const countryCode = getValues('countryCode');
-        const phoneWithoutCountryCode = fullPhoneNumber.startsWith(countryCode) ? fullPhoneNumber.slice(countryCode.length) : fullPhoneNumber;
-
-        data.cellphone = phoneWithoutCountryCode;
-        data.countryCode = countryCode;
-
+        // Verificamos si ya existe un cliente con el mismo nombre y apellido
         const nameExists = client.some((c) => c.name === data.name && c.lastname === data.lastname && c.id !== parseInt(id));
 
         if (nameExists) {
-            setShowError(true);
-            return;
+            setShowError(true); // Mostramos el mensaje de error
+            return; // Evitamos crear el cliente
         }
 
         const emailExists = client.some((c) => c.email === data.email && c.id !== parseInt(id));
@@ -86,6 +70,7 @@ export const FormCreateEdit = ({ id }) => {
             return;
         }
 
+
         try {
             if (id) {
                 await updateClient("/intimar/client", id, data);
@@ -93,32 +78,33 @@ export const FormCreateEdit = ({ id }) => {
             } else {
                 await createClient("/intimar/client", data);
                 toast.success("Cliente creado correctamente");
-
-                reset({
-                    name: "",
-                    lastname: "",
-                    age: "",
-                    email: "",
-                    cellphone: "",
-                    address: "",
-                    allergies: "",
-                });
-
-                setTimeout(() => {
-                    window.location.href = "/admin/clients";
-                }, 1250);
             }
+
+            reset({
+                name: "",
+                lastname: "",
+                age: "",
+                email: "",
+                cellphone: "",
+                address: "",
+                allergies: "",
+            });
+
+            setTimeout(() => {
+                window.location.href = "/admin/clients";
+            }, 1250);
         } catch (error) {
             console.error("Error:", error);
             toast.error("Hubo un error al procesar la solicitud");
         }
     };
 
+    
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Información de cliente</h6>
             <div className="pl-lg-4">
-                <Row>
+            <Row>
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-username">
                             Nombre
@@ -157,31 +143,6 @@ export const FormCreateEdit = ({ id }) => {
                 )}
                 <Row>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-cellphone">
-                            Teléfono
-                        </label>
-                        <FormGroup className={ myStyles.Inputgroup}>
-                            <PhoneInput
-                                country={'pe'}
-                                value={getValues('cellphone')}
-                                onChange={(phone, country) => {
-                                    setValue('cellphone', phone);
-                                    setValue('countryCode', country.dialCode);
-                                }}
-                                inputProps={{
-                                    name: 'cellphone',
-                                    required: true,
-                                    autoFocus: true
-                                }}
-                                containerStyle={{ width: '100%' }}
-                                inputStyle={{ width: '100%' }}
-                            />
-                            <div className="text-danger">{errors.cellphone && errors.cellphone.message}</div>
-                            <div className="text-danger">{serverErrors.cellphone}</div>
-                        </FormGroup>
-                    </Col>
-                    
-                    <Col lg="6">
                         <label className="form-control-label" htmlFor="input-email">
                             Correo
                         </label>
@@ -193,6 +154,31 @@ export const FormCreateEdit = ({ id }) => {
                                 type="email"
                                 {...register("email")}
                             />
+                            <div className="text-danger">{errors.email && errors.email.message}</div>
+                            <div className="text-danger">{serverErrors.email}</div>
+                        </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                        <label className="form-control-label" htmlFor="input-cellphone">
+                            Teléfono
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
+                                id="input-cellphone"
+                                placeholder="Ingrese el teléfono"
+                                type="text"
+                                {...register("cellphone", {
+                                    required: "Teléfono es requerido",
+                                    pattern: {
+                                        value: /^[0-9]{1,9}$/,
+                                        message: "Teléfono debe ser un número de hasta 9 dígitos"
+                                    }
+                                    
+                                })}
+                            />
+                            <div className="text-danger">{errors.cellphone && errors.cellphone.message}</div>
+                            <div className="text-danger">{serverErrors.cellphone}</div>
                         </FormGroup>
                     </Col>
                     
@@ -216,53 +202,7 @@ export const FormCreateEdit = ({ id }) => {
             <h6 className="heading-small text-muted mb-4">Información adicional</h6>
             <div className="pl-lg-4">
                 <Row>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-dni">
-                            DNI
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-dni"
-                                placeholder="Ingrese el DNI"
-                                type="text"
-                                {...register("dni")}
-                            />
-                        </FormGroup>
-                    </Col>
-
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-ruc">
-                            RUC
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-ruc"
-                                placeholder="Ingrese el RUC"
-                                type="text"
-                                {...register("ruc")}
-                            />
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-passport">
-                            Pasaporte
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-passport"
-                                placeholder="Ingrese el Pasaporte"
-                                type="text"
-                                {...register("numero_pasaporte")}
-                            />
-                        </FormGroup>
-                    </Col>
-
-                    <Col lg="6">
+                    <Col lg="12">
                         <label className="form-control-label" htmlFor="input-address">
                             Dirección
                         </label>
@@ -276,7 +216,7 @@ export const FormCreateEdit = ({ id }) => {
                             />
                         </FormGroup>
                     </Col>
-                </Row>              
+                </Row>
             </div>
             <Button block color="primary" size="lg" type="submit">
                 <i className="ni ni-send" /> Crear Cliente

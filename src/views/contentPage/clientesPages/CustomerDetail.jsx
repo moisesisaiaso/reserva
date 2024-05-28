@@ -41,6 +41,9 @@ export const CustomerDetail = () => {
                                         <p><strong>Dirección:</strong> {customerData.address  || "N/A"}</p>
                                         <p><strong>Edad:</strong> {customerData.age  || "N/A"}</p>
                                         <p><strong>Alergias:</strong> {customerData.allergies || "N/A"}</p>
+                                        <p><strong> DNI </strong>{customerData.dni|| "N/A"} </p>
+                                        <p><strong> RUC </strong>{customerData.ruc|| "N/A"} </p>
+                                        <p><strong> Numero de pasaporte: </strong>{customerData.numero_pasaporte|| "N/A"} </p>
                                 </CardBody>
                             </Card>
                         )}

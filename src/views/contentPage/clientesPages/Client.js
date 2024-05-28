@@ -106,8 +106,8 @@ const Client = () => {
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Nombre</th>
-                                                    <th>Correo Electrónico</th>
                                                     <th>Teléfono</th>
+                                                    <th>Correo Electrónico</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>

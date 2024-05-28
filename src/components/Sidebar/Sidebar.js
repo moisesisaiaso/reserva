@@ -155,7 +155,7 @@ const Sidebar = (props) => {
                 ) : null}
                 {/* Usuario (se muestra en dispositivos móviles) */}
                 <Nav className="align-items-center d-md-none">
-                    <UncontrolledDropdown nav>
+                    {/* <UncontrolledDropdown nav>
                         <DropdownToggle nav className="nav-link-icon">
                             <i className="ni ni-bell-55" />
                         </DropdownToggle>
@@ -169,7 +169,7 @@ const Sidebar = (props) => {
                             <DropdownItem divider />
                             <DropdownItem>Something else here</DropdownItem>
                         </DropdownMenu>
-                    </UncontrolledDropdown>
+                    </UncontrolledDropdown> */}
                     <UncontrolledDropdown nav>
                         <DropdownToggle nav>
                             <Media className="align-items-center">
@@ -189,20 +189,16 @@ const Sidebar = (props) => {
                                 <i className="ni ni-single-02" />
                                 <span>Mi perfil</span>
                             </DropdownItem>
-                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                            <DropdownItem to="/admin/configuracion" tag={Link}>
                                 <i className="ni ni-settings-gear-65" />
                                 <span>Configuración</span>
                             </DropdownItem>
-                            <DropdownItem to="/admin/user-profile" tag={Link}>
+                            <DropdownItem to="/admin/calendario" tag={Link}>
                                 <i className="ni ni-calendar-grid-58" />
                                 <span>Calendario</span>
                             </DropdownItem>
-                            {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                                <i className="ni ni-support-16" />
-                                <span>Support</span>
-                            </DropdownItem> */}
                             <DropdownItem divider />
-                            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                            <DropdownItem href="/login" onClick={(e) => e.preventDefault()}>
                                 <i className="ni ni-user-run" />
                                 <span>Cerrar sesión</span>
                             </DropdownItem>

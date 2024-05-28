@@ -43,8 +43,8 @@ export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, c
                 <td>
                     {name} {lastname}
                 </td>
-                <td>{email} </td>
                 <td>{cellphone}</td>
+                <td>{email} </td>
                 <td className={myStyles.actions}>
                     <a onClick={handleReserva} className={myStyles.btnReserva}>
                         Reservar
