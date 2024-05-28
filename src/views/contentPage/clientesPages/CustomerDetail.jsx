@@ -37,9 +37,9 @@ export const CustomerDetail = () => {
                                     {/* <h2>ID: {id}</h2> */}
                                     <h3>Nombre: {customerData.name} {customerData.lastname}</h3>
                                     <p><strong>Email:</strong> {customerData.email}</p>
-                                        <p><strong>Teléfono:</strong> {customerData.cellphone}</p>           
+                                        <p><strong>Teléfono:</strong> +{customerData.countryCode} {customerData.cellphone}</p>           
                                         <p><strong>Dirección:</strong> {customerData.address  || "N/A"}</p>
-                                        <p><strong>Edad:</strong> {customerData.age  || "N/A"}</p>
+                                        {/* <p><strong>Edad:</strong> {customerData.age  || "N/A"}</p> */}
                                         <p><strong>Alergias:</strong> {customerData.allergies || "N/A"}</p>
                                         <p><strong> DNI </strong>{customerData.dni|| "N/A"} </p>
                                         <p><strong> RUC </strong>{customerData.ruc|| "N/A"} </p>

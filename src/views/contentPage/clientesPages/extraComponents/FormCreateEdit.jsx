@@ -37,6 +37,7 @@ export const FormCreateEdit = ({ id }) => {
                     lastname,
                     age,
                     email,
+                    countryCode,
                     cellphone,
                     dni,
                     ruc,
@@ -51,7 +52,8 @@ export const FormCreateEdit = ({ id }) => {
     }, [client]);
 
     const submit = async (data) => {
-        if (!client) {
+        if (!data.name || !data.lastname || !data.cellphone) {
+            toast.error("Por favor, ingresa nombre, apellido y teléfono.");
             return;
         }
 
@@ -63,7 +65,7 @@ export const FormCreateEdit = ({ id }) => {
         // Separar el código de país del número de teléfono
         const fullPhoneNumber = getValues('cellphone');
         const countryCode = getValues('countryCode');
-        const phoneWithoutCountryCode = fullPhoneNumber.startsWith(countryCode) ? fullPhoneNumber.slice(countryCode.length) : fullPhoneNumber;
+        const phoneWithoutCountryCode = countryCode && fullPhoneNumber.startsWith(countryCode) ? fullPhoneNumber.slice(countryCode.length) : fullPhoneNumber;
 
         data.cellphone = phoneWithoutCountryCode;
         data.countryCode = countryCode;
@@ -99,13 +101,17 @@ export const FormCreateEdit = ({ id }) => {
                     lastname: "",
                     age: "",
                     email: "",
+                    countryCode: "",
                     cellphone: "",
                     address: "",
                     allergies: "",
+                    dni: "",
+                    ruc: "",
+                    numero_pasaporte: "",
                 });
 
                 setTimeout(() => {
-                    window.location.href = "/admin/clients";
+                    // window.location.href = "/admin/clients";
                 }, 1250);
             }
         } catch (error) {
@@ -215,37 +221,53 @@ export const FormCreateEdit = ({ id }) => {
             <hr className="my-4" />
             <h6 className="heading-small text-muted mb-4">Información adicional</h6>
             <div className="pl-lg-4">
-                <Row>
-                    <Col lg="6">
+            <Row>
+                <Col lg="6">
+                    <div className="form-group">
                         <label className="form-control-label" htmlFor="input-dni">
                             DNI
                         </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
                                 id="input-dni"
                                 placeholder="Ingrese el DNI"
-                                type="text"
-                                {...register("dni")}
+                                {...register("dni", {
+                                    pattern: {
+                                        value: /^[0-9]*$/,
+                                        message: "El DNI solo debe contener números"
+                                    }
+                                })}
                             />
-                        </FormGroup>
-                    </Col>
+                        </div>
+                        {errors.dni && <span className="text-danger">{errors.dni.message}</span>}
+                    </div>
+                </Col>
 
-                    <Col lg="6">
+                <Col lg="6">
+                    <div className="form-group">
                         <label className="form-control-label" htmlFor="input-ruc">
                             RUC
                         </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
                             <input
                                 className={`form-control-alternative ${myStyles.input}`}
                                 id="input-ruc"
                                 placeholder="Ingrese el RUC"
                                 type="text"
-                                {...register("ruc")}
+                                {...register("ruc", {
+                                    pattern: {
+                                        value: /^[0-9]*$/,
+                                        message: "El RUC solo debe contener números"
+                                    }
+                                })}
                             />
-                        </FormGroup>
-                    </Col>
-                </Row>
+                        </div>
+                        {errors.ruc && <span className="text-danger">{errors.ruc.message}</span>}
+                    </div>
+                </Col>
+            </Row>
+
                 <Row>
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-passport">
