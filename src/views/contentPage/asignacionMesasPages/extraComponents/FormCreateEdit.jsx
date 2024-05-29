@@ -115,11 +115,21 @@ export const FormCreateEdit = ({ id, type }) => {
                                 multiple
                                 {...register("mesas")}
                             >
-                                {mesasList?.map((mesa) => (
-                                    <option key={mesa.id} value={mesa.id}>
-                                        {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
-                                    </option>
-                                ))}
+                                {mesasList?.map((mesa) => {
+                                    if (id === mesa.id && type === "mesa") {
+                                        return (
+                                            <option key={mesa.id} value={mesa.id} selected>
+                                                {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
+                                            </option>
+                                        );
+                                    } else {
+                                        return (
+                                            <option key={mesa.id} value={mesa.id}>
+                                                {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
+                                            </option>
+                                        );
+                                    }
+                                })}
                             </select>
                         </FormGroup>
                     </Col>
