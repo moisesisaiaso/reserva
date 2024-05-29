@@ -84,33 +84,7 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
                     </Col>
                 </Row>
             </Form>
-            <Form
-                onSubmit={(e) => {
-                    searchClient(e, "email");
-                }}
-            >
-                <Row>
-                    <Col className={myStyles.inputContainer}>
-                        <FormGroup>
-                            <InputGroup
-                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
-                            >
-                                <input
-                                    className={`form-control-alternative ${myStyles.input}`}
-                                    placeholder="Buscar por email"
-                                    type="text"
-                                    ref={inputEmail}
-                                />
-                                <InputGroupAddon addonType="prepend">
-                                    <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </FormGroup>
-                    </Col>
-                </Row>
-            </Form>
+           
             <Form
                 onSubmit={(e) => {
                     searchClient(e, "cellphone");
@@ -127,6 +101,33 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
                                     placeholder="Buscar por teléfono"
                                     type="text"
                                     ref={inputCellphone}
+                                />
+                                <InputGroupAddon addonType="prepend">
+                                    <button>
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </FormGroup>
+                    </Col>
+                </Row>
+            </Form>
+            <Form
+                onSubmit={(e) => {
+                    searchClient(e, "email");
+                }}
+            >
+                <Row>
+                    <Col className={myStyles.inputContainer}>
+                        <FormGroup>
+                            <InputGroup
+                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+                            >
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    placeholder="Buscar por email"
+                                    type="text"
+                                    ref={inputEmail}
                                 />
                                 <InputGroupAddon addonType="prepend">
                                     <button>

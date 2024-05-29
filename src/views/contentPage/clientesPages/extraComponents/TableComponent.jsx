@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 
 export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, currentPage }) => {
-    const { id, name, lastname, email, cellphone } = client;
+    const { id, name, lastname, email, countryCode, cellphone } = client;
 
     const navigate = useNavigate();
 
@@ -43,8 +43,8 @@ export const TableComponent = ({ client, deleteClient, lengthId, itemsPerPage, c
                 <td>
                     {name} {lastname}
                 </td>
-                <td>{cellphone}</td>
-                <td>{email} </td>
+                <td>+{countryCode} {cellphone}</td>
+                <td>{email || "N/A"} </td>
                 <td className={myStyles.actions}>
                     <a onClick={handleReserva} className={myStyles.btnReserva}>
                         Reservar
