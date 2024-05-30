@@ -27,7 +27,7 @@ export const CardClient = ({ client }) => {
                     <CardText>
                         <ul className={myStyles.cardList}>
                             <li>
-                                <i className="ni ni-email-83" /> {email}
+                                <i className="ni ni-email-83" /> {email || "Sin email"}
                             </li>
                             <li>
                                 <i class="fa-solid fa-phone"></i> {cellphone}

@@ -143,7 +143,17 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         }
     };
 
+    const removeEmptyFields = (data) => {
+        return Object.entries(data)
+            .filter(([key, value]) => value) 
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+    };
+
     const submit = async (data) => {
+        data = removeEmptyFields(data); // Filtra los campos vacíos
         try {
             data.file = data.file[0];
             data.clienteId = reservarWithClientId || (selectedOption ? selectedOption.value : Number(data.clienteId));
@@ -213,7 +223,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             setTimeout(() => {
-            window.location.href = "/admin/reservas";
+            // window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
@@ -234,7 +244,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 <Row>
                 <Col lg="6">
                         <label className="form-control-label" htmlFor="input-username">Cliente</label>
-                        <FormGroup className={ myStyles.Inputgroup}>
+                        <div style={{ width: '100%', height: '3rem' }}>
                             <Select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 options={clientOptions}
@@ -245,11 +255,19 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     setValue("clienteId", selectedOption ? selectedOption.value : "");
                                 }}
                                 isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
-                                placeholder="Seleccionar cliente"
+                                placeholder="Buscar cliente"
+                                styles={{
+                                    control: (provided) => ({
+                                        ...provided,
+                                        height: '100%'
+                                    }),           
+                                }}
+                                
                             />
-                             {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
-                        </FormGroup>
+                        </div>
+                        {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
                     </Col>
+
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-email">
                             Motivo de reserva

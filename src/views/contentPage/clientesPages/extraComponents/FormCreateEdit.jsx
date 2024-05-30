@@ -24,11 +24,10 @@ export const FormCreateEdit = ({ id }) => {
             let clientEdit = client?.filter((element) => element.id === parseId);
 
             if (clientEdit.length > 0) {
-                const { name, lastname, age, email, countryCode, cellphone, dni, ruc, numero_pasaporte, address, allergies } = clientEdit[0];
+                const { name, lastname, email, countryCode, cellphone, dni, ruc, numero_pasaporte, address, allergies } = clientEdit[0];
                 reset({
                     name,
                     lastname,
-                    age,
                     email,
                     countryCode,
                     cellphone,
@@ -44,7 +43,18 @@ export const FormCreateEdit = ({ id }) => {
         }
     }, [client]);
 
+    const removeEmptyFields = (data) => {
+        return Object.entries(data)
+            // .filter(([key, value]) => value !== "")
+            .filter(([key, value]) => value) 
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+    };
     const submit = async (data) => {
+        data = removeEmptyFields(data); // Filtra los campos vacíos
+
         if (!data.name || !data.lastname || !data.cellphone) {
             toast.error("Por favor, ingresa nombre, apellido y teléfono.");
             return;
@@ -57,8 +67,6 @@ export const FormCreateEdit = ({ id }) => {
 
         setServerErrors({});
         setShowError(false);
-
-        data.age = Number(data.age);
 
         // Separar el código de país del número de teléfono
         const fullPhoneNumber = getValues('cellphone');
@@ -102,7 +110,6 @@ export const FormCreateEdit = ({ id }) => {
                 reset({
                     name: "",
                     lastname: "",
-                    age: "",
                     email: "",
                     countryCode: "",
                     cellphone: "",
@@ -114,7 +121,7 @@ export const FormCreateEdit = ({ id }) => {
                 });
 
                 setTimeout(() => {
-                    window.location.href = "/admin/clients";
+                    // window.location.href = "/admin/clients";
                 }, 1250);
             }
         } catch (error) {
@@ -205,7 +212,7 @@ export const FormCreateEdit = ({ id }) => {
                         <label className="form-control-label" htmlFor="input-cellphone">
                             Teléfono
                         </label>
-                        <FormGroup className={ myStyles.Inputgroup }>
+                        <FormGroup>
                             <PhoneInput
                                 country={'pe'}
                                 value={getValues('cellphone')}
@@ -218,8 +225,9 @@ export const FormCreateEdit = ({ id }) => {
                                     required: true,
                                     autoFocus: true
                                 }}
-                                containerStyle={{ width: '100%' }}
-                                inputStyle={{ width: '100%' }}
+                                containerStyle={{ width: '100%', height: '3rem' }}
+                                inputStyle={{ width: '100%',height: '3rem' }}
+                                
                             />
                             <div className="text-danger">{errors.cellphone && errors.cellphone.message}</div>
                             <div className="text-danger">{serverErrors.cellphone}</div>

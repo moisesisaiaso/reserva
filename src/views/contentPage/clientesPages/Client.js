@@ -100,19 +100,20 @@ const Client = () => {
 
                                 {/* tabla */}
                                 <section className={myStyles.tableSpacing}>
-                                    {isTable ? (
-                                        <Table striped responsive>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Nombre</th>
-                                                    <th>Teléfono</th>
-                                                    <th>Correo Electrónico</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {clientList?.map((client, i) => (
+                                {isTable ? (
+                                    <Table striped responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nombre</th>
+                                                <th>Teléfono</th>
+                                                <th>Correo Electrónico</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {clientList?.length > 0 ? (
+                                                clientList.map((client, i) => (
                                                     <TableComponent
                                                         key={client.id}
                                                         client={client}
@@ -121,23 +122,28 @@ const Client = () => {
                                                         currentPage={currentPage}
                                                         itemsPerPage={itemsPerPage}
                                                     />
-                                                ))}
-                                                {clientList?.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan="5">
-                                                            No hay clientes para mostrar
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </Table>
-                                    ) : (
-                                        clientList?.map((client) => (
-                                            <CardClient key={client.id} client={client} />
-                                        ))
-                                    )}
-                                </section>
-
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">
+                                                        No hay clientes para mostrar
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                ) : (
+                                    <>
+                                        {clientList?.length > 0 ? (
+                                            clientList.map((client) => (
+                                                <CardClient key={client.id} client={client} />
+                                            ))
+                                        ) : (
+                                            <div>No hay clientes para mostrar</div>
+                                        )}
+                                    </>
+                                )}
+                            </section>
                                 {/* Paginación */}
                                 <section>
                                     <PaginationComponent

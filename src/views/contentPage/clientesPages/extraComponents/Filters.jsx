@@ -19,25 +19,16 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
     const inputCellphone = useRef();
 
     // Función para buscar por nombre, email o teléfono
-    function searchClient(e, type) {
-        e.preventDefault();
-        let query = "";
-        if (type === "name") {
-            query = inputName.current.value;
-        } else if (type === "email") {
-            query = inputEmail.current.value;
-        } else {
-            query = inputCellphone.current.value;
-        }
-        console.log(query);
+    function searchClient() {
+        const nameQuery = inputName.current.value.trim().toLowerCase();
+        const emailQuery = inputEmail.current.value.trim().toLowerCase();
+        const cellphoneQuery = inputCellphone.current.value.trim();
 
-        const regex = new RegExp(query, "i"); // 'i' para hacer la búsqueda insensible a mayúsculas/minúsculas
-
-        // Filtrar por nombre, email o teléfono
         const filteredClients = clients.filter((client) => {
-            return (
-                regex.test(client.name) || regex.test(client.email) || regex.test(client.cellphone)
-            );
+            const nameMatch = client.name?.toLowerCase().includes(nameQuery);
+            const emailMatch = client.email?.toLowerCase().includes(emailQuery);
+            const cellphoneMatch = client.cellphone?.includes(cellphoneQuery);
+            return nameMatch && emailMatch && cellphoneMatch;
         });
 
         setListaFiltrada(filteredClients);
@@ -46,94 +37,94 @@ export const Filters = ({ clients, setListaFiltrada, setIsFilter }) => {
 
     // Función para reiniciar la tabla
     function resetTable() {
-        // Reiniciar la tabla aquí
-        // Por ejemplo:
         setListaFiltrada(clients); // Esto reinicia la lista de clientes al estado original
         setIsFilter(false);
-        inputName.current.value = ""; // Limpia el campo de búsqueda por nombre
-        inputEmail.current.value = ""; // Limpia el campo de búsqueda por email
-        inputCellphone.current.value = ""; // Limpia el campo de búsqueda por teléfono
+        inputName.current.value = "";
+        inputEmail.current.value = "";
+        inputCellphone.current.value = "";
+        searchClient(); 
+    }
+
+    // Función para manejar la tecla "Enter"
+    function handleKeyPress(event, type) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (type === 'email') {
+                resetTable();
+            } else {
+                searchClient();
+            }
+        }
     }
 
     return (
         <div className={myStyles.inputFilters}>
-            <Form
-                onSubmit={(e) => {
-                    searchClient(e, "name");
-                }}
-            >
+            <Form>
                 <Row>
                     <Col className={myStyles.inputContainer}>
                         <FormGroup>
-                            <InputGroup
-                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
-                            >
+                            <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
                                     className={`form-control-alternative ${myStyles.input}`}
                                     placeholder="Buscar por nombre"
                                     type="text"
                                     ref={inputName}
+                                    onChange={searchClient}
+                                    onKeyDown={(e) => handleKeyPress(e, 'name')}
                                 />
-                                <InputGroupAddon addonType="prepend">
+                                 <InputGroupAddon addonType="prepend">
                                     <button>
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </button>
-                                </InputGroupAddon>
+                                </InputGroupAddon>                               
                             </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row>
             </Form>
-           
-            <Form
-                onSubmit={(e) => {
-                    searchClient(e, "cellphone");
-                }}
-            >
+
+            <Form>
                 <Row>
                     <Col className={myStyles.inputContainer}>
                         <FormGroup>
-                            <InputGroup
-                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
-                            >
+                            <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
                                     className={`form-control-alternative ${myStyles.input}`}
                                     placeholder="Buscar por teléfono"
                                     type="text"
                                     ref={inputCellphone}
+                                    onChange={searchClient}
+                                    onKeyDown={(e) => handleKeyPress(e, 'cellphone')}
                                 />
-                                <InputGroupAddon addonType="prepend">
+                                 <InputGroupAddon addonType="prepend">
                                     <button>
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </button>
-                                </InputGroupAddon>
+                                </InputGroupAddon>                                   
                             </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row>
             </Form>
-            <Form
-                onSubmit={(e) => {
-                    searchClient(e, "email");
-                }}
-            >
+
+            <Form>
                 <Row>
                     <Col className={myStyles.inputContainer}>
                         <FormGroup>
-                            <InputGroup
-                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
-                            >
+                            <InputGroup className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}>
                                 <input
                                     className={`form-control-alternative ${myStyles.input}`}
                                     placeholder="Buscar por email"
                                     type="text"
                                     ref={inputEmail}
+                                    onChange={searchClient}
+                                    onKeyDown={(e) => handleKeyPress(e, 'email')}
                                 />
-                                <InputGroupAddon addonType="prepend">
+                                 <InputGroupAddon addonType="prepend">
                                     <button>
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </button>
-                                </InputGroupAddon>
+                                </InputGroupAddon>                                       
                             </InputGroup>
                         </FormGroup>
                     </Col>
