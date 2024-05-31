@@ -104,7 +104,7 @@ export const FormCreateEdit = ({ id }) => {
 
         try {
             if (id) {
-                await updateEmployee(`/intimar/employee/${id}`, payload);
+                await updateEmployee(`/intimar/employee`,id, payload);
                 toast.success("Empleado actualizado correctamente");
             } else {
                 await createEmployee("/intimar/auth/signup", payload);
@@ -168,7 +168,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese el Nombre"
                                     type="text"
                                     {...register("name", {
-                                        required: "Nombre es requerido",
+                                        ...(id ? {} : { required: "Nombre es requerido" }), // Hacer requerido solo si no estás editando
                                         pattern: {
                                             value: /^[A-Za-z\s]+$/,
                                             message: "El nombre solo debe contener letras y espacios"
@@ -191,7 +191,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese el Apellido"
                                     type="text"
                                     {...register("lastname", {
-                                        required: "Apellido es requerido",
+                                        ...(id ? {} : { required: "Apellido es requerido" }), // Hacer requerido solo si no estás editando
                                         pattern: {
                                             value: /^[A-Za-z\s]+$/,
                                             message: "El apellido solo debe contener letras y espacios"
@@ -216,7 +216,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese el Teléfono"
                                     type="text"
                                     {...register("cellphone", {
-                                        required: "Teléfono es requerido",
+                                        ...(id ? {} : { required: "Teléfono es requerido" }), // Hacer requerido solo si no estás editando
                                         minLength: {
                                             value: 9,
                                             message: "El teléfono debe tener al menos 9 dígitos"
@@ -291,7 +291,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese el Correo Electrónico"
                                     type="email"
                                     {...register("email", {
-                                        required: "Correo Electrónico es requerido",
+                                        ...(id ? {} : { required: "Correo Electrónico es requerido" }), // Hacer requerido solo si no estás editando
                                     })}
                                 />
                             </div>
@@ -310,7 +310,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Ingrese la Contraseña"
                                     type="password"
                                     {...register("password", {
-                                        required: "Contraseña es requerida",
+                                        ...(id ? {} : { required: "Contraseña es requerida" }), // Hacer requerido solo si no estás editando
                                         minLength: {
                                             value: 8,
                                             message: "La contraseña debe tener al menos 8 caracteres"
@@ -335,7 +335,7 @@ export const FormCreateEdit = ({ id }) => {
                                     placeholder="Confirme la Contraseña"
                                     type="password"
                                     {...register("confirmPassword", {
-                                        required: "Confirmar Contraseña es requerido",
+                                        ...(id ? {} : { required: "Confirmar Contraseña es requerido" }), // Hacer requerido solo si no estás editando
                                         validate: value => value === password || "Las contraseñas no coinciden"
                                     })}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
