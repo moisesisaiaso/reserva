@@ -100,7 +100,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                   placeholder="Nombre"
                   type="text"
                   ref={inputName}
-                  onChange={handleInputChange} // Agregar onChange aquí
+                  onChange={handleInputChange} 
                 />
                 <InputGroupAddon addonType="prepend">
                   <button>
@@ -120,7 +120,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                   placeholder="Email"
                   type="text"
                   ref={inputEmail}
-                  onChange={handleInputChange} // Agregar onChange aquí
+                  onChange={handleInputChange} 
                 />
                 <InputGroupAddon addonType="prepend" className={myStyles.buttonSearch}>
                   <button>
@@ -140,7 +140,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                   placeholder="Teléfono"
                   type="text"
                   ref={inputCellphone}
-                  onChange={handleInputChange} // Agregar onChange aquí
+                  onChange={handleInputChange}
                 />
                 <InputGroupAddon addonType="prepend">
                   <button>
