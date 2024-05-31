@@ -87,10 +87,7 @@ export const FormCreateEdit = ({ id }) => {
         const emailExists = client.some((c) => c.email === data.email && c.id !== parseInt(id));
         const cellphoneExists = client.some((c) => c.cellphone === data.cellphone && c.id !== parseInt(id));
 
-        if (!emailnullabel){
-            delete data.email
-        }
-        
+
         if (emailExists || cellphoneExists) {
             setServerErrors({
                 email: emailExists ? "Este correo ya existe" : "",

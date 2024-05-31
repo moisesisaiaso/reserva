@@ -40,6 +40,16 @@ export const FormCreateEdit = ({ id }) => {
         }
     }, [employee, id, reset]);
 
+    const removeEmptyFields = (data) => {
+        return Object.entries(data)
+            // .filter(([key, value]) => value !== "")
+            .filter(([key, value]) => value) 
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+    };
+
     const handleRoleChange = (e) => {
         const { value } = e.target;
         if (selectedRoles.includes(value)) {
@@ -50,6 +60,8 @@ export const FormCreateEdit = ({ id }) => {
     };
 
     const submit = async (data) => {
+        data = removeEmptyFields(data); // Filtra los campos vacíos
+
         if (data.password !== data.confirmPassword) {
             setError("confirmPassword", {
                 type: "manual",
@@ -79,7 +91,17 @@ export const FormCreateEdit = ({ id }) => {
         };
 
         setServerErrors({});
-        
+
+        const emailnullabel = data.email ? true : false;
+        const emailExists = employee.some((c) => c.email === data.email && c.id !== parseInt(id));
+
+        if (emailExists) {
+            setServerErrors({
+                email: emailExists ? "Este correo ya existe" : "",
+            });
+            return;
+        }
+
         try {
             if (id) {
                 await updateEmployee(`/intimar/employee/${id}`, payload);
@@ -273,7 +295,8 @@ export const FormCreateEdit = ({ id }) => {
                                     })}
                                 />
                             </div>
-                            {errors.email && <span className="text-danger">{errors.email.message}</span>}
+                            <div className="text-danger">{errors.email && errors.email.message}</div>
+                        <div className="text-danger">{serverErrors.email}</div>
                         </div>
                     </Col>
                     <Col lg="6">
