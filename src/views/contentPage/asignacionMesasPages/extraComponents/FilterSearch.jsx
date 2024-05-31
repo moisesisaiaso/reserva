@@ -152,6 +152,23 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
                         </InputGroup>
                     </FormGroup>
                 </Col>
+                <Col className={myStyles.inputContainer}>
+                    <FormGroup>
+                        <InputGroup className={`input-group-alternative mb-4`}>
+                            <Button
+                                color="info"
+                                outline
+                                type="button"
+                                size="lg"
+                                aria-pressed={true}
+                                onClick={(e) => filterByUbicacion(e, "Cafetin")}
+                                className={getButtonClass("Cafetin")} 
+                            >
+                                Cafetin
+                            </Button>
+                        </InputGroup>
+                    </FormGroup>
+                </Col>
             </Row>
             <Row>
                 <Col className={myStyles.inputContainer}>

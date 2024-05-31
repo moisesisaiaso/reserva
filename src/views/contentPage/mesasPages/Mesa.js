@@ -127,6 +127,7 @@ const Mesa = () => {
                                 <section className={myStyles.tableSpacing}>
                                     {isTable ? (
                                         <Table striped responsive>
+                                            {/* Encabezados de la tabla */}
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -137,17 +138,19 @@ const Mesa = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {mesaList?.map((mesa, i) => (
-                                                    <TableComponent
-                                                        key={mesa.id}
-                                                        mesa={mesa}
-                                                        lengthId={i}
-                                                        deleteMesa={deleteMesa}
-                                                        currentPage={currentPage}
-                                                        itemsPerPage={itemsPerPage}
-                                                    />
-                                                ))}
-                                                {mesaList?.length === 0 && (
+                                                {/* Verificar si hay mesas en la lista para mostrar */}
+                                                {mesaList?.length > 0 ? (
+                                                    mesaList.map((mesa, i) => (
+                                                        <TableComponent
+                                                            key={mesa.id}
+                                                            mesa={mesa}
+                                                            lengthId={i}
+                                                            deleteMesa={deleteMesa}
+                                                            currentPage={currentPage}
+                                                            itemsPerPage={itemsPerPage}
+                                                        />
+                                                    ))
+                                                ) : (
                                                     <tr>
                                                         <td colSpan="5" className="text-center">
                                                             No hay mesas para mostrar
@@ -156,18 +159,21 @@ const Mesa = () => {
                                                 )}
                                             </tbody>
                                         </Table>
-                                    ) : mesaList?.length === 0 ? (
-                                        <p className="text-center">No hay mesas para mostrar</p>
                                     ) : (
-                                        mesaList?.map((mesa) => (
-                                            <CardMesa
-                                                key={mesa.id}
-                                                mesa={mesa}
-                                                updateMesa={updateMesa}
-                                                updated={updated}
-                                                setUpdated={setUpdated}
-                                            />
-                                        ))
+                                        // Si no estás mostrando la tabla, mostrar las tarjetas
+                                        mesaList?.length > 0 ? (
+                                            mesaList.map((mesa) => (
+                                                <CardMesa
+                                                    key={mesa.id}
+                                                    mesa={mesa}
+                                                    updateMesa={updateMesa}
+                                                    updated={updated}
+                                                    setUpdated={setUpdated}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p className="text-center">No hay mesas para mostrar</p>
+                                        )
                                     )}
                                 </section>
 

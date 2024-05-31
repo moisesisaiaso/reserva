@@ -4,13 +4,25 @@ import { FormGroup, InputGroup, Col, Row, Button } from "reactstrap";
 
 export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const [selectedFilter, setSelectedFilter] = useState("Todos");
-    const filterByUbicacion = (e, zona) => {
-        e.preventDefault();
-        setSelectedFilter(zona);
-        const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
+
+    const inputEstado = useRef();
+    const handleSearch = () => {
+        const value = inputEstado.current?.value;
+        const query = value === "Disponible" ? true : value === "No disponible" ? false : "";
+
+        const filteredMesas = mesas?.filter((mesa) => mesa.estado_mesa === query);
+
         setListaFiltrada(filteredMesas);
         setIsFilter(true);
     };
+    const filterByUbicacion = (e, zona) => {
+        e.preventDefault();
+        setSelectedFilter(zona);
+        const filteredMesas = mesas && mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
+        setListaFiltrada(filteredMesas || []);
+        setIsFilter(true);
+    };
+    
 
     const showAllMesas = (e) => {
         e.preventDefault();
@@ -140,10 +152,10 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
                                 type="button"
                                 size="lg"
                                 aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Cafetin")}
-                                className={getButtonClass("Cafetin")} 
+                                onClick={(e) => filterByUbicacion(e, "Embarcación")}
+                                className={getButtonClass("Embarcación")} 
                             >
-                                Cafetin
+                                Embarcación
                             </Button>
                         </InputGroup>
                     </FormGroup>
@@ -157,12 +169,32 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
                                 type="button"
                                 size="lg"
                                 aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Embarcación")}
-                                className={getButtonClass("Embarcación")} 
+                                onClick={(e) => filterByUbicacion(e, "Cafetin")}
+                                className={getButtonClass("Cafetin")} 
                             >
-                                Embarcación
+                                Cafetin
                             </Button>
                         </InputGroup>
+                    </FormGroup>
+                </Col>
+            </Row>
+            <Row>
+                <Col className={myStyles.inputContainer}>
+                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <select
+                            className={`form-control-alternative ${myStyles.input}`}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                width: "11.5rem",
+                            }}
+                            type="select"
+                            ref={inputEstado}
+                            onChange={handleSearch}
+                        >
+                            <option value="Disponible">Disponible</option>
+                            <option value="No disponible">No disponible</option>
+                        </select>
                     </FormGroup>
                 </Col>
             </Row>

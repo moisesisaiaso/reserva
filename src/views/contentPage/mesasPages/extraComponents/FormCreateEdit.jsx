@@ -1,74 +1,39 @@
-import myStyles from "../../../../assets/css/myStyles.module.css";
-import {
-    FormGroup,
-    Form,
-    Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
-    Col,
-    Row,
-    Card,
-    Button,
-} from "reactstrap";
-
+import React from "react";
+import { FormGroup, Col, Row, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
-import { useEffect, useState } from "react";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-export const FormCreateEdit = ({ id }) => {
-    const { handleSubmit, register, reset } = useForm();
+import myStyles from "../../../../assets/css/myStyles.module.css";
 
+export const FormCreateEdit = ({ id }) => {
+    const { handleSubmit, register, reset, formState: { errors } } = useForm();
     const [mesa, getMesas, createMesa, , updateMesa] = useCrud();
 
-    console.log(id);
-
-    useEffect(() => {
-        getMesas("/intimar/mesa");
-    }, []);
-
-    useEffect(() => {
-        let parseId = parseInt(id);
-        if (id && mesa) {
-            let mesaEdit = mesa?.filter((element) => element.id === parseId);
-
-            // Verificar que mesaEdit no esté vacío antes de desestructurar
-            if (mesaEdit.length > 0) {
-                const { ubicacion_mesa, numero_mesa, estado_mesa } = mesaEdit[0];
-                reset({
-                    ubicacion_mesa,
-                    numero_mesa,
-                    estado_mesa: estado_mesa.toString(),
-                });
-            } else {
-                console.warn(`No se encontró ninguna mesa con el ID: ${id}`);
-            }
-        }
-    }, [mesa, id, reset]);
-
     const submit = async (data) => {
-        data.estado_mesa = "true";
-
-        console.log(data);
-
-        if (id) {
-            await updateMesa("/intimar/mesa", id, data);
-            console.log("Editado");
-            toast.success("Mesa editada con éxito");
-        } else {
-            await createMesa("/intimar/mesa", data);
-            toast.success("Mesa creada con éxito");
+        try {
+            if (!data.ubicacion_mesa || !data.numero_mesa) {
+                throw new Error("Los campos de número y ubicación de mesa son requeridos.");
+            }
+            
+            if (id) {
+                await updateMesa("/intimar/mesa", id, data);
+                toast.success("Mesa editada con éxito");
+            } else {
+                await createMesa("/intimar/mesa", data);
+                toast.success("Mesa creada con éxito");
+            }
+    
+            reset({
+                ubicacion_mesa: "",
+                numero_mesa: "",
+            });
+            setTimeout(() => {
+                window.location.href = "/admin/mesas";
+            }, 1250);
+        } catch (error) {
+            toast.error(error.message);
         }
-
-        reset({
-            ubicacion_mesa: "",
-            numero_mesa: "",
-        });
-        setTimeout(() => {
-        window.location.href = "/admin/mesas";
-    }, 1250);
     };
 
     return (
@@ -81,14 +46,14 @@ export const FormCreateEdit = ({ id }) => {
                             Ubicación
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                        <select
+                            <select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 style={{
                                     display: "flex",
                                     alignItems: "center",
                                 }}
                                 id=""
-                                {...register("ubicacion_mesa")}
+                                {...register("ubicacion_mesa", { required: true })}
                             >
                                 <option value="">Seleccione la Ubicación</option>
                                 <option value="Playa">Playa</option>
@@ -97,7 +62,9 @@ export const FormCreateEdit = ({ id }) => {
                                 <option value="Bar">Bar</option>
                                 <option value="Poltrona">Poltrona</option>
                                 <option value="Embarcación">Embarcación</option>
+                                <option value="Cafetin">Cafetin</option>
                             </select>
+                            {errors.ubicacion_mesa && <p className="text-danger">Ubicación de mesa es requerida</p>}
                         </FormGroup>
                     </Col>
                     <Col md="12">
@@ -110,8 +77,9 @@ export const FormCreateEdit = ({ id }) => {
                                 id=""
                                 placeholder="Ingrese el Número"
                                 type="text"
-                                {...register("numero_mesa")}
+                                {...register("numero_mesa", { required: true })}
                             />
+                            {errors.numero_mesa && <p className="text-danger">Número de mesa es requerido</p>}
                         </FormGroup>
                     </Col>
                 </Row>
@@ -120,7 +88,6 @@ export const FormCreateEdit = ({ id }) => {
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
             </Button>
             <ToastContainer position="top-right" autoClose={3000} />
-
         </form>
     );
 };
