@@ -55,6 +55,17 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
         );
     }
 
+    // Función para reiniciar la tabla y limpiar campos
+    function resetTable() {
+        setListaFiltrada(employees);
+        setIsFilter(false);
+        inputName.current.value = "";
+        inputEmail.current.value = "";
+        inputCellphone.current.value = "";
+        inputRole.current.value = "";
+        searchEmployee({ preventDefault: () => {} }); // Pasar un objeto vacío para evitar el error
+    }
+
     return (
         <div className={myStyles.inputFilters}>
             <Form onSubmit={searchEmployee}>
@@ -72,7 +83,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                                 />
                                 <InputGroupAddon addonType="prepend">
                                     <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </InputGroupAddon>
                             </InputGroup>
@@ -91,7 +102,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                                 />
                                 <InputGroupAddon addonType="prepend" className={myStyles.buttonSearch}>
                                     <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </InputGroupAddon> 
                             </InputGroup>
@@ -110,7 +121,7 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                                 />
                                 <InputGroupAddon addonType="prepend">
                                     <button>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </InputGroupAddon>
                             </InputGroup>
@@ -139,6 +150,11 @@ export const Filters = ({ employees, setListaFiltrada, setIsFilter }) => {
                                 </InputGroupAddon>
                             </InputGroup>
                         </FormGroup>
+                    </Col>
+                    <Col xs={12} className="d-flex justify-content-end">
+                        <Button color="secondary" onClick={resetTable} className="mb-2">
+                            Reiniciar
+                        </Button>
                     </Col>
                 </Row>
             </Form>
