@@ -82,9 +82,20 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
+    /* FINALIZAR RESERVA*/
+    const finalizarApi = async (path) => {
+        console.log(path);
+        return await axiosInstance
+            .post(path)
+            .then(() => {
+                console.log("Data desasociada");
+            })
+            .catch((error) => console.log(error));
+    };
+
     useEffect(() => {
         console.log("un elemento:", apiData);
     }, [apiData]);
 
-    return [apiData, getApi, postApi, deleteApi, updateApi, removeApi];
+    return [apiData, getApi, postApi, deleteApi, updateApi, removeApi, finalizarApi];
 };

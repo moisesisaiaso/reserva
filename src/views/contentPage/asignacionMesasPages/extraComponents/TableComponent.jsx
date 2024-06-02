@@ -3,6 +3,7 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 import React, { useEffect, useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { useCrud } from "hooks/useCrud";
 
 export const TableComponent = ({
     reserva,
@@ -12,15 +13,19 @@ export const TableComponent = ({
     currentPage,
     setUpdated,
     updated,
+    setIsFilter,
+    finalizarReserva,
 }) => {
-    const { id, client, fecha_reserva, hora_reserva, mesas, mozo } = reserva;
+    const { id, client, fecha_reserva, hora_reserva, hora_llegada, mesas, mozo } = reserva;
 
     const navigate = useNavigate();
 
     const [stateModal, setStateModal] = useState(false);
 
-    const handleMozo = () => {
-        /* navigate("/admin/mesas/create", { state: id }); */
+    const handleFinalizar = async () => {
+        await finalizarReserva(`intimar/reserva/${id}/end`);
+        setUpdated(!updated);
+        setIsFilter(true);
     };
 
     const handleDetail = () => {
@@ -35,6 +40,7 @@ export const TableComponent = ({
         await removeAsignacion(`/intimar/reserva/${id}/mesa`);
         toggleModal();
         setUpdated(!updated);
+        setIsFilter(true);
     };
 
     /* items asignaciones */
@@ -50,6 +56,7 @@ export const TableComponent = ({
                 </td>
                 <td>{fecha_reserva}</td>
                 <td>{hora_reserva}</td>
+                <td>{hora_llegada}</td>
                 <td>
                     <ul>
                         {mesas?.map((mesa) => (
@@ -66,9 +73,9 @@ export const TableComponent = ({
                 </td>
                 <td>{`${mozo?.name} ${mozo?.lastname}`}</td>
                 <td className={myStyles.actions}>
-                    {/* <a onClick={handleMozo} className={myStyles.btnReserva}>
-                        Liberar mesa
-                    </a> */}
+                    <a onClick={handleFinalizar} className={myStyles.btnReserva}>
+                        Finalizar Reserva
+                    </a>
 
                     <div>
                         <a onClick={handleDetail} className={myStyles.btnDetail}>

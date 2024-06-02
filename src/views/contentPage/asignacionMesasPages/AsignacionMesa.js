@@ -21,7 +21,7 @@ const AsignacionMesa = () => {
     const [mesas, getMesas, , , updateMesa] = useCrud();
     const [mesasAsignadas, setMesasAsignadas] = useState();
     const [reservasAsignadas, setReservasAsignadas] = useState();
-    const [reservas, getReservas, , , , removeAsignacion] = useCrud();
+    const [reservas, getReservas, , , , removeAsignacion, finalizarReserva] = useCrud();
     const [updated, setUpdated] = useState(false);
     const [pages, setPages] = useState();
     const [listaFiltrada, setListaFiltrada] = useState();
@@ -48,14 +48,16 @@ const AsignacionMesa = () => {
         }
 
         if (reservas) {
-            /* obtener solo las reservas con asignaciones */
-            const asignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
+            /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */
+            const asignadas = reservas?.filter(
+                (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
+            );
             setReservasAsignadas(asignadas);
         }
     }, [mesas, reservas, updated]);
 
     const estados = {
-        reservas,
+        reservas: reservasAsignadas,
         mesas,
     };
 
@@ -73,12 +75,12 @@ const AsignacionMesa = () => {
 
     /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
-        if (isTable) {
+        if (isFilter || isTable) {
             isMesaOrReserva("reservas");
         } else {
             isMesaOrReserva("mesas");
         }
-    }, [listaFiltrada, mesas, isFilter, reservas]);
+    }, [listaFiltrada, mesas, isFilter, reservas, isTable]);
 
     // función para obtener la lista cortada segun los items por pagina
     const getDataPaginate = (nombreEstado) => {
@@ -99,10 +101,10 @@ const AsignacionMesa = () => {
 
     // pagina actual vuelve a ser 1 si se ha hecho un filtrado
     useEffect(() => {
-        if (isFilter) {
+        if (isFilter || isTable) {
             setCurrentPage(1);
         }
-    }, [listaFiltrada]);
+    }, [listaFiltrada, isTable]);
 
     // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
     useEffect(() => {
@@ -168,6 +170,7 @@ const AsignacionMesa = () => {
                                                     <th>Nombre del Cliente</th>
                                                     <th>Fecha de reserva</th>
                                                     <th>Hora de reserva</th>
+                                                    <th>Hora de llegada</th>
                                                     <th>Ubicación de mesa</th>
                                                     <th>Número de mesa</th>
                                                     <th>Mozo</th>
@@ -185,6 +188,8 @@ const AsignacionMesa = () => {
                                                         itemsPerPage={itemsPerPage}
                                                         setUpdated={setUpdated}
                                                         updated={updated}
+                                                        setIsFilter={setIsFilter}
+                                                        finalizarReserva={finalizarReserva}
                                                     />
                                                 ))}
                                                 {reservaList?.length === 0 && (

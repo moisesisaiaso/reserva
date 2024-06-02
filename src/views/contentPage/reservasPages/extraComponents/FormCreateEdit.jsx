@@ -11,18 +11,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
-        /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
+    /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
     cuando parameterId existe significa que este dato viene del parametro de la url cuando accedo a este formulario lo que significa que es para editar un registro, es decir con este parameterId obtengo todo los campos de esta asignación de mesa ya existente para poder mostrarlo en los campos y editar  */
     /* Collapse Anticipo */
     const adultosString = useRef();
     const ninosString = useRef();
     const [adultos, setAdultos] = useState();
     const [ninos, setNinos] = useState();
-    
+
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-   
+
     const [currentFile, setCurrentFile] = useState();
-    const { handleSubmit, register, reset, setValue, formState: { errors } } = useForm();
+    const {
+        handleSubmit,
+        register,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm();
     const [dataClient, setDataClient] = useState();
     const [clienteIdReserva, setClienteIdReserva] = useState();
     const [clients, getClients] = useCrud();
@@ -30,7 +36,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [reserva, setReserva] = useState();
     const [filePreview, setFilePreview] = useState(null);
     const [clientName, setClientName] = useState();
-    const [selectedOption, setSelectedOption] = useState(null); 
+    const [selectedOption, setSelectedOption] = useState(null);
 
     useEffect(() => {
         getClients("/intimar/client").then((fetchedClients) => {
@@ -38,23 +44,27 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         });
         if (parameterId) {
             getReservas("/intimar/reserva").then((fetchedReservas) => {
-                console.log("Fetched reservas:", fetchedReservas); 
+                console.log("Fetched reservas:", fetchedReservas);
             });
         }
-    }, [parameterId]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
+    }, [
+        parameterId,
+    ]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
 
     useEffect(() => {
-          /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
+        /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
         if (reservarWithClientId) {
             const idClient = parseInt(reservarWithClientId);
             if (clients && clients.length > 0) {
-               // Se busca la reserva correspondiente en la lista de reservas utilizando el ID
+                // Se busca la reserva correspondiente en la lista de reservas utilizando el ID
                 const clientEdit = clients.find((element) => element.id === idClient);
                 if (clientEdit) {
                     setDataClient(clientEdit);
-                    setSelectedOption({ value: clientEdit.id, label: `${clientEdit.name} ${clientEdit.lastname}` });
+                    setSelectedOption({
+                        value: clientEdit.id,
+                        label: `${clientEdit.name} ${clientEdit.lastname}`,
+                    });
                     setValue("clienteId", idClient); // Se establece el valor del campo "clienteId" en el formulario
-
                 }
             }
         } else if (parameterId && reservas && reservas.length > 0) {
@@ -67,39 +77,68 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     const clientEdit = clients.find((element) => element.id === idClient);
                     if (clientEdit) {
                         setDataClient(clientEdit);
-                        setSelectedOption({ value: clientEdit.id, label: `${clientEdit.name} ${clientEdit.lastname}` });
+                        setSelectedOption({
+                            value: clientEdit.id,
+                            label: `${clientEdit.name} ${clientEdit.lastname}`,
+                        });
                         setValue("clienteId", idClient);
                     }
                 }
             }
         }
     }, [clients, parameterId, reservarWithClientId, reservas]);
-    
-    
 
     useEffect(() => {
         if (reserva) {
-            const { fecha_reserva, hora_reserva, cant_adultos, cant_ninos, estado_reserva, anticipo_required, motivo_reserva, clienteId, file, client } = reserva;
+            const {
+                fecha_reserva,
+                hora_reserva,
+                cant_adultos,
+                cant_ninos,
+                estado_reserva,
+                anticipo_required,
+                motivo_reserva,
+                clienteId,
+                file,
+                client,
+            } = reserva;
             setClientName(client);
             setClienteIdReserva(clienteId);
             setCollapseIsOpen(anticipo_required);
-            
+
             /* En estos casos se tuvo que mandar directamente los valores a los campos con el atributo value ya que use Form no mostraba estos valores */
             setAdultos(reserva.cant_adultos);
             setNinos(reserva.cant_ninos);
 
             setCurrentFile(file);
-            
+
             /* si al momento de editar una reserva la propiedad anticipo_required es true, me despliega el formulario para editar el anticipo y esta condición me permite rellenar los campos de la reserva a editar solo con los compos que corresponden a cuando la reserva es con anticipo o no */
             if (anticipo_required) {
                 const { anticipo } = reserva;
                 const { monto_anticipo, banco, moneda, estado_anticipo } = anticipo;
                 reset({
-                    fecha_reserva, hora_reserva, cant_adultos, cant_ninos, estado_reserva, anticipo_required, motivo_reserva, clienteId, file,
-                    anticipo: { monto_anticipo, banco, moneda, estado_anticipo }
+                    fecha_reserva,
+                    hora_reserva,
+                    cant_adultos,
+                    cant_ninos,
+                    estado_reserva,
+                    anticipo_required,
+                    motivo_reserva,
+                    clienteId,
+                    file,
+                    anticipo: { monto_anticipo, banco, moneda, estado_anticipo },
                 });
             } else {
-                reset({ fecha_reserva, hora_reserva, cant_adultos, cant_ninos,estado_reserva, anticipo_required, motivo_reserva, clienteId });
+                reset({
+                    fecha_reserva,
+                    hora_reserva,
+                    cant_adultos,
+                    cant_ninos,
+                    estado_reserva,
+                    anticipo_required,
+                    motivo_reserva,
+                    clienteId,
+                });
             }
         }
     }, [reserva]);
@@ -122,7 +161,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             reader.onloadend = () => setFilePreview(reader.result);
             reader.readAsDataURL(file);
         } else {
-         // Si el tamaño excede los 10 MB, muestra una alerta
+            // Si el tamaño excede los 10 MB, muestra una alerta
             alert("El tamaño del archivo no puede superar los 10 MB.");
         }
     };
@@ -156,11 +195,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         data = removeEmptyFields(data); // Filtra los campos vacíos
         try {
             data.file = data.file[0];
-            data.clienteId = reservarWithClientId || (selectedOption ? selectedOption.value : Number(data.clienteId));
+            data.clienteId =
+                reservarWithClientId ||
+                (selectedOption ? selectedOption.value : Number(data.clienteId));
             data.cant_adultos = Number(adultosString.current.value);
             data.cant_ninos = Number(ninosString.current.value);
             data.anticipo_required = collapseIsOpen;
-                
+
             /* varible a la que se le asigna la data puede ser (form data u objeto json) */
             let requestData;
 
@@ -170,19 +211,18 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 data.anticipo.fecha_anticipo = new Date().toISOString().split("T")[0];
                 const formData = new FormData();
 
-                
                 // Primero, maneja el objeto anidado 'anticipo' si existe
                 // if (data.anticipo) {
                 //     formData.append("anticipo", JSON.stringify(data.anticipo));
                 // }
                 if (data.anticipo) formData.append("anticipo", JSON.stringify(data.anticipo));
-                   // Luego, maneja todas las demás claves que no están anidadas
+                // Luego, maneja todas las demás claves que no están anidadas
                 for (const key in data) {
                     if (data.hasOwnProperty(key) && key !== "anticipo") {
                         formData.append(key, data[key]);
                     }
                 }
-                  // Finalmente, añade el archivo si existe
+                // Finalmente, añade el archivo si existe
                 // if (currentFile) {
                 //     formData.append("file", currentFile);
                 // }
@@ -197,7 +237,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 requestData = data;
             }
 
-             /* peticiones para editar y crear reservas */
+            /* peticiones para editar y crear reservas */
 
             if (parameterId) {
                 // Edición de reserva existente
@@ -208,7 +248,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                     // Si no hay un cliente específico, usar el ID proporcionado en los datos
                     data.clienteId = Number(data.clienteId);
                 }
-            
+
                 // Llamada para actualizar la reserva
                 await updateReserva("/intimar/reserva", parameterId, requestData);
                 toast.success("Reserva editada correctamente.");
@@ -219,19 +259,17 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 toast.success("Reserva creada correctamente.");
                 console.log("respuesta de crear", crear?.data);
                 console.log("crear");
-            
             }
 
             setTimeout(() => {
-            // window.location.href = "/admin/reservas";
+            window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
             toast.error("Hubo un error al procesar la solicitud");
         }
     };
-    
-            
+
     const clientOptions = clients?.map((client) => ({
         value: client?.id,
         label: `${client?.name} ${client?.lastname}`,
@@ -240,11 +278,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Información requerida</h6>
-            <div className="pl-lg-4"> 
+            <div className="pl-lg-4">
                 <Row>
                 <Col lg="6">
                         <label className="form-control-label" htmlFor="input-username">Cliente</label>
-                        <div style={{ width: '100%', height: '3rem' }}>
+                        <FormGroup className={ myStyles.Inputgroup}>
                             <Select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 options={clientOptions}
@@ -252,20 +290,16 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 onChange={(selectedOption) => {
                                     console.log("Selected option:", selectedOption);
                                     setSelectedOption(selectedOption);
-                                    setValue("clienteId", selectedOption ? selectedOption.value : "");
+                                    setValue(
+                                        "clienteId",
+                                        selectedOption ? selectedOption.value : ""
+                                    );
                                 }}
                                 isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
-                                placeholder="Buscar cliente"
-                                styles={{
-                                    control: (provided) => ({
-                                        ...provided,
-                                        height: '100%'
-                                    }),           
-                                }}
-                                
+                                placeholder="Seleccionar cliente"
                             />
-                        </div>
-                        {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
+                             {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
+                        </FormGroup>
                     </Col>
 
                     <Col lg="6">
@@ -298,7 +332,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 onChange={handleTotalPeople}
                                 required
                             />
-                            {errors.cant_adultos && <span className="text-danger">{errors.cant_adultos.message}</span>}                            
+                            {errors.cant_adultos && (
+                                <span className="text-danger">{errors.cant_adultos.message}</span>
+                            )}
                         </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -331,7 +367,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 min={new Date().toISOString().split("T")[0]} // Establece la fecha mínima a la fecha de hoy
 
                             />
-                            {errors.fecha_reserva && <span className="text-danger">{errors.fecha_reserva.message}</span>}                            
+                            {errors.fecha_reserva && (
+                                <span className="text-danger">{errors.fecha_reserva.message}</span>
+                            )}
                         </FormGroup>
                     </Col>
                     <Col md="12">
@@ -350,7 +388,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 {...register("hora_reserva")}
                                 required
                             />
-                             {errors.hora_reserva && <span className="text-danger">{errors.hora_reserva.message}</span>}                          
+                            {errors.hora_reserva && (
+                                <span className="text-danger">{errors.hora_reserva.message}</span>
+                            )}
                         </FormGroup>
                     </Col>
 
@@ -526,10 +566,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             </div>
 
             <Button block color="primary" size="lg" type="submit">
-                <i className="ni ni-send" /> Crear Reserva
+                <i className="ni ni-send" /> {parameterId ? "Editar Reserva" : "Crear Reserva"}
             </Button>
             <ToastContainer position="top-right" autoClose={3000} />
-
         </form>
     );
 };
