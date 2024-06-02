@@ -324,12 +324,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
-                                id="fecha_reserva"
-                                className={`form-control ${myStyles.input} ${errors.fecha_reserva ? "is-invalid" : ""}`}
+                                className={`form-control-alternative ${myStyles.input}`}
+                                id="input-last-name"
                                 type="date"
-                                {...register("fecha_reserva", { required: "La fecha de la reserva es requerida" })}
-                                min={new Date().toISOString().split("T")[0]} // Establece la fecha mínima a la fecha de hoy
-
+                                {...register("fecha_reserva")}
+                                required
                             />
                             {errors.fecha_reserva && <span className="text-danger">{errors.fecha_reserva.message}</span>}                            
                         </FormGroup>
@@ -381,6 +380,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             </FormGroup>
                         </Col>
                     )}
+
+
+
                 </Row>
             </div>
             <hr className="my-4" />
