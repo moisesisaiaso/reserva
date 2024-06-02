@@ -7,6 +7,7 @@ import { useCrud } from "hooks/useCrud";
 export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
     const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
     const [estado, setEstado] = useState(estado_mesa ? "Disponible" : "No disponible");
+    const [reservaId, setReservaId] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,11 +23,22 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
         navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
     };
 
-    const handleMesaLiberar = async () => {
-        const data = { estado_mesa: true };
-        /* aquí enviamos a liberar mesa */
-        await updateMesa("intimar/mesa", id, data);
-        setUpdated(!updated);
+    useEffect(() => {
+        if (!estado_mesa) {
+            const reservas = mesa?.reservas;
+            if (reservas?.length > 0) {
+                /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */
+                const reserva = reservas?.find(
+                    (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
+                );
+                setReservaId(reserva.id);
+            }
+        }
+    }, []);
+
+    const handleMesaDetalle = async () => {
+        /* vamos al detalle de la mesa no disponible */
+        navigate("/admin/reservas/detail", { state: reservaId });
     };
 
     return (
@@ -64,9 +76,9 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
                         <Button
                             color="warning"
                             className={myStyles.cardButtonMesa}
-                            onClick={handleMesaLiberar}
+                            onClick={handleMesaDetalle}
                         >
-                            <i className="ni ni-lock-circle-open" /> Liberar Mesa
+                            <i className="ni ni-lock-circle-open" /> Ir al detalle
                         </Button>
                     )}
                 </CardBody>

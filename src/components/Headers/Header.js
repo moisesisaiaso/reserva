@@ -22,7 +22,11 @@ const Header = () => {
         let aforoByReserva = 0;
         let clientesTotal = 0; // Variable temporal para contar clientes
         if (reservas) {
-            const asignadas = reservas?.filter((reserva) => reserva.mesas.length > 0);
+            /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */
+            const asignadas = reservas?.filter(
+                (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
+            );
+
             asignadas.forEach((reserva) => {
                 const adultos = parseInt(reserva.cant_adultos);
                 const ninos = parseInt(reserva.cant_ninos);
@@ -118,7 +122,8 @@ const Header = () => {
                                         </Row>
                                         <p className="mt-3 mb-0 text-muted text-sm">
                                             <span className="text-success mr-2">
-                                                <i className="fa fa-arrow-right" /> De {totalAsignadas}
+                                                <i className="fa fa-arrow-right" /> De{" "}
+                                                {totalAsignadas}
                                             </span>
                                             <span className="text-nowrap">Reservas</span>
                                         </p>
@@ -148,7 +153,8 @@ const Header = () => {
                                         </Row>
                                         <p className="mt-3 mb-0 text-muted text-sm">
                                             <span className="text-danger mr-2">
-                                                <i className="fas fa-arrow-right" /> Ocupadas: {totalAsignadas}
+                                                <i className="fas fa-arrow-right" /> Ocupadas:{" "}
+                                                {totalAsignadas}
                                             </span>{" "}
                                             <span className="text-nowrap">Mesas</span>
                                         </p>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Badge, Button, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -10,6 +10,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         id,
         fecha_reserva,
         hora_reserva,
+        hora_salida,
         cant_adultos,
         cant_ninos,
         motivo_reserva,
@@ -24,8 +25,23 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
 
     const [stateModal, setStateModal] = React.useState(false);
 
+    const [isDisable, setIsDisable] = useState(false);
+
+    useEffect(() => {
+        const disponible = hora_salida !== null || estado_reserva === "Cancelada" ? true : false;
+        setIsDisable(disponible);
+    }, []);
+    let buttonDisable = {};
+    if (isDisable) {
+        buttonDisable = {
+            opacity: 0.5,
+        };
+    }
+
     const handleMesa = () => {
-        navigate("/admin/asignar-mesa/create", { state: { id, type: "reserva" } });
+        if (!isDisable) {
+            navigate("/admin/asignar-mesa/create", { state: { id, type: "reserva" } });
+        }
     };
 
     const handleDetail = () => {
@@ -52,15 +68,17 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
             return "danger";
         } else if (estado_reserva === "Confirmada") {
             return "success";
-        } else {
+        } else if (estado_reserva === "Finalizada") {
             return "primary";
+        } else {
+            return "default";
         }
     };
 
     const fechaFormateada = format(new Date(fecha_reserva), "dd-MM-yyyy", { locale: es });
 
     const totalPersonas = cant_adultos + cant_ninos;
-    
+
     const handleConfirmacion = () => {
         const mensajeConfirmacion = `
         *Confirmación de Reserva:*
@@ -77,8 +95,10 @@ To confirm your reservation, please reply with *CONFIRM*. This is necessary to v
 Thank you for choosing us!
         `;
         const mensajeCodificado = encodeURIComponent(mensajeConfirmacion);
-        const whatsappLink = `https://wa.me/${client.countryCode.replace('+', '')}${client.cellphone}?text=${mensajeCodificado}`;
-        window.open(whatsappLink, '_blank'); // Abre el enlace en una nueva pestaña
+        const whatsappLink = `https://wa.me/${client.countryCode.replace("+", "")}${
+            client.cellphone
+        }?text=${mensajeCodificado}`;
+        window.open(whatsappLink, "_blank"); // Abre el enlace en una nueva pestaña
     };
 
     return (
@@ -99,7 +119,7 @@ Thank you for choosing us!
                 </td>
                 {/* <td>{estadoAnticipo}</td> */}
                 <td className={myStyles.actions}>
-                    <a onClick={handleMesa} className={myStyles.btnReserva}>
+                    <a onClick={handleMesa} className={myStyles.btnReserva} style={buttonDisable}>
                         Asignar Mesa
                     </a>
                     <div>
@@ -126,7 +146,13 @@ Thank you for choosing us!
                     <h5 className="modal-title" id="exampleModalLabel" color="warning">
                         ⚠️ Advertencia !!!
                     </h5>
-                    <button aria-label="Close" className="close" data-dismiss="modal" type="button" onClick={toggleModal}>
+                    <button
+                        aria-label="Close"
+                        className="close"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={toggleModal}
+                    >
                         <span aria-hidden={true}>×</span>
                     </button>
                 </div>
@@ -141,7 +167,12 @@ Thank you for choosing us!
                     </p>
                 </div>
                 <div className="modal-footer">
-                    <Button color="secondary" data-dismiss="modal" type="button" onClick={toggleModal}>
+                    <Button
+                        color="secondary"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={toggleModal}
+                    >
                         Cerrar
                     </Button>
                     <Button color="primary" type="button" onClick={handleDelete}>

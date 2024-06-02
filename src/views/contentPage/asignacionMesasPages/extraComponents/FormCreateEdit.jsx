@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const FormCreateEdit = ({ id, type }) => {
     const { handleSubmit, register, reset, setValue } = useForm({
         defaultValues: {
-            reservaId: id && type === "reserva" ? { value: id, label: "" } : null,
+            reservaId: id && type === "reserva" ? { value: id } : null,
             mesas: id && type === "mesa" ? [id] : [],
         },
     });
@@ -21,6 +21,7 @@ export const FormCreateEdit = ({ id, type }) => {
     const [reservas, getReservas, setMesas] = useCrud();
     const [employees, getEmployees, setMozo] = useCrud();
     const [mesasList, setMesaList] = useState();
+    const [reservasList, setReservasList] = useState();
     const employee = useRef();
 
     useEffect(() => {
@@ -31,9 +32,17 @@ export const FormCreateEdit = ({ id, type }) => {
 
     useEffect(() => {
         let parseId = parseInt(id);
-        if (id && reservas && type === "reserva") {
-            let reserva = reservas.filter((reserva) => reserva.id === parseId);
+
+        if (reservas) {
+            const disponibles = reservas.filter((reserva) => reserva.hora_salida === null);
+            console.log("disponibles", disponibles);
+            setReservasList(disponibles);
+        }
+
+        if (id && reservasList && type === "reserva") {
+            let reserva = reservasList.filter((reserva) => reserva.id === parseId);
             setReserva(reserva[0]);
+            console.log("entra");
         }
 
         if (mesas) {
@@ -41,6 +50,9 @@ export const FormCreateEdit = ({ id, type }) => {
             setMesaList(mesasLibres);
         }
     }, [mesas, reservas]);
+
+    console.log("reserva :", reserva);
+    console.log("reservaList :", reservasList);
 
     const submit = async (data) => {
         const id = data.reservaId.value;
@@ -64,6 +76,9 @@ export const FormCreateEdit = ({ id, type }) => {
         }, 1150);
     };
 
+    useEffect(() => {
+        console.log("reserva encontrada");
+    }, [reserva]);
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Selección de reserva</h6>
@@ -82,17 +97,16 @@ export const FormCreateEdit = ({ id, type }) => {
                                     " " +
                                     myStyles.Inputgroup
                                 }`}
-                                options={reservas?.map((reserva) => ({
+                                options={reservasList?.map((reserva) => ({
                                     value: reserva.id,
                                     label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
                                 }))}
-                                defaultValue={
-                                    id && type === "reserva"
-                                        ? {
-                                              value: id,
-                                              label: `${reserva?.client.name} ${reserva?.client.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
-                                          }
-                                        : null
+                                value={
+                                    id &&
+                                    type === "reserva" && {
+                                        value: id,
+                                        label: `${reserva?.client.name} ${reserva?.client.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
+                                    }
                                 }
                                 onChange={(option) => setValue("reservaId", option)}
                                 placeholder="Seleccionar Reserva"
@@ -115,11 +129,21 @@ export const FormCreateEdit = ({ id, type }) => {
                                 multiple
                                 {...register("mesas")}
                             >
-                                {mesasList?.map((mesa) => (
-                                    <option key={mesa.id} value={mesa.id}>
-                                        {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
-                                    </option>
-                                ))}
+                                {mesasList?.map((mesa) => {
+                                    if (id === mesa.id && type === "mesa") {
+                                        return (
+                                            <option key={mesa.id} value={mesa.id} selected>
+                                                {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
+                                            </option>
+                                        );
+                                    } else {
+                                        return (
+                                            <option key={mesa.id} value={mesa.id}>
+                                                {`${mesa?.ubicacion_mesa} -- ${mesa?.numero_mesa}`}
+                                            </option>
+                                        );
+                                    }
+                                })}
                             </select>
                         </FormGroup>
                     </Col>

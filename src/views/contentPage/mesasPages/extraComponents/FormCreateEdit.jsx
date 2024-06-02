@@ -67,8 +67,8 @@ export const FormCreateEdit = ({ id }) => {
             numero_mesa: "",
         });
         setTimeout(() => {
-        window.location.href = "/admin/mesas";
-    }, 1250);
+            window.location.href = "/admin/mesas";
+        }, 1250);
     };
 
     return (
@@ -81,7 +81,7 @@ export const FormCreateEdit = ({ id }) => {
                             Ubicación
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                        <select
+                            <select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 style={{
                                     display: "flex",
@@ -120,7 +120,6 @@ export const FormCreateEdit = ({ id }) => {
                 <i className="ni ni-send" /> {id ? "Editar Mesa" : "Crear Mesa"}
             </Button>
             <ToastContainer position="top-right" autoClose={3000} />
-
         </form>
     );
 };
