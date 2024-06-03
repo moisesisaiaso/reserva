@@ -24,14 +24,20 @@ export const ReservaDetail = () => {
 
     const getEstadoReservaColor = () => {
         switch (reservaData?.estado_reserva) {
-            case 'Cancelado':
-                return 'danger';
-            case 'Pendiente a confirmar':
-                return 'warning';
-            case 'Confirmado':
-                return 'success';
+            case "Pendiente a confirmar":
+                return "warning";
+            case "Cancelada":
+                return "danger";
+            case "Confirmada":
+                return "default";
+            case "Lista de espera":
+                return "success";
+            case "En proceso":
+                return "primary";
+            case "Finalizada":
+                return "dark";
             default:
-                return 'secondary';
+                return "default";
         }
     };
 
@@ -45,7 +51,7 @@ export const ReservaDetail = () => {
             case 'Aprobado':
                 return 'success';
             default:
-                return 'secondary';
+                return 'dark';
         }
     };
 
@@ -64,7 +70,7 @@ export const ReservaDetail = () => {
                                 <p><strong>Email:</strong> {reservaData.client?.email || 'N/A'}</p>
                                 <p><strong>Fecha de Reserva:</strong> {reservaData.fecha_reserva || 'N/A'}</p>
                                 <p><strong>Hora de Reserva:</strong> {reservaData.hora_reserva || 'N/A'}</p>
-                                <p><strong>Estado de la Reserva:</strong> 
+                                <p><strong>Estado de la Reserva: </strong> 
                                     <Badge color={getEstadoReservaColor()} pill>
                                         {reservaData.estado_reserva || 'N/A'}
                                     </Badge>
@@ -72,7 +78,7 @@ export const ReservaDetail = () => {
                                 <p><strong>Motivo de la Reserva:</strong> {reservaData.motivo_reserva || 'N/A'}</p>
                                 <p><strong>Adultos:</strong> {reservaData.cant_adultos || 'N/A'}</p>
                                 <p><strong>Niños:</strong> {reservaData.cant_ninos || 'N/A'}</p>
-                                <p><strong>Anticipo Requerido:</strong> {reservaData.anticipo_required ? 'Sí' : 'No'}</p>
+                                <p><strong>Anticipo Requerido: </strong> {reservaData.anticipo_required ? 'Sí' : 'No'}</p>
                                 <p><strong>Usuario que registró: </strong> {reservaData.usuario?.name || 'N/A'} {reservaData.usuario?.lastname || 'N/A'}</p>
                             </CardBody>
                         </Card>

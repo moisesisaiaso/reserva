@@ -7,8 +7,8 @@ import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
@@ -173,10 +173,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
         // Convertir las horas de inicio y fin a minutos
         const inicio = 11 * 60; // 11:00 AM en minutos
-        const fin = 16 * 60; //4:00 PM en minutos
+        const fin = 17 * 60 + 30; // 5:30 PM en minutos
 
         if (totalMinutos < inicio || totalMinutos > fin) {
-            e.target.setCustomValidity("La hora debe estar entre las 11:00 y las 16:00.");
+            toast.error("La hora de reserva debe estar entre las 11:00 y las 17:30."); // Mostrar notificación de error
+            e.target.setCustomValidity("La hora de reserva debe estar entre las 11:00 y las 17:30.");
         } else {
             e.target.setCustomValidity("");
         }
@@ -194,6 +195,24 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const submit = async (data) => {
         data = removeEmptyFields(data); // Filtra los campos vacíos
         try {
+            if (!data.clienteId) {
+                // Mostrar notificación de error si no se selecciona un cliente
+                toast.error("Debe seleccionar un cliente.");
+                return; // Salir de la función sin continuar con la creación de la reserva
+            }
+
+              // Validar hora de reserva
+              const horaReserva = data.hora_reserva;
+              const [horas, minutos] = horaReserva.split(":").map((element) => Number(element));
+              const totalMinutos = horas * 60 + minutos;
+              const inicio = 11 * 60; // 11:00 AM en minutos
+              const fin = 17 * 60 + 30; // 5:30 PM en minutos
+  
+              if (totalMinutos < inicio || totalMinutos > fin) {
+                  toast.error("La hora de reserva debe estar entre las 11:00 y las 17:30.");
+                  return;
+              }
+  
             data.file = data.file[0];
             data.clienteId =
                 reservarWithClientId ||
@@ -262,7 +281,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             setTimeout(() => {
-            window.location.href = "/admin/reservas";
+            // window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
@@ -282,7 +301,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 <Row>
                 <Col lg="6">
                         <label className="form-control-label" htmlFor="input-username">Cliente</label>
-                        <FormGroup className={ myStyles.Inputgroup}>
+                        <div style={{ width: '100%', height: '3rem' }}>
                             <Select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 options={clientOptions}
@@ -290,16 +309,20 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 onChange={(selectedOption) => {
                                     console.log("Selected option:", selectedOption);
                                     setSelectedOption(selectedOption);
-                                    setValue(
-                                        "clienteId",
-                                        selectedOption ? selectedOption.value : ""
-                                    );
+                                    setValue("clienteId", selectedOption ? selectedOption.value : "");
                                 }}
                                 isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
-                                placeholder="Seleccionar cliente"
+                                placeholder="Buscar cliente"
+                                styles={{
+                                    control: (provided) => ({
+                                        ...provided,
+                                        height: '100%'
+                                    }),           
+                                }}
+
                             />
-                             {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
-                        </FormGroup>
+                        </div>
+                        {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
                     </Col>
 
                     <Col lg="6">
@@ -372,7 +395,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             )}
                         </FormGroup>
                     </Col>
-                    <Col md="12">
+                    <Col md="6">
                         <label className="form-control-label" htmlFor="input-last-name">
                             Hora de Reserva
                         </label>
@@ -386,13 +409,34 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     e.target.setCustomValidity(e.target.validationMessage)
                                 }
                                 {...register("hora_reserva")}
-                                required
+                                // required
                             />
                             {errors.hora_reserva && (
                                 <span className="text-danger">{errors.hora_reserva.message}</span>
                             )}
                         </FormGroup>
                     </Col>
+                    <Col lg="6">
+                    <label className="form-control-label" htmlFor="language">
+                        Idioma
+                    </label>
+                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <select
+                            className={`form-control-alternative ${myStyles.input}`}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                            id="language"
+                            {...register("language")}
+                            defaultValue="es" 
+                        >
+                            <option value="es">Español</option>
+                            <option value="en">Inglés</option>
+                        </select>
+                    </FormGroup>
+                </Col>
+
 
                     {parameterId && (
                         <Col lg="12">
@@ -501,6 +545,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         }}
                                         id="input-city"
                                         {...register("anticipo.moneda")}
+                                        defaultValue="PEN" 
                                         required={collapseIsOpen}
                                     >
                                         <option value="">Seleccionar ...</option>

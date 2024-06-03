@@ -47,7 +47,7 @@ axiosInstance.interceptors.response.use(
 
 // Función para iniciar sesión. Toma un correo electrónico y una contraseña, hace una solicitud POST a la ruta de inicio de sesión y almacena el token de acceso, el token de actualización y la información del usuario en el almacenamiento local si la respuesta es exitosa.
 export async function login(credentials) {
-    // console.log(credentials);
+    console.log(credentials);
 
     try {
         const response = await axiosInstance.post("/intimar/auth/signin", credentials);

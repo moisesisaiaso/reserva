@@ -23,7 +23,7 @@ const Reserva = () => {
         getReservas("/intimar/reserva");
     }, []);
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {

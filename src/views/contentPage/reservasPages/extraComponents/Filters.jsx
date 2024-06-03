@@ -183,7 +183,9 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                                 <option value="">Todos los estados</option>
                                 <option value="Pendiente a confirmar">Pendiente a confirmar</option>
                                 <option value="Confirmada">Confirmada</option>
+                                <option value="Lista de espera">Lista de espera</option>
                                 <option value="Cancelada">Cancelada</option>
+                                <option value="Cancelada">Finalizada</option>
                             </Input>
                         </FormGroup>
                     </Col>

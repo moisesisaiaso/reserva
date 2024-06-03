@@ -23,26 +23,30 @@ export const CardReserva = ({ reserva = {} }) => {
   };
 
   const getEstadoReservaColor = () => {
-    if (estado_reserva === 'Pendiente a confirmar') {
-      return 'warning';
-    } else if (estado_reserva === 'Cancelada') {
-      return 'danger';
-    } else if (estado_reserva === 'Confirmada') {
-      return 'success';
+    if (estado_reserva === "Pendiente a confirmar") {
+        return "warning";
+    } else if (estado_reserva === "Cancelada") {
+        return "danger";
+    } else if (estado_reserva === "Confirmada") {
+        return "default";
+    } else if (estado_reserva === "Lista de espera") {
+        return "warning";
+    } else if (estado_reserva === "En proceso") {
+        return "primary";
+    } else if (estado_reserva === "Finalizada") {
+        return "dark";
     } else {
-      return 'primary';
+        return "default";
     }
-  };
+};
 
   const getEstadoAnticipoColor = () => {
-    if (anticipo?.estado_anticipo === 'CANCELADO') {
+    if (anticipo?.estado_anticipo === 'Rechazado') {
       return 'danger';
-    } else if (anticipo?.estado_anticipo === 'NO PAGADO') {
+    } else if (anticipo?.estado_anticipo === 'Pendiente') {
       return 'warning';
-    } else if (anticipo?.estado_anticipo === 'EN ESPERA') {
-      return 'primary';
     } else {
-      return 'success';
+      return 'default';
     }
   };
 
@@ -61,7 +65,7 @@ export const CardReserva = ({ reserva = {} }) => {
           {client?.name} {client?.lastname}
         </h3>
       </CardHeader>
-      <CardBody className="text-center">
+      <CardBody className="text-center d-flex flex-column justify-content-between">
         <ul className={myStyles.cardList}>
           <li>
             <i className="ni ni-calendar-grid-58" /> {fecha_reserva}
@@ -72,11 +76,16 @@ export const CardReserva = ({ reserva = {} }) => {
           <li>
             <i className="fa-solid fa-user" /> Adultos: {cant_adultos}, Niños: {cant_ninos}
           </li>
-          <li style={{ display: 'flex', justifyContent: 'center' }}>
+          {/* <li style={{ display: 'flex', justifyContent: 'center' }}> */}
+          <li>
+              <i className="fa-solid fa-circle-exclamation" />
+              Reserva:
             <Badge color={getEstadoReservaColor()} pill>
               {estado_reserva}
             </Badge>
-          </li>
+            </li>
+          
+          {/* </li> */}
           {anticipo && (
             <li>
               <i className="fa-solid fa-money-check" />
@@ -86,11 +95,11 @@ export const CardReserva = ({ reserva = {} }) => {
               </Badge>
             </li>
           )}
-          {motivo_reserva && ( 
+          {/* {motivo_reserva && ( 
             <li>
               <i className="fa-solid fa-circle-exclamation" /> {motivo_reserva}
             </li>
-          )}
+          )} */}
         </ul>
         <Button
           color="warning"

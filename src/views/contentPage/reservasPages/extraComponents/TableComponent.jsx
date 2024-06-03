@@ -67,9 +67,13 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         } else if (estado_reserva === "Cancelada") {
             return "danger";
         } else if (estado_reserva === "Confirmada") {
+            return "default";
+        } else if (estado_reserva === "Lista de espera") {
             return "success";
-        } else if (estado_reserva === "Finalizada") {
+        } else if (estado_reserva === "En proceso") {
             return "primary";
+        } else if (estado_reserva === "Finalizada") {
+            return "dark";
         } else {
             return "default";
         }
