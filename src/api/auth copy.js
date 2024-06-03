@@ -3,7 +3,7 @@ import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-//COMPAÑERO
+//COMPAÑERO CODIGO
 // Agrega un interceptor para las solicitudes
 axiosInstance.interceptors.request.use((config) => {
     // Obtén el token de localStorage
