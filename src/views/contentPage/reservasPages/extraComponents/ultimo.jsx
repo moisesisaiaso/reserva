@@ -375,16 +375,13 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     <option value="Lista de espera">Lista de espera</option>
                                     <option value="En proceso">En proceso</option>
                                     <option value="Finalizada">Finalizada</option>
-
                                 </select>
                             </FormGroup>
                         </Col>
                     )}
-
-
-
                 </Row>
             </div>
+
             <hr className="my-4" />
             {/* Address */}
             <h6 className="heading-small text-muted mb-4">Información de Anticipo</h6>

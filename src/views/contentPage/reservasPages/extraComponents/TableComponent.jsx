@@ -75,7 +75,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
         }
     };
 
-    const fechaFormateada = format(new Date(fecha_reserva), "dd-MM-yyyy", { locale: es });
+    // const fechaFormateada = format(new Date(fecha_reserva), "dd-MM-yyyy", { locale: es });
 
     const totalPersonas = cant_adultos + cant_ninos;
 
@@ -108,7 +108,7 @@ Thank you for choosing us!
                 <td>
                     {client?.name} {client?.lastname}
                 </td>
-                <td>{fechaFormateada}</td>
+                <td>{fecha_reserva}</td>
                 <td>{hora_reserva}</td>
                 <td>{cant_adultos}</td>
                 <td>{cant_ninos}</td>

@@ -271,6 +271,15 @@ export const FormCreateEdit = ({ id }) => {
                                 />
                                 <label htmlFor="mesero" style={{ marginLeft: "0.5rem" }}> Mesero</label>
                             </div>
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    value="vigilante"
+                                    checked={selectedRoles.includes("vigilante")}
+                                    onChange={handleRoleChange}
+                                />
+                                <label htmlFor="vigilante" style={{ marginLeft: "0.5rem" }}> Vigilante</label>
+                            </div>
                         </FormGroup>
                         {errors.roles && <Alert color="danger">Debe seleccionar al menos un rol</Alert>}
                     </Col>

@@ -118,7 +118,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                                     setMesSeleccionado(e.target.value);
                                     searchReserva();
                                 }}
-                            >
+                                >
                                 <option value="">Todos los meses</option>
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
