@@ -25,6 +25,7 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
 
     useEffect(() => {
         if (!estado_mesa) {
+            console.log("mesa: ", mesa);
             const reservas = mesa?.reservas;
             if (reservas?.length > 0) {
                 /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */

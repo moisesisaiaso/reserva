@@ -29,11 +29,10 @@ import { CreateMesa } from "views/contentPage/mesasPages/CreateMesa";
 import Employee from "views/contentPage/empleadosPages/Employee";
 import { CreateEmployee } from "views/contentPage/empleadosPages/CreateEmployee";
 // import { EmployeeDetail } from "views/contentPage/empleadosPages/EmployeeDetail";
-import EmployeeDetail from 'views/contentPage/empleadosPages/EmployeeDetail';
+import EmployeeDetail from "views/contentPage/empleadosPages/EmployeeDetail";
 
 //? Configuracion
 import Configuracion from "views/contentPage/Configuracion";
-
 
 /* ESTE ARCHIVO SOLO ES PARA EL CONTENIDO => TODAS LAS PAGINAS */
 
@@ -42,12 +41,22 @@ let routes = [
         path: "/home",
         component: <Index />,
         layout: "/admin",
+        roles: ["administrador", "recepcionista", "anfitrion", "vigilante", "mesero"],
     },
+    //^ CALENDARIO
+    {
+        path: "/calendario",
+        component: <Calendario />,
+        layout: "/admin",
+        roles: ["administrador", "recepcionista", "anfitrion", "vigilante", "mesero"],
+    },
+
     //^CLIENTES
     {
         path: "/clients",
         component: <Client />,
         layout: "/admin",
+        roles: ["administrador", "recepcionista", "anfitrion"],
     },
     {
         path: "/clients/detail/:id",
@@ -127,17 +136,6 @@ let routes = [
         component: <Configuracion />,
         layout: "/admin",
     },
-    //^AUTH
-    {
-        path: "/user-profile",
-        component: <Profile />,
-        layout: "/admin",
-    },
-    {
-        path: "/calendario",
-        component: <Calendario />,
-        layout: "/admin",
-    },
     {
         path: "/login",
         component: <Login />,
@@ -147,6 +145,12 @@ let routes = [
         path: "/register",
         component: <Register />,
         layout: "/auth",
+    },
+    //^AUTH
+    {
+        path: "/user-profile",
+        component: <Profile />,
+        layout: "/admin",
     },
 ];
 export default routes;

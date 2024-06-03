@@ -34,7 +34,9 @@ export const FormCreateEdit = ({ id, type }) => {
         let parseId = parseInt(id);
 
         if (reservas) {
-            const disponibles = reservas.filter((reserva) => reserva.hora_salida === null);
+            const disponibles = reservas.filter(
+                (reserva) => reserva.hora_salida === null && reserva.estado_reserva !== "Cancelada"
+            );
             console.log("disponibles", disponibles);
             setReservasList(disponibles);
         }

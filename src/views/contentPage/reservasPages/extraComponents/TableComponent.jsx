@@ -28,8 +28,8 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
     const [isDisable, setIsDisable] = useState(false);
 
     useEffect(() => {
-        const disponible = hora_salida !== null || estado_reserva === "Cancelada" ? true : false;
-        setIsDisable(disponible);
+        const noDisponible = hora_salida !== null || estado_reserva === "Cancelada" ? true : false;
+        setIsDisable(noDisponible);
     }, []);
     let buttonDisable = {};
     if (isDisable) {

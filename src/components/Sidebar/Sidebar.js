@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom"; // Importación de NavLink y Link de react-router-dom
 import { PropTypes } from "prop-types"; // Importación de PropTypes para definir tipos de propiedades
 import {
@@ -29,12 +29,28 @@ import {
     Container,
     Row,
     Col,
-} from "reactstrap"; 
+} from "reactstrap";
+import { useCrud } from "hooks/useCrud";
+import axiosInstance from "api/axiosInstance";
 
 // Definición del componente Sidebar
 const Sidebar = (props) => {
+    const [employee, setEmployee] = useState();
+    const [routesList, setRoutesList] = useState();
     // Estado para controlar si el menú está colapsado o no
     const [collapseOpen, setCollapseOpen] = useState(false);
+
+    /* obtengo el empleado */
+    const empleado = async () => {
+        const resp = await axiosInstance.get("/intimar/employee/profile");
+        setEmployee(resp.data);
+
+        console.log("entra");
+    };
+    useEffect(() => {
+        empleado();
+    }, []);
+
     // Estado para controlar el estado de colapso de cada elemento del menú
     const [collapseStates, setCollapseStates] = useState(Array(props.routes.length).fill(false));
 
@@ -64,9 +80,21 @@ const Sidebar = (props) => {
     // Desestructuración de las propiedades routes y logo
     const { routes, logo } = props;
 
+    useEffect(() => {
+        if (employee) {
+            const routesByRole = routes.filter((route) => {
+                return employee.roles.some((rol) => route.roles.includes(rol));
+            });
+
+            setRoutesList(routesByRole);
+        }
+    }, [employee]);
+
+    console.log("nueva lista de rutas: ", routesList);
+    console.log("employee: ", employee);
     // Función para crear los enlaces del menú
-    const createLinks = (routes) => {
-        return routes.map((route, key) => {
+    const createLinks = (routesList) => {
+        return routesList.map((route, key) => {
             if (route.subRoutes) {
                 const isOpen = collapseStates[key];
                 return (
@@ -81,12 +109,14 @@ const Sidebar = (props) => {
                                 <span className="nav-link-text">{route.name}</span>
                                 {/* Icono de flecha para indicar el estado del colapso */}
                                 <i
-                                    className={`fas ${isOpen ? 'fa-chevron-down' : 'fa-chevron-right'}`}
-                                    style={{ fontSize: '9px', color: '#6c757d' }}
+                                    className={`fas ${
+                                        isOpen ? "fa-chevron-down" : "fa-chevron-right"
+                                    }`}
+                                    style={{ fontSize: "9px", color: "#6c757d" }}
                                 />
                             </div>
                         </a>
-                        <div className={`collapse ${isOpen ? 'show' : ''}`}>
+                        <div className={`collapse ${isOpen ? "show" : ""}`}>
                             <ul className="nav-sm flex-column nav">
                                 {route.subRoutes.map((subRoute, subKey) => (
                                     <li key={subKey} className="nav-item">
@@ -94,7 +124,9 @@ const Sidebar = (props) => {
                                             className="nav-link"
                                             href={subRoute.layout + subRoute.path}
                                         >
-                                            <span className="sidenav-mini-icon">{subRoute.miniIcon}</span>
+                                            <span className="sidenav-mini-icon">
+                                                {subRoute.miniIcon}
+                                            </span>
                                             <span className="sidenav-normal">{subRoute.name}</span>
                                         </a>
                                     </li>
@@ -140,7 +172,7 @@ const Sidebar = (props) => {
             className="navbar-vertical fixed-left navbar-light bg-white"
             expand="md"
             id="sidenav-main"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
             <Container fluid>
                 {/* Botón para alternar el colapso del menú */}
@@ -237,7 +269,7 @@ const Sidebar = (props) => {
                     </div>
 
                     {/* Navegación */}
-                    <Nav navbar>{createLinks(routes)}</Nav>
+                    {routesList && <Nav navbar>{createLinks(routesList)}</Nav>}
                     {/* Divider */}
                     {/* <hr className="my-3" /> */}
                     {/* Encabezado */}

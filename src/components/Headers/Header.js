@@ -10,7 +10,7 @@ const Header = () => {
     const [porcentajeCapacidad, setPorcentajeCapacidad] = useState();
     const [totalAsignadas, setTotalAsignadas] = useState(0);
     const [mesasDisponibles, setMesasDisponibles] = useState(0);
-    const [clientesEnMesas, setClientesEnMesas] = useState(0); // Nuevo estado
+    const [mesasOcupadas, setMesasOcupadas] = useState(0); // Nuevo estado
 
     useEffect(() => {
         getReservas("intimar/reserva");
@@ -20,7 +20,7 @@ const Header = () => {
 
     useEffect(() => {
         let aforoByReserva = 0;
-        let clientesTotal = 0; // Variable temporal para contar clientes
+        // Variable temporal para contar clientes
         if (reservas) {
             /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */
             const asignadas = reservas?.filter(
@@ -32,10 +32,7 @@ const Header = () => {
                 const ninos = parseInt(reserva.cant_ninos);
 
                 aforoByReserva += adultos + ninos;
-                clientesTotal += adultos + ninos; // Sumar clientes por reserva
             });
-
-            setClientesEnMesas(clientesTotal); // Actualizar estado con total de clientes en mesas
 
             for (let i = 0; i <= aforoByReserva; i++) {
                 setTimeout(() => {
@@ -58,8 +55,11 @@ const Header = () => {
 
     useEffect(() => {
         if (mesas) {
-            const asignadas = mesas?.filter((mesa) => mesa.estado_mesa === true);
-            setMesasDisponibles(asignadas.length);
+            const disponibles = mesas?.filter((mesa) => mesa.estado_mesa === true);
+            setMesasDisponibles(disponibles.length);
+
+            const ocupadas = mesas.length - disponibles.length;
+            setMesasOcupadas(ocupadas);
         }
     }, [mesas]);
 
@@ -154,7 +154,7 @@ const Header = () => {
                                         <p className="mt-3 mb-0 text-muted text-sm">
                                             <span className="text-danger mr-2">
                                                 <i className="fas fa-arrow-right" /> Ocupadas:{" "}
-                                                {totalAsignadas}
+                                                {mesasOcupadas}
                                             </span>{" "}
                                             <span className="text-nowrap">Mesas</span>
                                         </p>
