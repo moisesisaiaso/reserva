@@ -1,6 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
-import { FormGroup, Form, Input, Col, Row, Button, Label } from "reactstrap";
+import {
+    FormGroup,
+    Form,
+    Input,
+    Col,
+    Row,
+    Button,
+    Label,
+} from "reactstrap";
 
 export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
     const inputMes = useRef();
@@ -10,20 +18,20 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
     const [horaSeleccionada, setHoraSeleccionada] = useState("");
     const [diaEspecifico, setDiaEspecifico] = useState("");
     const [mesSeleccionado, setMesSeleccionado] = useState("");
-    const [nombreCliente, setNombreCliente] = useState("");
+    const [nombreCliente, setNombreCliente] = useState(""); 
 
-    // Función para buscar reservas según los criterios de búsqueda
+        // Función para buscar reservas según los criterios de búsqueda
     function searchReserva() {
         const mes = mesSeleccionado;
         const dia = inputDia.current?.value;
         const estadoReserva = inputEstado.current?.value;
-        const nombre = nombreCliente.toLowerCase();
-        // Verificar si reservas está definido
+        const nombre = nombreCliente.toLowerCase(); 
+  // Verificar si reservas está definido
         if (!reservas) {
             return;
         }
 
-        // Filtrar por mes, día, hora, estado de reserva, cliente
+  // Filtrar por mes, día, hora, estado de reserva, cliente
         const filteredReservas = reservas.filter((reserva) => {
             let mesMatch = true;
             let diaMatch = true;
@@ -31,7 +39,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
             let estadoMatch = true;
             let clienteMatch = true;
 
-            // Verificar si el mes coincide
+             // Verificar si el mes coincide
             if (mes !== "") {
                 mesMatch = reserva.fecha_reserva.includes(`-${mes}-`);
             }
@@ -54,9 +62,8 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                 estadoMatch = reserva.estado_reserva === estadoReserva;
             }
 
-            if (nombre !== "") {
-                const clienteNombreCompleto =
-                    `${reserva.client?.name} ${reserva.client?.lastname}`.toLowerCase();
+            if (nombre !== "") { 
+                const clienteNombreCompleto = `${reserva.client?.name} ${reserva.client?.lastname}`.toLowerCase();
                 clienteMatch = clienteNombreCompleto.includes(nombre);
             }
 
@@ -64,13 +71,11 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
         });
 
         setListaFiltrada(filteredReservas);
-        setIsFilter(true);
     }
 
     // Función para reiniciar la tabla y mostrar todas las reservas
     function resetTable() {
         setListaFiltrada(reservas);
-        setIsFilter(false);
         inputMes.current.value = "";
         inputDia.current.value = "";
         inputEstado.current.value = "";
@@ -81,44 +86,37 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
         setNombreCliente("");
     }
 
-    // UseEffect para invocar la función de búsqueda al cambiar las opciones de búsqueda
-    /* 
+        // UseEffect para invocar la función de búsqueda al cambiar las opciones de búsqueda
+
     useEffect(() => {
         searchReserva();
-    }, [mesSeleccionado, diaEspecifico, horaSeleccionada, nombreCliente]);
- */
+    }, [mesSeleccionado, diaEspecifico, horaSeleccionada, nombreCliente]); 
+
     return (
         <div className={myStyles.inputFilters}>
             <Form>
-                <label for="buscar">Buscar por: </label>
                 <Row>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            {/* <Label for="nombre_cliente"> Nombre del Cliente</Label> */}
+                            <Label for="nombre_cliente">Buscar por Nombre del Cliente</Label> 
                             <Input
                                 type="text"
                                 id="nombre_cliente"
                                 placeholder="Nombre del cliente"
-                                onChange={(e) => {
-                                    setNombreCliente(e.target.value);
-                                    searchReserva();
-                                }}
+                                onChange={(e) => setNombreCliente(e.target.value)}
                                 innerRef={inputCliente}
                             />
                         </FormGroup>
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            {/* <Label for="mes_reserva"> Mes</Label> */}
+                            <Label for="mes_reserva">Buscar por Mes</Label>
                             <Input
                                 type="select"
                                 id="mes_reserva"
                                 innerRef={inputMes}
-                                onChange={(e) => {
-                                    setMesSeleccionado(e.target.value);
-                                    searchReserva();
-                                }}
-                                >
+                                onChange={(e) => setMesSeleccionado(e.target.value)}
+                            >
                                 <option value="">Todos los meses</option>
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -137,29 +135,23 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            {/* <Label for="dia_reserva"> Día</Label> */}
+                            <Label for="dia_reserva">Buscar por Día</Label>
                             <Input
                                 type="text"
                                 id="dia_reserva"
                                 placeholder="Día específico"
                                 innerRef={inputDia}
-                                onChange={(e) => {
-                                    setDiaEspecifico(e.target.value);
-                                    searchReserva();
-                                }}
+                                onChange={(e) => setDiaEspecifico(e.target.value)}
                             />
                         </FormGroup>
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            {/* <Label for="hora_reserva"> Hora</Label> */}
+                            <Label for="hora_reserva">Buscar por Hora</Label>
                             <Input
                                 type="select"
                                 id="hora_reserva"
-                                onChange={(e) => {
-                                    setHoraSeleccionada(e.target.value);
-                                    searchReserva();
-                                }}
+                                onChange={(e) => setHoraSeleccionada(e.target.value)}
                             >
                                 <option value="">Todas las horas</option>
                                 <option value="11:00">11:00 am</option>
@@ -173,7 +165,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            {/* <Label for="estado_reserva"> Estado de Reserva</Label> */}
+                            <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
                             <Input
                                 type="select"
                                 id="estado_reserva"
@@ -183,9 +175,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                                 <option value="">Todos los estados</option>
                                 <option value="Pendiente a confirmar">Pendiente a confirmar</option>
                                 <option value="Confirmada">Confirmada</option>
-                                <option value="Lista de espera">Lista de espera</option>
                                 <option value="Cancelada">Cancelada</option>
-                                <option value="Cancelada">Finalizada</option>
                             </Input>
                         </FormGroup>
                     </Col>
