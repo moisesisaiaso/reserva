@@ -148,9 +148,19 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         const numberNinos = parseInt(ninosString?.current?.value) || 0;
         setAdultos(numberAdultos);
         setNinos(numberNinos);
-        const totalPeoble = numberAdultos + numberNinos;
-        setCollapseIsOpen(totalPeoble >= 8);
+        const totalPeople = numberAdultos + numberNinos;
+        setCollapseIsOpen(totalPeople >= 8);
+    
+        // Calcular el monto del anticipo
+        let montoAnticipo = 0;
+        if (totalPeople >= 8) {
+            montoAnticipo = totalPeople * 20;
+        }
+    
+        // Actualizar el valor del campo del monto de anticipo en el formulario
+        setValue("anticipo.monto_anticipo", montoAnticipo);
     };
+    
 
     /* datos de lo que viene en el campo file */
     const handleFileChange = (e) => {
@@ -444,24 +454,26 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 Estado de reserva
                             </label>
                             <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                                <select
-                                    className={`form-control-alternative ${myStyles.input}`}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                    }}
-                                    id="input-city"
-                                    {...register("estado_reserva")}
-                                >
-                                    <option value="">Seleccionar estado</option>
-                                    <option value="Pendiente">Pendiente a confirmar</option>
-                                    <option value="Confirmada">Confirmada</option>
-                                    <option value="Cancelada">Cancelada</option>
-                                    <option value="Lista de espera">Lista de espera</option>
-                                    <option value="En proceso">En proceso</option>
-                                    <option value="Finalizada">Finalizada</option>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                id="input-city"
+                                {...register("estado_reserva")}
+                                // value={"Pendiente"} 
+                                // defaultValue="Pendiente" // Cambiado de value a defaultValue
 
-                                </select>
+                            >
+                                <option value="">Seleccionar estado</option>
+                                <option value="Pendiente">Pendiente a confirmar</option>
+                                <option value="Confirmada">Confirmada</option>
+                                <option value="Cancelada">Cancelada</option>
+                                <option value="Lista de espera">Lista de espera</option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Finalizada">Finalizada</option>
+                            </select>
                             </FormGroup>
                         </Col>
                     )}
