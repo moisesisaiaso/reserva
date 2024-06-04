@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
+import { useNavigate } from "react-router-dom";
 
 import {
     FormGroup,
@@ -17,7 +18,7 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const inputUbicacion = useRef();
     const inputMesa = useRef();
     const inputEstado = useRef();
-
+    const navigate = useNavigate();
     // Función para buscar por nombre, mesa o teléfono
     const handleSearch = (type) => {
         let query = "";
@@ -51,7 +52,6 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
         setIsFilter(true);
     };
 
-    
     function resetTable() {
         setListaFiltrada(mesas);
         inputUbicacion.current.value = "";
@@ -59,69 +59,130 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
         inputEstado.current.value = "";
     }
 
+    const handleBtnCreate = () => {
+        navigate("/admin/mesas/create/");
+    };
+
     return (
+        <div >
         <div className={myStyles.inputFilters}>
-            <Row>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup
-                            className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+            <Form>
+            {/* <Button
+                type="button"
+                size="lg"
+                className={myStyles.btCreate}
+                onClick={handleBtnCreate}
+            >
+                <i className="ni ni-fat-add fa-2x" />
+                <span>Agregar Mesa</span>
+            </Button> */}
+                <Row>
+                    <Col className={myStyles.inputContainer}>
+                        <FormGroup>
+                            <InputGroup
+                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+                            >
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    placeholder="Buscar por ubicación"
+                                    type="text"
+                                    ref={inputUbicacion}
+                                    onChange={() => handleSearch("ubicacion")}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleSearch("ubicacion");
+                                        }
+                                    }}
+                                />
+                                <InputGroupAddon addonType="prepend">
+                                    <button type="button">
+                                        <i className="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </FormGroup>
+                    </Col>
+                    <Col xs={12} className="d-flex justify-content-start mb-2">
+                        <Button 
+                        color="info" 
+                        onClick={handleBtnCreate}
                         >
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                placeholder="Buscar por ubicación"
-                                type="text"
-                                ref={inputUbicacion}
-                                onChange={() => handleSearch("ubicacion")}
-                            />
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup
-                            className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
-                        >
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                placeholder="Buscar por mesa"
-                                type="text"
-                                ref={inputMesa}
-                                onChange={() => handleSearch("mesa")}
-                            />
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                        <select
-                            className={`form-control-alternative ${myStyles.input}`}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                width: "11.5rem",
-                            }}
-                            type="select"
-                            ref={inputEstado}
-                            onChange={handleSearch}
-                        >
-                            <option value="Disponible">Disponible</option>
-                            <option value="No disponible">No disponible</option>
-                        </select>
-                    </FormGroup>
-                </Col>
+                            Agregar Mesa
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
+            <Form>
+                <Row>
+                    <Col className={myStyles.inputContainer}>
+                        <FormGroup>
+                            <InputGroup
+                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+                            >
+                                <input
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    placeholder="Buscar por mesa"
+                                    type="text"
+                                    ref={inputMesa}
+                                    onChange={() => handleSearch("mesa")}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleSearch("mesa");
+                                        }
+                                    }}
+                                />
+                                <InputGroupAddon addonType="prepend">
+                                    <button type="button">
+                                        <i className="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </FormGroup>
+                    </Col>
+                </Row>
+            </Form>
+            <Form>
+                <Row>
+                    <Col className={myStyles.inputContainer}>
+                        <FormGroup>
+                            <InputGroup
+                                className={`input-group-alternative mb-4 ${myStyles.inputSearch}`}
+                            >
+                                <select
+                                    className={`form-select form-select-sm ${myStyles.selectInput} ${myStyles.inputFilters}`}
+                                    ref={inputEstado}
+                                    onChange={() => handleSearch("estado")}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleSearch("estado");
+                                        }
+                                    }}
+                                >
+                                    <option value="" disabled selected hidden>Seleccione un estado</option>
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="No disponible">No disponible</option>
+                                </select>
+                                <InputGroupAddon addonType="prepend">
+                                    <button type="button"  style={{ marginRight: "20px" }}>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </FormGroup>
+                    </Col>
                     <Col xs={12} className="d-flex justify-content-end">
                         <Button color="secondary" onClick={resetTable} className="mb-2">
                             Reiniciar
                         </Button>
                     </Col>
                 </Row>
+            </Form>
+            
         </div>
+        </div>
+    
     );
 };

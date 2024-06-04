@@ -32,7 +32,7 @@ const Mesa = () => {
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
-    let itemsPerPage = 5;
+    let itemsPerPage = 10;
     /* obtengo la cantidad de paginas según la lista */
 
     useEffect(() => {
@@ -173,8 +173,8 @@ const Mesa = () => {
                                                 )}
                                             </tbody>
                                         </Table>
-                                    ) : (
-                                        mesaList?.map((mesa) => (
+                                    ) : mesaList?.length > 0 ? (
+                                        mesaList.map((mesa) => (
                                             <CardMesa
                                                 key={mesa.id}
                                                 mesa={mesa}
@@ -185,9 +185,10 @@ const Mesa = () => {
                                                 finalizarReserva={finalizarReserva}
                                             />
                                         ))
+                                    ) : (
+                                        <p>No hay mesas para mostrar</p>
                                     )}
                                 </section>
-
                                 {/* Paginación */}
                                 <section>
                                     <PaginationComponent

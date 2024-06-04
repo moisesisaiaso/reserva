@@ -90,6 +90,12 @@ const Sidebar = (props) => {
         }
     }, [employee]);
 
+    const handleLogout = () => {
+        // Elimina todos los datos del localStorage
+        localStorage.clear();
+        window.location.href = "/login";
+    };
+
     console.log("nueva lista de rutas: ", routesList);
     console.log("employee: ", employee);
     // Función para crear los enlaces del menú
@@ -230,10 +236,10 @@ const Sidebar = (props) => {
                                 <span>Calendario</span>
                             </DropdownItem>
                             <DropdownItem divider />
-                            <DropdownItem href="/login" onClick={(e) => e.preventDefault()}>
-                                <i className="ni ni-user-run" />
-                                <span>Cerrar sesión</span>
-                            </DropdownItem>
+                            <DropdownItem href="#pablo" onClick={handleLogout}>
+                                    <i className="ni ni-user-run" />
+                                    <span>Cerrar sesión</span>
+                                </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 </Nav>

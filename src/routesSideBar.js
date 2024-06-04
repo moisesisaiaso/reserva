@@ -53,13 +53,13 @@ export let routesSideBar = [
         layout: "/admin",
         roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA", "ROL_ANFITRION"],
     },
-    {
-        path: "/asignar-mesa",
-        name: "Mesas asignadas",
-        icon: "ni ni-support-16 text-info",
-        layout: "/admin",
-        roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA", "ROL_ANFITRION", "ROL_MESERO"],
-    },
+    // {
+    //     path: "/asignar-mesa",
+    //     name: "Mesas asignadas",
+    //     icon: "ni ni-support-16 text-info",
+    //     layout: "/admin",
+    //     roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA", "ROL_ANFITRION", "ROL_MESERO"],
+    // },
     {
         path: "/mesas",
         name: "Mesas",

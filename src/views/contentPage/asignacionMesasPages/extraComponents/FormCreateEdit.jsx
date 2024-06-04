@@ -88,17 +88,12 @@ export const FormCreateEdit = ({ id, type }) => {
                 <Row>
                     <Col md="12">
                         <label className="form-control-label" htmlFor="input-reserva">
-                            Seleccionar Reserva
+                            Buscar Reserva
                         </label>
-                        <FormGroup>
+                        <div style={{ width: '100%', height: '4rem' }}>
                             <Select
-                                className={`form-control-alternative ${
-                                    myStyles.input +
-                                    " " +
-                                    myStyles.inputSearch +
-                                    " " +
-                                    myStyles.Inputgroup
-                                }`}
+                                className={`form-control-alternative ${myStyles.input}`}
+
                                 options={reservasList?.map((reserva) => ({
                                     value: reserva.id,
                                     label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
@@ -113,7 +108,7 @@ export const FormCreateEdit = ({ id, type }) => {
                                 onChange={(option) => setValue("reservaId", option)}
                                 placeholder="Seleccionar Reserva"
                             />
-                        </FormGroup>
+                        </div>
                     </Col>
                 </Row>
             </div>

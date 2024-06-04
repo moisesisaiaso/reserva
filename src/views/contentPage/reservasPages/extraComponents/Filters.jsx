@@ -102,7 +102,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                             <Input
                                 type="text"
                                 id="nombre_cliente"
-                                placeholder="Nombre del cliente"
+                                placeholder="Buscar por nombre del cliente"
                                 onChange={(e) => setNombreCliente(e.target.value)}
                                 innerRef={inputCliente}
                             />
@@ -116,6 +116,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                                 id="mes_reserva"
                                 innerRef={inputMes}
                                 onChange={(e) => setMesSeleccionado(e.target.value)}
+                                placeholder="Buscar por mes"
                             >
                                 <option value="">Todos los meses</option>
                                 <option value="01">Enero</option>
@@ -139,7 +140,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                             <Input
                                 type="text"
                                 id="dia_reserva"
-                                placeholder="Día específico"
+                                placeholder="Buscar por día específico"
                                 innerRef={inputDia}
                                 onChange={(e) => setDiaEspecifico(e.target.value)}
                             />
@@ -151,6 +152,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                             <Input
                                 type="select"
                                 id="hora_reserva"
+                                placeholder="Buscar por hora"
                                 onChange={(e) => setHoraSeleccionada(e.target.value)}
                             >
                                 <option value="">Todas las horas</option>
@@ -169,6 +171,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                             <Input
                                 type="select"
                                 id="estado_reserva"
+                                placeholder="Buscar por día estado de reserva"
                                 innerRef={inputEstado}
                                 onChange={searchReserva}
                             >

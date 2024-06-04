@@ -113,7 +113,7 @@ export const CardMesa = ({
                             className={myStyles.cardButtonMesa}
                             onClick={handleLiberar}
                         >
-                            <i className="ni ni-lock-circle-open" /> liberar mesa
+                            <i className="ni ni-lock-circle-open" /> Liberar mesa
                         </Button>
                     )}
                 </CardBody>
