@@ -110,42 +110,43 @@ const Reserva = () => {
                                 </section>
 
                                 <section className={myStyles.tableSpacing}>
-                                    {reservaList && reservaList.length === 0 ? (
-                                        <p>No hay reservas que mostrar</p>
-                                    ) : isTable ? (
-                                        <Table striped responsive>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Nombre del Cliente</th>
-                                                    <th>Fecha de reserva</th>
-                                                    <th>Hora de reserva</th>
-                                                    <th>N° adultos</th>
-                                                    <th>N° niños</th>
-                                                    <th>Estado de reserva</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {reservaList?.map((reserva, i) => (
-                                                    <TableComponent
-                                                        key={reserva.id}
-                                                        reserva={reserva}
-                                                        lengthId={i}
-                                                        deleteReserva={deleteReserva}
-                                                        currentPage={currentPage}
-                                                        itemsPerPage={itemsPerPage}
-                                                    />
-                                                ))}
-                                            </tbody>
-                                        </Table>
+                                    {reservaList && reservaList.length > 0 ? (
+                                        isTable ? (
+                                            <Table striped responsive>
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Nombre del Cliente</th>
+                                                        <th>Fecha de reserva</th>
+                                                        <th>Hora de reserva</th>
+                                                        <th>N° adultos</th>
+                                                        <th>N° niños</th>
+                                                        <th>Estado de reserva</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {reservaList?.map((reserva, i) => (
+                                                        <TableComponent
+                                                            key={reserva.id}
+                                                            reserva={reserva}
+                                                            lengthId={i}
+                                                            deleteReserva={deleteReserva}
+                                                            currentPage={currentPage}
+                                                            itemsPerPage={itemsPerPage}
+                                                        />
+                                                    ))}
+                                                </tbody>
+                                            </Table>
+                                        ) : (
+                                            reservaList?.map((reserva) => (
+                                                <CardReserva key={reserva.id} reserva={reserva} />
+                                            ))
+                                        )
                                     ) : (
-                                        reservaList?.map((reserva) => (
-                                            <CardReserva key={reserva.id} reserva={reserva} />
-                                        ))
+                                        <p>No hay reservas que mostrar</p>
                                     )}
                                 </section>
-
                                 <section>
                                     <PaginationComponent
                                         currentPage={currentPage}

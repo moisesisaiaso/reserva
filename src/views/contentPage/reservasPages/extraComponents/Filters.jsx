@@ -98,7 +98,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                 <Row>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="nombre_cliente">Buscar por Nombre del Cliente</Label> 
+                            {/* <Label for="nombre_cliente">Buscar por Nombre del Cliente</Label>  */}
                             <Input
                                 type="text"
                                 id="nombre_cliente"
@@ -110,7 +110,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="mes_reserva">Buscar por Mes</Label>
+                            {/* <Label for="mes_reserva">Buscar por Mes</Label> */}
                             <Input
                                 type="select"
                                 id="mes_reserva"
@@ -135,7 +135,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="dia_reserva">Buscar por Día</Label>
+                            {/* <Label for="dia_reserva">Buscar por Día</Label> */}
                             <Input
                                 type="text"
                                 id="dia_reserva"
@@ -147,7 +147,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={2}>
                         <FormGroup>
-                            <Label for="hora_reserva">Buscar por Hora</Label>
+                            {/* <Label for="hora_reserva">Buscar por Hora</Label> */}
                             <Input
                                 type="select"
                                 id="hora_reserva"
@@ -165,7 +165,7 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                     <Col xs={12} sm={6} md={3}>
                         <FormGroup>
-                            <Label for="estado_reserva">Buscar por Estado de Reserva</Label>
+                            {/* <Label for="estado_reserva">Buscar por Estado de Reserva</Label> */}
                             <Input
                                 type="select"
                                 id="estado_reserva"
@@ -176,6 +176,10 @@ export const Filters = ({ reservas, setListaFiltrada, setIsFilter }) => {
                                 <option value="Pendiente a confirmar">Pendiente a confirmar</option>
                                 <option value="Confirmada">Confirmada</option>
                                 <option value="Cancelada">Cancelada</option>
+                                <option value="Lista de espera">Lista de espera</option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Finalizada">Finalizada</option>
+
                             </Input>
                         </FormGroup>
                     </Col>
