@@ -24,20 +24,15 @@ export const OptionBtn = ({ setIsTable }) => {
         }
     };
 
-    const handleBtnCreate = () => {
-        navigate("/admin/mesas/create/");
+    const handleBtnCreateAsignar = () => {
+        navigate("/admin/asignar-mesa/create");
     };
 
     return (
         <>
-            <Button
-                type="button"
-                size="lg"
-                className={myStyles.btCreate}
-                onClick={handleBtnCreate}
-            >
+            <Button type="button" size="lg" className={myStyles.btCreate} onClick={handleBtnCreateAsignar}>
                 <i className="ni ni-fat-add fa-2x" />
-                <span>Agregar Mesa</span>
+                <span>Asignar Mesa</span>
             </Button>
             <div>
                 <Button
@@ -49,7 +44,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     onClick={() => handleActive("tarjeta")}
                     className={activeTarjeta}
                 >
-                    Tarjetas
+                    Mesas
                 </Button>
                 <Button
                     color="info"
@@ -60,7 +55,7 @@ export const OptionBtn = ({ setIsTable }) => {
                     onClick={() => handleActive("tabla")}
                     className={activeTabla}
                 >
-                    Tabla
+                    Gestion de mesas
                 </Button>
             </div>
         </>

@@ -32,7 +32,7 @@ const Mesa = () => {
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
-    let itemsPerPage = 5;
+    let itemsPerPage = 10;
     /* obtengo la cantidad de paginas según la lista */
 
     useEffect(() => {

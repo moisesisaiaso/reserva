@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
+import { useNavigate } from "react-router-dom";
 
 import {
     FormGroup,
@@ -17,7 +18,7 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const inputUbicacion = useRef();
     const inputMesa = useRef();
     const inputEstado = useRef();
-
+    const navigate = useNavigate();
     // Función para buscar por nombre, mesa o teléfono
     const handleSearch = (type) => {
         let query = "";
@@ -58,9 +59,23 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
         inputEstado.current.value = "";
     }
 
+    const handleBtnCreate = () => {
+        navigate("/admin/mesas/create/");
+    };
+
     return (
+        <div >
         <div className={myStyles.inputFilters}>
             <Form>
+            {/* <Button
+                type="button"
+                size="lg"
+                className={myStyles.btCreate}
+                onClick={handleBtnCreate}
+            >
+                <i className="ni ni-fat-add fa-2x" />
+                <span>Agregar Mesa</span>
+            </Button> */}
                 <Row>
                     <Col className={myStyles.inputContainer}>
                         <FormGroup>
@@ -87,6 +102,14 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
                                 </InputGroupAddon>
                             </InputGroup>
                         </FormGroup>
+                    </Col>
+                    <Col xs={12} className="d-flex justify-content-start mb-2">
+                        <Button 
+                        color="info" 
+                        onClick={handleBtnCreate}
+                        >
+                            Agregar Mesa
+                        </Button>
                     </Col>
                 </Row>
             </Form>
@@ -157,6 +180,9 @@ export const FilterSearch = ({ mesas, setListaFiltrada, setIsFilter }) => {
                     </Col>
                 </Row>
             </Form>
+            
         </div>
+        </div>
+    
     );
 };

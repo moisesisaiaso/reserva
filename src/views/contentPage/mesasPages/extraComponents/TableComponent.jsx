@@ -44,6 +44,11 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
         toggleModal();
     };
 
+    // const handleDetail = () => {
+    //     navigate("/admin/reservas/detail", { state: id });
+    // };
+
+
     /* items mesas */
     const pageActual = currentPage - 1;
     const groupPage = pageActual * itemsPerPage;
@@ -61,6 +66,9 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
                     </a>
 
                     <div>
+                    {/* <a onClick={handleDetail} className={myStyles.btnDetail}>
+                            <i class="fa-regular fa-eye fa-2x"></i>
+                        </a> */}
                         <a onClick={handleEdit} className={myStyles.btnEdit}>
                             <i class="fa-regular fa-pen-to-square fa-2x"></i>
                         </a>
