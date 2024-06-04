@@ -15,22 +15,36 @@ import { FilterSearch } from "./extraComponents/FilterSearch";
 
 const Mesa = () => {
     const [isTable, setIsTable] = useState(true);
-    const [mesas, getMesas, , deleteMesa, updateMesa] = useCrud();
+    const [mesas, getMesas, , deleteMesa] = useCrud();
     const [mesaList, setMesaList] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [updated, setUpdated] = useState(false);
     const [pages, setPages] = useState();
     const [listaFiltrada, setListaFiltrada] = useState();
     const [isFilter, setIsFilter] = useState(false);
+    const [reservasAsignadas, setReservasAsignadas] = useState();
+    const [reservas, getReservas, , , , , finalizarReserva] = useCrud();
 
     useEffect(() => {
         getMesas("/intimar/mesa");
+        getReservas("/intimar/reserva");
     }, [updated]);
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
     let itemsPerPage = 5;
     /* obtengo la cantidad de paginas según la lista */
+
+    useEffect(() => {
+        if (reservas) {
+            /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  o si estado_reserva es diferente de cancelado*/
+            const asignadas = reservas?.filter(
+                (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
+            );
+            setReservasAsignadas(asignadas);
+        }
+    }, [reservas, updated]);
+
     useEffect(() => {
         if (!isFilter) {
             setPages(
@@ -160,20 +174,19 @@ const Mesa = () => {
                                             </tbody>
                                         </Table>
                                     ) : (
-                                        // Si no estás mostrando la tabla, mostrar las tarjetas
-                                        mesaList?.length > 0 ? (
-                                            mesaList.map((mesa) => (
-                                                <CardMesa
-                                                    key={mesa.id}
-                                                    mesa={mesa}
-                                                    updateMesa={updateMesa}
-                                                    updated={updated}
-                                                    setUpdated={setUpdated}
-                                                />
-                                            ))
-                                        ) : (
-                                            <p className="text-center">No hay mesas para mostrar</p>
-                                        )
+
+                                        mesaList?.map((mesa) => (
+                                            <CardMesa
+                                                key={mesa.id}
+                                                mesa={mesa}
+                                                reservasAsignadas={reservasAsignadas}
+                                                updated={updated}
+                                                setUpdated={setUpdated}
+                                                setIsFilter={setIsFilter}
+                                                finalizarReserva={finalizarReserva}
+                                            />
+                                        ))
+
                                     )}
                                 </section>
 

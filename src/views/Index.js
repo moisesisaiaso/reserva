@@ -2,7 +2,7 @@ import myStyles from "../assets/css/myStyles.module.css";
 import Header from "components/Headers/Header.js";
 
 import { useEffect, useState } from "react";
-import { CardMesa } from "./contentPage/asignacionMesasPages/extraComponents/CardMesa";
+
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
 import { FilterSearch } from "./contentPage/asignacionMesasPages/extraComponents/FilterSearch";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
@@ -15,6 +15,8 @@ import Chart from "chart.js";
 import AsignacionMesa from "views/contentPage/asignacionMesasPages/AsignacionMesa";
 
 import { Button, Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
+import { Filters } from "./contentPage/mesasPages/extraComponents/Filters";
+import { CardMesa } from "./contentPage/mesasPages/extraComponents/CardMesa";
 
 const Index = (props) => {
     const [activeNav, setActiveNav] = useState(1);
@@ -27,14 +29,27 @@ const Index = (props) => {
     const [pages, setPages] = useState();
     const [listaFiltrada, setListaFiltrada] = useState();
     const [isFilter, setIsFilter] = useState(false);
+    const [reservasAsignadas, setReservasAsignadas] = useState();
+    const [reservas, getReservas, , , , , finalizarReserva] = useCrud();
 
     useEffect(() => {
         getMesas("/intimar/mesa");
+        getReservas("/intimar/reserva");
     }, [updated]);
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
     let itemsPerPage = 5;
+    useEffect(() => {
+        if (reservas) {
+            /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  o si estado_reserva es diferente de cancelado*/
+            const asignadas = reservas?.filter(
+                (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
+            );
+            setReservasAsignadas(asignadas);
+        }
+    }, [reservas, updated]);
+
     /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
         if (!isFilter) {
@@ -87,18 +102,7 @@ const Index = (props) => {
                             <CardHeader className="bg-transparent">
                                 <Row className="align-items-center">
                                     <Col>
-                                        <h2 className="ms-3">Mesas asignacion</h2>
-                                    </Col>
-                                    <Col className="d-flex justify-content-end">
-                                        <Button
-                                            type="button"
-                                            size="lg"
-                                            className={myStyles.btCreate}
-                                            onClick={handleBtnCreate}
-                                        >
-                                            <i className="ni ni-fat-add fa-2x" />
-                                            <span>Asignar Mesa</span>
-                                        </Button>
+                                        <h2 className="ms-3">Mesas</h2>
                                     </Col>
                                 </Row>
                             </CardHeader>
@@ -111,7 +115,7 @@ const Index = (props) => {
                                         marginBottom: "1rem",
                                     }}
                                 >
-                                    <FilterSearch
+                                    <Filters
                                         mesas={mesas}
                                         setListaFiltrada={setListaFiltrada}
                                         setIsFilter={setIsFilter}
@@ -124,9 +128,11 @@ const Index = (props) => {
                                             <CardMesa
                                                 key={mesa.id}
                                                 mesa={mesa}
-                                                updateMesa={updateMesa}
+                                                reservasAsignadas={reservasAsignadas}
                                                 updated={updated}
                                                 setUpdated={setUpdated}
+                                                setIsFilter={setIsFilter}
+                                                finalizarReserva={finalizarReserva}
                                             />
                                         ))
                                     ) : (
