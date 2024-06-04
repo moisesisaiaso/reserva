@@ -174,7 +174,6 @@ const Mesa = () => {
                                             </tbody>
                                         </Table>
                                     ) : (
-
                                         mesaList?.map((mesa) => (
                                             <CardMesa
                                                 key={mesa.id}
@@ -186,7 +185,6 @@ const Mesa = () => {
                                                 finalizarReserva={finalizarReserva}
                                             />
                                         ))
-
                                     )}
                                 </section>
 

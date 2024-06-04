@@ -38,7 +38,7 @@ export const CardMesa = ({
             setReserva(reserva);
             console.log("reserva: ", reserva);
         }
-    }, []);
+    }, [updated]);
 
     const handleLiberar = async () => {
         await finalizarReserva(`intimar/reserva/${reserva?.id}/end`);
