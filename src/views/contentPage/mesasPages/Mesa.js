@@ -174,22 +174,24 @@ const Mesa = () => {
                                             </tbody>
                                         </Table>
                                     ) : (
+                                        mesaList?.length > 0 ? (
+                                            mesaList.map((mesa) => (
+                                                <CardMesa
+                                                    key={mesa.id}
+                                                    mesa={mesa}
+                                                    reservasAsignadas={reservasAsignadas}
+                                                    updated={updated}
+                                                    setUpdated={setUpdated}
+                                                    setIsFilter={setIsFilter}
+                                                    finalizarReserva={finalizarReserva}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p>No hay mesas para mostrar</p>
 
-                                        mesaList?.map((mesa) => (
-                                            <CardMesa
-                                                key={mesa.id}
-                                                mesa={mesa}
-                                                reservasAsignadas={reservasAsignadas}
-                                                updated={updated}
-                                                setUpdated={setUpdated}
-                                                setIsFilter={setIsFilter}
-                                                finalizarReserva={finalizarReserva}
-                                            />
-                                        ))
-
+                                        )
                                     )}
                                 </section>
-
                                 {/* Paginación */}
                                 <section>
                                     <PaginationComponent
