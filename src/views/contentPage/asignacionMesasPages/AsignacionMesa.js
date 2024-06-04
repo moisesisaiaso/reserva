@@ -6,12 +6,13 @@ import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table 
 import { useCrud } from "hooks/useCrud";
 
 import { PaginationComponent } from "views/generalComponents/PaginationComponent";
-import { CardMesa } from "./extraComponents/CardMesa";
-// import { Filters } from "./extraComponents/Filters";
+
 import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 import { OptionBtn } from "./extraComponents/OptionBtn";
-import { FilterSearch } from "./extraComponents/FilterSearch";
+// import { FilterSearch } from "./extraComponents/FilterSearch";
+import { Filters } from "../mesasPages/extraComponents/Filters";
+import { CardMesa } from "../mesasPages/extraComponents/CardMesa";
 
 const AsignacionMesa = () => {
     const [isTable, setIsTable] = useState(true);
@@ -142,7 +143,7 @@ const AsignacionMesa = () => {
                                 {/* filtros */}
                                 <section>
                                     {!isTable && (
-                                        <FilterSearch
+                                        <Filters
                                             mesas={mesas}
                                             setListaFiltrada={setListaFiltrada}
                                             setIsFilter={setIsFilter}
@@ -209,9 +210,11 @@ const AsignacionMesa = () => {
                                             <CardMesa
                                                 key={mesa.id}
                                                 mesa={mesa}
+                                                reservasAsignadas={reservasAsignadas}
                                                 updateMesa={updateMesa}
                                                 setUpdated={setUpdated}
                                                 updated={updated}
+                                                finalizarReserva={finalizarReserva}
                                             />
                                         ))
                                     )}

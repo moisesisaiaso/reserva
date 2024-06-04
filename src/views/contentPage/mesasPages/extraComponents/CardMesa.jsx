@@ -4,10 +4,17 @@ import { Button, Card, CardBody, CardHeader, CardText, CardTitle } from "reactst
 import { useNavigate } from "react-router-dom";
 import { useCrud } from "hooks/useCrud";
 
-export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
+export const CardMesa = ({
+    mesa,
+    reservasAsignadas,
+    updated,
+    setUpdated,
+    setIsFilter,
+    finalizarReserva,
+}) => {
     const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
     const [estado, setEstado] = useState(estado_mesa ? "Disponible" : "No disponible");
-    const [reservaId, setReservaId] = useState();
+    const [reserva, setReserva] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,22 +31,19 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
     };
 
     useEffect(() => {
-        if (!estado_mesa) {
-            console.log("mesa: ", mesa);
-            const reservas = mesa?.reservas;
-            if (reservas?.length > 0) {
-                /* obtener solo las reservas donde su propiedad hora_llegada sea diferente de null y hora_salida sea igual a null  */
-                const reserva = reservas?.find(
-                    (reserva) => reserva.hora_llegada !== null && reserva.hora_salida === null
-                );
-                setReservaId(reserva.id);
-            }
+        if (estado !== "Disponible") {
+            const reserva = reservasAsignadas?.find((reserva) =>
+                reserva.mesas.some((mesa) => mesa.id === id)
+            );
+            setReserva(reserva);
+            console.log("reserva: ", reserva);
         }
     }, []);
 
-    const handleMesaDetalle = async () => {
-        /* vamos al detalle de la mesa no disponible */
-        navigate("/admin/reservas/detail", { state: reservaId });
+    const handleLiberar = async () => {
+        await finalizarReserva(`intimar/reserva/${reserva?.id}/end`);
+        setUpdated(!updated);
+        setIsFilter(true);
     };
 
     return (
@@ -53,18 +57,48 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
             >
                 <CardHeader className={myStyles.cardTitle + " " + myStyles.mesaTitle}>
                     <h4>Mesa #{numero_mesa}</h4>
+                    <p style={{ display: "flex", alignItems: "center", columnGap: "0.5rem" }}>
+                        <i className="ni ni-pin-3" /> {ubicacion_mesa}
+                    </p>
                 </CardHeader>
                 <CardBody>
-                    <CardText>
-                        <ul className={myStyles.cardList}>
-                            <li>
-                                <i className="ni ni-pin-3" /> {ubicacion_mesa}
-                            </li>
-                            <li>
-                                <i class="ni ni-bulb-61"></i> {estado}
-                            </li>
-                        </ul>
-                    </CardText>
+                    {estado !== "Disponible" ? (
+                        <CardText style={{ marginBottom: "2rem" }}>
+                            <ul className={myStyles.cardList}>
+                                <li>
+                                    <i className="ni ni-single-02" /> {reserva?.client.name}{" "}
+                                    {reserva?.client.lastname}
+                                </li>
+                                <li>
+                                    <i class="ni ni-watch-time"></i> {reserva?.hora_llegada}
+                                </li>
+
+                                <li>
+                                    <i className="ni ni-badge" /> {reserva?.mozo.name}
+                                </li>
+                                <li>
+                                    <i class="ni ni-fat-delete"></i> {estado}
+                                </li>
+                            </ul>
+                        </CardText>
+                    ) : (
+                        <CardText style={{ marginBottom: "0.5rem" }}>
+                            <ul
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    height: "4rem",
+                                    alignItems: "center",
+                                    padding: "0",
+                                    listStyle: "none",
+                                }}
+                            >
+                                <li>
+                                    <i class="ni ni-fat-delete"></i> {estado}
+                                </li>
+                            </ul>
+                        </CardText>
+                    )}
                     {estado === "Disponible" ? (
                         <Button
                             color="warning"
@@ -77,9 +111,9 @@ export const CardMesa = ({ mesa, updateMesa, updated, setUpdated }) => {
                         <Button
                             color="warning"
                             className={myStyles.cardButtonMesa}
-                            onClick={handleMesaDetalle}
+                            onClick={handleLiberar}
                         >
-                            <i className="ni ni-lock-circle-open" /> Ir al detalle
+                            <i className="ni ni-lock-circle-open" /> liberar mesa
                         </Button>
                     )}
                 </CardBody>

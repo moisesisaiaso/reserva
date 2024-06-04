@@ -3,6 +3,18 @@ import myStyles from "../../../../assets/css/myStyles.module.css";
 import { FormGroup, InputGroup, Col, Row, Button } from "reactstrap";
 
 export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
+    const inputEstado = useRef();
+
+    const handleSearch = () => {
+        const value = inputEstado.current?.value;
+        const query = value === "Disponible" ? true : value === "No disponible" ? false : "";
+
+        const filteredMesas = mesas?.filter((mesa) => mesa.estado_mesa === query);
+
+        setListaFiltrada(filteredMesas);
+        setIsFilter(true);
+    };
+
     const [selectedFilter, setSelectedFilter] = useState("Todos");
     const filterByUbicacion = (e, zona) => {
         e.preventDefault();
@@ -26,146 +38,66 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
             : myStyles.button;
     };
 
+    const zonas = ["Playa", "Terraza", "Comedor", "Bar", "Poltrona", "Embarcación", "Cafetin"];
+
     return (
-        <div className={myStyles.inputFilters}>
-            <Row>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={showAllMesas}
-                                className={getButtonClass("Todos")}
-                            >
-                                Todos
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Playa")}
-                                className={getButtonClass("Playa")} 
-                            >
-                                Playa
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Terraza")}
-                                className={getButtonClass("Terraza")} 
-                            >
-                                Terraza
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Comedor")}
-                                className={getButtonClass("Comedor")} 
-                            >
-                                Comedor
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Bar")}
-                                className={getButtonClass("Bar")} 
-                            >
-                                Bar
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Poltrona")}
-                                className={getButtonClass("Poltrona")} 
-                            >
-                                Poltrona
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Cafetin")}
-                                className={getButtonClass("Cafetin")} 
-                            >
-                                Cafetin
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-                <Col className={myStyles.inputContainer}>
-                    <FormGroup>
-                        <InputGroup className={`input-group-alternative mb-4`}>
-                            <Button
-                                color="info"
-                                outline
-                                type="button"
-                                size="lg"
-                                aria-pressed={true}
-                                onClick={(e) => filterByUbicacion(e, "Embarcación")}
-                                className={getButtonClass("Embarcación")} 
-                            >
-                                Embarcación
-                            </Button>
-                        </InputGroup>
-                    </FormGroup>
-                </Col>
-            </Row>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                marginBottom: "2rem",
+            }}
+        >
+            <FormGroup
+                className={myStyles.inputSearch + " " + myStyles.Inputgroup}
+                style={{ height: "3.5rem", marginRight: "1rem" }}
+            >
+                <select
+                    className={`form-control-alternative ${myStyles.input}`}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "11.5rem",
+                    }}
+                    type="select"
+                    ref={inputEstado}
+                    onChange={handleSearch}
+                >
+                    <option value="Disponible">Disponible</option>
+                    <option value="No disponible">No disponible</option>
+                </select>
+            </FormGroup>
+
+            <Button
+                style={{ height: "3.5rem" }}
+                color="info"
+                outline
+                type="button"
+                size="lg"
+                aria-pressed={true}
+                onClick={showAllMesas}
+                className={getButtonClass("Todos")}
+            >
+                Todos
+            </Button>
+
+            {zonas.map((zona, i) => (
+                <Button
+                    style={{ height: "3.5rem" }}
+                    color="info"
+                    outline
+                    type="button"
+                    size="lg"
+                    aria-pressed={true}
+                    onClick={(e) => filterByUbicacion(e, zona)}
+                    className={getButtonClass(zona)}
+                    key={i}
+                >
+                    {zona}
+                </Button>
+            ))}
         </div>
     );
 };
