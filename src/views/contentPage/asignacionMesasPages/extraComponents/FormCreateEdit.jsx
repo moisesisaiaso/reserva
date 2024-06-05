@@ -32,8 +32,6 @@ export const FormCreateEdit = ({ id, type }) => {
     }, []);
 
     useEffect(() => {
-        let parseId = parseInt(id);
-
         if (reservas) {
             const disponibles = reservas.filter(
                 (reserva) => reserva.hora_salida === null && reserva.estado_reserva !== "Cancelada"
@@ -42,20 +40,32 @@ export const FormCreateEdit = ({ id, type }) => {
             setReservasList(disponibles);
         }
 
-        if (id && reservasList && type === "reserva") {
-            let reserva = reservasList.filter((reserva) => reserva.id === parseId);
-            setReserva(reserva[0]);
-            console.log("entra");
-        }
-
         if (mesas) {
             const mesasLibres = mesas.filter((mesa) => mesa.estado_mesa === true);
             setMesaList(mesasLibres);
         }
     }, [mesas, reservas]);
 
+    useEffect(() => {
+        let parseId = parseInt(id);
+        if (id && reservasList && type === "reserva") {
+            let reserva = reservasList.filter((reserva) => reserva.id === parseId);
+            setReserva(reserva[0]);
+            console.log("entra");
+        }
+    }, [reservasList]);
+
     console.log("reserva :", reserva);
     console.log("reservaList :", reservasList);
+
+    useEffect(() => {
+        if (id && type === "reserva" && reserva) {
+            setSelectedReserva({
+                value: reserva?.id,
+                label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
+            });
+        }
+    }, [reserva]);
 
     const submit = async (data) => {
         const id = selectedReserva ? selectedReserva.value : null;
@@ -65,15 +75,15 @@ export const FormCreateEdit = ({ id, type }) => {
         }
         delete data.reservaId;
         data = data.mesas;
-    
+
         await setMesas(`/intimar/reserva/${id}/mesa`, data);
         toast.success("Mesa asignada con éxito");
-    
+
         reset({
             reservaId: "",
             mesas: "",
         });
-    
+
         const mozoId = employee.current.value;
         if (!mozoId) {
             toast.error("Debe seleccionar un mozo.");
@@ -81,7 +91,7 @@ export const FormCreateEdit = ({ id, type }) => {
         }
         let dataMozo = { mozoId };
         await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
-    
+
         setTimeout(() => {
             window.location.href = "/admin/mesas";
         }, 1150);
@@ -90,27 +100,34 @@ export const FormCreateEdit = ({ id, type }) => {
     useEffect(() => {
         console.log("reserva encontrada");
     }, [reserva]);
+
+    const reservaOptions = reservasList?.map((reserva) => ({
+        value: reserva.id,
+        label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
+    }));
+
     return (
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Selección de reserva</h6>
             <div className="pl-lg-4">
-            <Row>
+                <Row>
                     <Col md="12">
                         <label className="form-control-label" htmlFor="input-reserva">
                             Buscar Reserva
                         </label>
-                        <div style={{ width: '100%', height: '4rem' }}>
+                        <div style={{ width: "100%", height: "4rem" }}>
                             <Select
                                 className={`form-control-alternative ${myStyles.input}`}
-                                options={reservasList?.map((reserva) => ({
-                                    value: reserva.id,
-                                    label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
-                                }))}
+                                options={reservaOptions}
                                 value={selectedReserva}
                                 onChange={(selectedReserva) => {
                                     setSelectedReserva(selectedReserva);
-                                    setValue("reservaId", selectedReserva ? selectedReserva.value : "");
+                                    setValue(
+                                        "reservaId",
+                                        selectedReserva ? selectedReserva.value : ""
+                                    );
                                 }}
+                                isDisabled={id && type === "reserva"}
                                 placeholder="Seleccionar Reserva"
                             />
                         </div>

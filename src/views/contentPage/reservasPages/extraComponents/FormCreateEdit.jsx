@@ -7,11 +7,11 @@ import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
-    /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar el un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
+    /* parameterId y asignarWithReservaId ambos me devuelven el id de la reserva, la diferencia es de donde vienen, asignarWithReservaId es el id de reserva que viene apartir de la tabla reserva de esta forma yo se que este dato solo va a utilizarse para rellenar  un campo del formulario de asignación de mesa en especifico el campo de reservaId; 
     cuando parameterId existe significa que este dato viene del parametro de la url cuando accedo a este formulario lo que significa que es para editar un registro, es decir con este parameterId obtengo todo los campos de esta asignación de mesa ya existente para poder mostrarlo en los campos y editar  */
     /* Collapse Anticipo */
     const adultosString = useRef();
@@ -150,17 +150,16 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         setNinos(numberNinos);
         const totalPeople = numberAdultos + numberNinos;
         setCollapseIsOpen(totalPeople >= 8);
-    
+
         // Calcular el monto del anticipo
         let montoAnticipo = 0;
         if (totalPeople >= 8) {
             montoAnticipo = totalPeople * 20;
         }
-    
+
         // Actualizar el valor del campo del monto de anticipo en el formulario
         setValue("anticipo.monto_anticipo", montoAnticipo);
     };
-    
 
     /* datos de lo que viene en el campo file */
     const handleFileChange = (e) => {
@@ -187,7 +186,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
         if (totalMinutos < inicio || totalMinutos > fin) {
             toast.error("La hora de reserva debe estar entre las 11:00 y las 17:30."); // Mostrar notificación de error
-            e.target.setCustomValidity("La hora de reserva debe estar entre las 11:00 y las 17:30.");
+            e.target.setCustomValidity(
+                "La hora de reserva debe estar entre las 11:00 y las 17:30."
+            );
         } else {
             e.target.setCustomValidity("");
         }
@@ -195,7 +196,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
 
     const removeEmptyFields = (data) => {
         return Object.entries(data)
-            .filter(([key, value]) => value) 
+            .filter(([key, value]) => value)
             .reduce((acc, [key, value]) => {
                 acc[key] = value;
                 return acc;
@@ -211,18 +212,18 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 return; // Salir de la función sin continuar con la creación de la reserva
             }
 
-              // Validar hora de reserva
-              const horaReserva = data.hora_reserva;
-              const [horas, minutos] = horaReserva.split(":").map((element) => Number(element));
-              const totalMinutos = horas * 60 + minutos;
-              const inicio = 11 * 60; // 11:00 AM en minutos
-              const fin = 17 * 60 + 30; // 5:30 PM en minutos
-  
-              if (totalMinutos < inicio || totalMinutos > fin) {
-                  toast.error("La hora de reserva debe estar entre las 11:00 y las 17:30.");
-                  return;
-              }
-  
+            // Validar hora de reserva
+            const horaReserva = data.hora_reserva;
+            const [horas, minutos] = horaReserva.split(":").map((element) => Number(element));
+            const totalMinutos = horas * 60 + minutos;
+            const inicio = 11 * 60; // 11:00 AM en minutos
+            const fin = 17 * 60 + 30; // 5:30 PM en minutos
+
+            if (totalMinutos < inicio || totalMinutos > fin) {
+                toast.error("La hora de reserva debe estar entre las 11:00 y las 17:30.");
+                return;
+            }
+
             data.file = data.file[0];
             data.clienteId =
                 reservarWithClientId ||
@@ -291,7 +292,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             setTimeout(() => {
-            window.location.href = "/admin/reservas";
+                window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
@@ -309,9 +310,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             <h6 className="heading-small text-muted mb-4">Información requerida</h6>
             <div className="pl-lg-4">
                 <Row>
-                <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-username">Cliente</label>
-                        <div style={{ width: '100%', height: '3rem' }}>
+                    <Col lg="6">
+                        <label className="form-control-label" htmlFor="input-username">
+                            Cliente
+                        </label>
+                        <div style={{ width: "100%", height: "3rem" }}>
                             <Select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 options={clientOptions}
@@ -319,20 +322,26 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 onChange={(selectedOption) => {
                                     console.log("Selected option:", selectedOption);
                                     setSelectedOption(selectedOption);
-                                    setValue("clienteId", selectedOption ? selectedOption.value : "");
+                                    setValue(
+                                        "clienteId",
+                                        selectedOption ? selectedOption.value : ""
+                                    );
                                 }}
-                                isDisabled={(parameterId && !reservarWithClientId) || reservarWithClientId}
+                                isDisabled={
+                                    (parameterId && !reservarWithClientId) || reservarWithClientId
+                                }
                                 placeholder="Buscar cliente"
                                 styles={{
                                     control: (provided) => ({
                                         ...provided,
-                                        height: '100%'
-                                    }),           
+                                        height: "100%",
+                                    }),
                                 }}
-
                             />
                         </div>
-                        {errors.clienteId && <span className="text-danger">Debe seleccionar un cliente.</span>}
+                        {errors.clienteId && (
+                            <span className="text-danger">Debe seleccionar un cliente.</span>
+                        )}
                     </Col>
 
                     <Col lg="6">
@@ -394,11 +403,14 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
                             <input
                                 id="fecha_reserva"
-                                className={`form-control ${myStyles.input} ${errors.fecha_reserva ? "is-invalid" : ""}`}
+                                className={`form-control ${myStyles.input} ${
+                                    errors.fecha_reserva ? "is-invalid" : ""
+                                }`}
                                 type="date"
-                                {...register("fecha_reserva", { required: "La fecha de la reserva es requerida" })}
+                                {...register("fecha_reserva", {
+                                    required: "La fecha de la reserva es requerida",
+                                })}
                                 min={new Date().toISOString().split("T")[0]} // Establece la fecha mínima a la fecha de hoy
-
                             />
                             {errors.fecha_reserva && (
                                 <span className="text-danger">{errors.fecha_reserva.message}</span>
@@ -427,26 +439,25 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                         </FormGroup>
                     </Col>
                     <Col lg="6">
-                    <label className="form-control-label" htmlFor="language">
-                        Idioma
-                    </label>
-                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                        <select
-                            className={`form-control-alternative ${myStyles.input}`}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                    }}
-                            id="language"
-                            {...register("language")}
-                            defaultValue="es" 
-                        >
-                            <option value="es">Español</option>
-                            <option value="en">Inglés</option>
-                        </select>
-                    </FormGroup>
-                </Col>
-
+                        <label className="form-control-label" htmlFor="language">
+                            Idioma
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                id="language"
+                                {...register("language")}
+                                defaultValue="es"
+                            >
+                                <option value="es">Español</option>
+                                <option value="en">Inglés</option>
+                            </select>
+                        </FormGroup>
+                    </Col>
 
                     {parameterId && (
                         <Col lg="12">
@@ -454,26 +465,25 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 Estado de reserva
                             </label>
                             <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
-                                className={`form-control-alternative ${myStyles.input}`}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}
-                                id="input-city"
-                                {...register("estado_reserva")}
-                                // value={"Pendiente"} 
-                                // defaultValue="Pendiente" // Cambiado de value a defaultValue
-
-                            >
-                                <option value="">Seleccionar estado</option>
-                                <option value="Pendiente">Pendiente a confirmar</option>
-                                <option value="Confirmada">Confirmada</option>
-                                <option value="Cancelada">Cancelada</option>
-                                <option value="Lista de espera">Lista de espera</option>
-                                <option value="En proceso">En proceso</option>
-                                <option value="Finalizada">Finalizada</option>
-                            </select>
+                                <select
+                                    className={`form-control-alternative ${myStyles.input}`}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                    id="input-city"
+                                    {...register("estado_reserva")}
+                                    // value={"Pendiente"}
+                                    // defaultValue="Pendiente" // Cambiado de value a defaultValue
+                                >
+                                    <option value="">Seleccionar estado</option>
+                                    <option value="Pendiente">Pendiente a confirmar</option>
+                                    <option value="Confirmada">Confirmada</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                    <option value="Lista de espera">Lista de espera</option>
+                                    <option value="En proceso">En proceso</option>
+                                    <option value="Finalizada">Finalizada</option>
+                                </select>
                             </FormGroup>
                         </Col>
                     )}
@@ -557,7 +567,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         }}
                                         id="input-city"
                                         {...register("anticipo.moneda")}
-                                        defaultValue="PEN" 
+                                        defaultValue="PEN"
                                         required={collapseIsOpen}
                                     >
                                         <option value="">Seleccionar ...</option>
