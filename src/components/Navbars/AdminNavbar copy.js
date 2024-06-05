@@ -40,8 +40,7 @@ const AdminNavbar = (props) => {
     const routesArray = location.pathname.replace("/", "").split("/").filter(Boolean);
 
     const disableNavbar = location.pathname.includes("/admin/calendario") ||
-        location.pathname.includes("/admin/user-profile") ||
-        location.pathname.includes("/admin/graficas");
+        location.pathname.includes("/admin/user-profile");
 
     return (
         <>
@@ -60,17 +59,20 @@ const AdminNavbar = (props) => {
                             <>
                                 <Link
                                     className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                                    to=""
+                                    to="/"
                                 >
                                     {props.brandText}
                                 </Link>
                             </>
                         ) : (
                             <ul className={myStyles.routeLink}>
+                                <li>
+                                    <NavLink to="/admin/home">Inicio</NavLink>
+                                </li>
                                 {routesArray.map((route, i) => (
                                     <li key={i}>
                                         <NavLink
-                                            to={`admin/${route}`}
+                                            to={`/admin/${route}`}
                                             activeStyle={{ color: "red" }}
                                         >
                                             / {route}
@@ -90,10 +92,10 @@ const AdminNavbar = (props) => {
                                             />
                                         </span>
                                         <Media className="ml-2 d-none d-lg-block">
-                                        <span className="mb-0 text-sm font-weight-bold">
-                                            {`${user?.name} ${user?.lastname}`}
-                                        </span>
-                                    </Media>
+                                            <span className="mb-0 text-sm font-weight-bold text-white">
+                                                {`${user?.name} ${user?.lastname}`}
+                                            </span>
+                                        </Media>
                                     </Media>
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
