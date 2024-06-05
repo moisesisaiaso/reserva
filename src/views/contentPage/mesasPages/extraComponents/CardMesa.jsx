@@ -27,7 +27,7 @@ export const CardMesa = ({
 
     const handleMesaAsignar = () => {
         /* aquí enviamos a asignar mesa */
-        navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
+        navigate("/admin/mesas/crearAsignacion", { state: { id, type: "mesa" } });
     };
 
     useEffect(() => {

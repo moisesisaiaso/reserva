@@ -26,8 +26,7 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
 
     const handleMesa = () => {
         if (!isDisable) {
-            /* aquí enviamos a asignar mesa */
-            navigate("/admin/asignar-mesa/create", { state: { id, type: "mesa" } });
+            navigate("/admin/mesas/crearAsignacion", { state: { id, type: "mesa" } });
         }
     };
 

@@ -92,7 +92,7 @@ let routes = [
         layout: "/admin",
     },
     {
-        path: "/asignar-mesa/create",
+        path: "/mesas/crearAsignacion",
         component: <CreateAsignacion />,
         layout: "/admin",
     },

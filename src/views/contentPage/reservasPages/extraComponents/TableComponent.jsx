@@ -40,7 +40,7 @@ export const TableComponent = ({ reserva, deleteReserva, lengthId, itemsPerPage,
 
     const handleMesa = () => {
         if (!isDisable) {
-            navigate("/admin/asignar-mesa/create", { state: { id, type: "reserva" } });
+            navigate("/admin/mesas/crearAsignacion", { state: { id, type: "reserva" } });
         }
     };
 

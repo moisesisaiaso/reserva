@@ -22,7 +22,7 @@ export const OptionBtn = ({ setIsTable }) => {
     };
 
     const handleBtnCreate = () => {
-        navigate("/admin/asignar-mesa/create");
+        navigate("/admin/mesas/crearAsignacion");
     };
 
     return (
