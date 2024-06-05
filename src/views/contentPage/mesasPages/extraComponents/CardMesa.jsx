@@ -13,7 +13,7 @@ export const CardMesa = ({
     finalizarReserva,
 }) => {
     const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
-    const [estado, setEstado] = useState(estado_mesa ? "Disponible" : "No disponible");
+    const [estado, setEstado] = useState();
     const [reserva, setReserva] = useState();
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export const CardMesa = ({
         } else {
             setEstado("No disponible");
         }
-    }, [updated]);
+    }, []);
 
     const handleMesaAsignar = () => {
         /* aquí enviamos a asignar mesa */
@@ -38,12 +38,13 @@ export const CardMesa = ({
             setReserva(reserva);
             console.log("reserva: ", reserva);
         }
-    }, [updated]);
+    }, [updated, reservasAsignadas]);
 
     const handleLiberar = async () => {
         await finalizarReserva(`intimar/reserva/${reserva?.id}/end`);
+
+        setEstado("Disponible");
         setUpdated(!updated);
-        setIsFilter(true);
     };
 
     return (
@@ -61,21 +62,28 @@ export const CardMesa = ({
                         <i className="ni ni-pin-3" /> {ubicacion_mesa}
                     </p>
                 </CardHeader>
+
                 <CardBody>
                     {estado !== "Disponible" ? (
                         <CardText style={{ marginBottom: "2rem" }}>
                             <ul className={myStyles.cardList}>
-                                <li>
-                                    <i className="ni ni-single-02" /> {reserva?.client.name}{" "}
-                                    {reserva?.client.lastname}
-                                </li>
-                                <li>
-                                    <i class="ni ni-watch-time"></i> {reserva?.hora_llegada}
-                                </li>
+                                {reserva ? (
+                                    <>
+                                        <li>
+                                            <i className="ni ni-single-02" /> {reserva?.client.name}{" "}
+                                            {reserva?.client.lastname}
+                                        </li>
+                                        <li>
+                                            <i class="ni ni-watch-time"></i> {reserva?.hora_llegada}
+                                        </li>
 
-                                <li>
-                                    <i className="ni ni-badge" /> {reserva?.mozo.name}
-                                </li>
+                                        <li>
+                                            <i className="ni ni-badge" /> {reserva?.mozo.name}
+                                        </li>
+                                    </>
+                                ) : (
+                                    <p>Cargando...</p>
+                                )}
                                 <li>
                                     <i class="ni ni-fat-delete"></i> {estado}
                                 </li>

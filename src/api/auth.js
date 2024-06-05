@@ -28,12 +28,19 @@ axiosInstance.interceptors.response.use(
                     localStorage.setItem("access_token", accessToken);
                     localStorage.setItem("refresh_token", refreshToken);
 
+                    // Reintenta la solicitud original con el nuevo token de acceso.
                     return axiosInstance(error.config);
                 }
             } catch (refreshError) {
-                // Si la actualización del token falla y el estado de la respuesta es 403 (prohibido), se redirige al usuario a la página de inicio de sesión.
-                if (refreshError.response && refreshError.response.status === 403) {
-                    window.location.href = "/login";
+                // Manejo de errores específicos, como la expiración del refresh-token.
+                if (refreshError.response) {
+                    // Si la actualización del token falla y el estado de la respuesta es 403 (prohibido), se redirige al usuario a la página de inicio de sesión.
+                    if (refreshError.response.status === 403) {
+                        window.location.href = "/login";
+                    } else {
+                        // Aquí puedes manejar otros códigos de estado y errores.
+                        console.error("Error al refrescar el token:", refreshError);
+                    }
                 }
             } finally {
                 isRefreshing = false;
@@ -60,7 +67,7 @@ export async function login(credentials) {
             localStorage.setItem("refresh_token", refreshToken);
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error al iniciar sesión:", error);
     }
 }
 
@@ -81,6 +88,7 @@ async function refreshAccessToken() {
 
         return response;
     } catch (refreshError) {
-        console.error(refreshError);
+        console.error("Error al refrescar el token:", refreshError);
+        // Aquí puedes agregar lógica adicional para manejar el error, como informar al usuario o redirigir a la página de inicio de sesión.
     }
 }

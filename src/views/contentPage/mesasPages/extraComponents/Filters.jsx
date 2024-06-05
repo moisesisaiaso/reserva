@@ -38,7 +38,16 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
             : myStyles.button;
     };
 
-    const zonas = ["Playa", "Terraza", "Comedor", "Bar", "Poltrona", "Embarcación", "Cafetin", "Extra"];
+    const zonas = [
+        "Playa",
+        "Terraza",
+        "Comedor",
+        "Bar",
+        "Poltrona",
+        "Embarcación",
+        "Cafetin",
+        "Extra",
+    ];
 
     return (
         <div
@@ -52,7 +61,7 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
         >
             <FormGroup
                 className={myStyles.inputSearch + " " + myStyles.Inputgroup}
-                style={{ height: "3.2rem", marginRight: "1rem",marginTop: "0.5rem" }}
+                style={{ height: "3.2rem", marginRight: "1rem", marginTop: "0.5rem" }}
             >
                 <select
                     className={`form-control-alternative ${myStyles.input}`}
@@ -71,7 +80,7 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
             </FormGroup>
 
             <Button
-                style={{ height: "3.2rem",marginTop: "0.5rem" }}
+                style={{ height: "3.2rem", marginTop: "0.5rem" }}
                 color="info"
                 outline
                 type="button"

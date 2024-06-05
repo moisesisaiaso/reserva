@@ -215,6 +215,7 @@ const AsignacionMesa = () => {
                                                 setUpdated={setUpdated}
                                                 updated={updated}
                                                 finalizarReserva={finalizarReserva}
+                                                setIsFilter={setIsFilter}
                                             />
                                         ))
                                     )}
