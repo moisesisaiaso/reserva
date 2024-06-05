@@ -83,7 +83,7 @@ export const FormCreateEdit = ({ id, type }) => {
         await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
     
         setTimeout(() => {
-            // window.location.href = "/admin/mesas";
+            window.location.href = "/admin/mesas";
         }, 1150);
     };
 
