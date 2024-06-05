@@ -94,10 +94,4 @@ export let routesSideBar = [
         layout: "/admin",
         roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA"],
     },
-    // {
-    //     path: "/tables",
-    //     name: "Tables-Graficas",
-    //     icon: "ni ni-bullet-list-67 text-red",
-    //     layout: "/admin",
-    // },
 ];
