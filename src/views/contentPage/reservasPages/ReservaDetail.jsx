@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "api/axiosInstance";
 import myStyles from "../../../assets/css/myStyles.module.css";
-import { Container, Row, Col, Card, CardHeader, CardBody, Badge } from "reactstrap";
+import { Container, Row, Col, Card, CardHeader, CardBody, Badge, Button } from "reactstrap";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 
 export const ReservaDetail = () => {
     const location = useLocation();
     const reservaId = location.state;
     const [reservaData, setReservaData] = useState(null);
+    const navigate = useNavigate();  
 
     useEffect(() => {
         const fetchReservaData = async () => {
@@ -22,6 +24,7 @@ export const ReservaDetail = () => {
         fetchReservaData();
     }, [reservaId]);
 
+    
     const getEstadoReservaColor = () => {
         switch (reservaData?.estado_reserva) {
             case "Pendiente a confirmar":
@@ -53,6 +56,10 @@ export const ReservaDetail = () => {
             default:
                 return 'dark';
         }
+    };
+    const handleMesa = () => {
+            navigate("/admin/mesas/crearAsignacion");
+    
     };
 
     return (
@@ -114,30 +121,35 @@ export const ReservaDetail = () => {
                 )}
             </Row>
             <Row>
-                <Col md="12">
-                    {reservaData && (
-                        <Card className="shadow mt-4">
-                            <CardHeader>
-                                <h1>Horario y Mesas</h1>
-                            </CardHeader>
-                            <CardBody>
-                                <p><strong>Hora de Llegada:</strong> {reservaData.hora_llegada || 'Aún no asignada'}</p>                              
-                                <p><strong>Mesas Asignadas:</strong></p>
-                                <ul>
-                                    {reservaData.mesas?.length ? (
-                                        reservaData.mesas.map((mesa, index) => (
-                                            <li key={index}>Mesa {mesa.numero_mesa} - {mesa.ubicacion_mesa}</li>
-                                        ))
-                                    ) : (
-                                        <li>Aún no asignada</li>
-                                    )}
-                                </ul>
-                                <p><strong>Mozo Asignado:</strong> {reservaData.mozo?.name || '-'} {reservaData.mozo?.lastname || '-'}</p>
-                                <p><strong>Hora de Salida:</strong> {reservaData.hora_salida || 'Aún no registrada'}</p>
-                            </CardBody>
-                        </Card>
-                    )}
-                </Col>
+            <Col md="12">
+                {reservaData && (
+                    <Card className="shadow mt-4">
+                        <CardHeader style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h1>Horario y Mesa</h1>
+                            {reservaData.hora_llegada === "Aún no asignada" || !reservaData.hora_llegada ? (
+                                <Button color="info" onClick={handleMesa}>
+                                    Asignar Mesas
+                                </Button>
+                            ) : null}
+                        </CardHeader>
+                        <CardBody>
+                            <p><strong>Hora de Llegada:</strong> {reservaData.hora_llegada || 'Aún no asignada'}</p>                              
+                            <p><strong>Mesas Asignadas:</strong></p>
+                            <ul>
+                                {reservaData.mesas?.length ? (
+                                    reservaData.mesas.map((mesa, index) => (
+                                        <li key={index}>Mesa {mesa.numero_mesa} - {mesa.ubicacion_mesa}</li>
+                                    ))
+                                ) : (
+                                    <li>Aún no asignada</li>
+                                )}
+                            </ul>
+                            <p><strong>Mozo Asignado:</strong> {reservaData.mozo?.name || '-'} {reservaData.mozo?.lastname || '-'}</p>
+                            <p><strong>Hora de Salida:</strong> {reservaData.hora_salida || 'Aún no registrada'}</p>
+                        </CardBody>
+                    </Card>
+                )}
+            </Col>
             </Row>
         </Container>
     );
