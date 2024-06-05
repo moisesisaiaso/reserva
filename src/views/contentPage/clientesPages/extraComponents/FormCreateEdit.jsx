@@ -118,7 +118,7 @@ export const FormCreateEdit = ({ id }) => {
                 });
 
                 setTimeout(() => {
-                    // window.location.href = "/admin/clients";
+                    window.location.href = "/admin/clients";
                 }, 1250);
             }
         } catch (error) {

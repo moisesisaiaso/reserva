@@ -36,7 +36,7 @@ const UserHeader = () => {
                     <Col lg="12" className="text-center">
                         {employeeData && ( 
                             <h1 className="display-4 text-white">
-                                Hola {employeeData.name} {employeeData.lastname}
+                                Bienvenid@, {employeeData.name} {employeeData.lastname}
                             </h1>
                         )}
                     </Col>

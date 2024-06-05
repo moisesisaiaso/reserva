@@ -291,7 +291,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             setTimeout(() => {
-            // window.location.href = "/admin/reservas";
+            window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
