@@ -23,6 +23,7 @@ export const FormCreateEdit = ({ id, type }) => {
     const [mesasList, setMesaList] = useState();
     const [reservasList, setReservasList] = useState();
     const employee = useRef();
+    const [selectedReserva, setSelectedReserva] = useState(null);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
@@ -57,24 +58,32 @@ export const FormCreateEdit = ({ id, type }) => {
     console.log("reservaList :", reservasList);
 
     const submit = async (data) => {
-        const id = data.reservaId.value;
+        const id = selectedReserva ? selectedReserva.value : null;
+        if (!id) {
+            toast.error("Debe seleccionar una reserva.");
+            return;
+        }
         delete data.reservaId;
         data = data.mesas;
-
+    
         await setMesas(`/intimar/reserva/${id}/mesa`, data);
         toast.success("Mesa asignada con éxito");
-
+    
         reset({
             reservaId: "",
             mesas: "",
         });
-
+    
         const mozoId = employee.current.value;
+        if (!mozoId) {
+            toast.error("Debe seleccionar un mozo.");
+            return;
+        }
         let dataMozo = { mozoId };
         await setMozo(`intimar/reserva/${id}/mozo`, dataMozo);
-
+    
         setTimeout(() => {
-            window.location.href = "/admin/asignar-mesa";
+            // window.location.href = "/admin/mesas";
         }, 1150);
     };
 
@@ -85,7 +94,29 @@ export const FormCreateEdit = ({ id, type }) => {
         <form onSubmit={handleSubmit(submit)}>
             <h6 className="heading-small text-muted mb-4">Selección de reserva</h6>
             <div className="pl-lg-4">
-                <Row>
+            <Row>
+                    <Col md="12">
+                        <label className="form-control-label" htmlFor="input-reserva">
+                            Buscar Reserva
+                        </label>
+                        <div style={{ width: '100%', height: '4rem' }}>
+                            <Select
+                                className={`form-control-alternative ${myStyles.input}`}
+                                options={reservasList?.map((reserva) => ({
+                                    value: reserva.id,
+                                    label: `${reserva?.client?.name} ${reserva?.client?.lastname} -- ${reserva?.fecha_reserva} -- ${reserva?.hora_reserva}`,
+                                }))}
+                                value={selectedReserva}
+                                onChange={(selectedReserva) => {
+                                    setSelectedReserva(selectedReserva);
+                                    setValue("reservaId", selectedReserva ? selectedReserva.value : "");
+                                }}
+                                placeholder="Seleccionar Reserva"
+                            />
+                        </div>
+                    </Col>
+                </Row>
+                {/* <Row>
                     <Col md="12">
                         <label className="form-control-label" htmlFor="input-reserva">
                             Buscar Reserva
@@ -110,7 +141,7 @@ export const FormCreateEdit = ({ id, type }) => {
                             />
                         </div>
                     </Col>
-                </Row>
+                </Row> */}
             </div>
             <h6 className="heading-small text-muted mb-4">Asignación de mesas</h6>
             <div className="pl-lg-4">
