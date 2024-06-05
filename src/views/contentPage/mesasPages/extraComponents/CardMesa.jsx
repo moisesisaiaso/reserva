@@ -11,6 +11,7 @@ export const CardMesa = ({
     setUpdated,
     setIsFilter,
     finalizarReserva,
+    liberada,
 }) => {
     const { id, ubicacion_mesa, numero_mesa, estado_mesa } = mesa;
     const [estado, setEstado] = useState();
@@ -42,7 +43,7 @@ export const CardMesa = ({
 
     const handleLiberar = async () => {
         await finalizarReserva(`intimar/reserva/${reserva?.id}/end`);
-
+        liberada();
         setEstado("Disponible");
         setUpdated(!updated);
     };
