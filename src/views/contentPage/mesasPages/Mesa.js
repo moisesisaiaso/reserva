@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import myStyles from "../../../assets/css/myStyles.module.css";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table } from "reactstrap";
 import { useCrud } from "hooks/useCrud";
@@ -30,6 +33,9 @@ const Mesa = () => {
         getReservas("/intimar/reserva");
     }, [updated]);
 
+    const liberada = () => {
+        toast.success("Mesa liberada con éxito");
+    };
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
     let itemsPerPage = 10;
@@ -183,6 +189,7 @@ const Mesa = () => {
                                                 setUpdated={setUpdated}
                                                 setIsFilter={setIsFilter}
                                                 finalizarReserva={finalizarReserva}
+                                                liberada={liberada}
                                             />
                                         ))
                                     ) : (
@@ -201,6 +208,7 @@ const Mesa = () => {
                         </Card>
                     </div>
                 </Row>
+                <ToastContainer position="top-right" autoClose={3000} />
             </Container>
         </>
     );

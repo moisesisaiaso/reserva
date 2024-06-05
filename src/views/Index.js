@@ -1,4 +1,8 @@
 import myStyles from "../assets/css/myStyles.module.css";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "components/Headers/Header.js";
 
 import { useEffect, useState } from "react";
@@ -36,6 +40,10 @@ const Index = (props) => {
         getMesas("/intimar/mesa");
         getReservas("/intimar/reserva");
     }, [updated]);
+
+    const liberada = () => {
+        toast.success("Mesa liberada con éxito");
+    };
 
     /* logica para la paginación */
     // Inicializa la página actual y la cantidad de elementos por página
@@ -133,6 +141,7 @@ const Index = (props) => {
                                                 setUpdated={setUpdated}
                                                 setIsFilter={setIsFilter}
                                                 finalizarReserva={finalizarReserva}
+                                                liberada={liberada}
                                             />
                                         ))
                                     ) : (
@@ -154,6 +163,7 @@ const Index = (props) => {
                         </Card>
                     </Col>
                 </Row>
+                <ToastContainer position="top-right" autoClose={3000} />
             </Container>
         </>
     );

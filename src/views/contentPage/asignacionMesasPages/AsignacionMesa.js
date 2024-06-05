@@ -1,5 +1,8 @@
 import myStyles from "../../../assets/css/myStyles.module.css";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useEffect, useState } from "react";
 // reactstrap components
 import { Card, CardHeader, CardBody, Container, Row, UncontrolledTooltip, Table } from "reactstrap";
@@ -32,6 +35,10 @@ const AsignacionMesa = () => {
         getMesas("/intimar/mesa");
         getReservas("/intimar/reserva");
     }, [updated]);
+
+    const liberada = () => {
+        toast.success("Mesa liberada con éxito");
+    };
 
     console.log("liberado;", updated);
 
@@ -215,6 +222,8 @@ const AsignacionMesa = () => {
                                                 setUpdated={setUpdated}
                                                 updated={updated}
                                                 finalizarReserva={finalizarReserva}
+                                                setIsFilter={setIsFilter}
+                                                liberada={liberada}
                                             />
                                         ))
                                     )}
@@ -231,6 +240,7 @@ const AsignacionMesa = () => {
                         </Card>
                     </div>
                 </Row>
+                <ToastContainer position="top-right" autoClose={3000} />
             </Container>
         </>
     );
