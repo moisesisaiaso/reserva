@@ -88,7 +88,7 @@ const Sidebar = (props) => {
 
             setRoutesList(routesByRole);
         }
-    }, [employee]);
+    }, [employee, routes]);
 
     const handleLogout = () => {
         // Elimina todos los datos del localStorage
@@ -237,9 +237,9 @@ const Sidebar = (props) => {
                             </DropdownItem>
                             <DropdownItem divider />
                             <DropdownItem href="#pablo" onClick={handleLogout}>
-                                    <i className="ni ni-user-run" />
-                                    <span>Cerrar sesión</span>
-                                </DropdownItem>
+                                <i className="ni ni-user-run" />
+                                <span>Cerrar sesión</span>
+                            </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 </Nav>

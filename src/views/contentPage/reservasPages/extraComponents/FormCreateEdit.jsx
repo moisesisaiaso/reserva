@@ -410,7 +410,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                 {...register("fecha_reserva", {
                                     required: "La fecha de la reserva es requerida",
                                 })}
-                                min={new Date().toISOString().split("T")[0]} // Establece la fecha mínima a la fecha de hoy
+                                min={!parameterId && new Date().toISOString().split("T")[0]} // Establece la fecha mínima a la fecha de hoy
                             />
                             {errors.fecha_reserva && (
                                 <span className="text-danger">{errors.fecha_reserva.message}</span>
