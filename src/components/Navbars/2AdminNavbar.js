@@ -41,17 +41,19 @@ const AdminNavbar = (props) => {
 
     const disableNavbar = location.pathname.includes("/admin/calendario") ||
         location.pathname.includes("/admin/user-profile") ||
-        location.pathname.includes("/admin/graficas");
+        location.pathname.includes("/admin/graficas") ||
+        location.pathname.includes("/admin/home");
+
 
     return (
         <>
             {!disableNavbar && (
                 <Navbar
-                    className={`navbar-top ${
-                        location.pathname === "/admin/home" ? "navbar-dark" : ""
-                    } ${
-                        location.pathname !== "/admin/home" && myStyles.navbarContainer
-                    }`}
+                className={`navbar-top ${
+                    location.pathname === "/admin/home" ? "navbar-dark" : ""
+                } ${
+                    location.pathname !== "/admin/home" && myStyles.navbarContainer
+                }`}
                     expand="md"
                     id="navbar-main"
                 >
@@ -60,16 +62,13 @@ const AdminNavbar = (props) => {
                             <>
                                 <Link
                                     className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                                    to="/"
+                                    to=""
                                 >
                                     {props.brandText}
                                 </Link>
                             </>
                         ) : (
                             <ul className={myStyles.routeLink}>
-                                {/* <li>
-                                    <NavLink to="/inicio">Inicio</NavLink>
-                                </li> */}
                                 {routesArray.map((route, i) => (
                                     <li key={i}>
                                         <NavLink
