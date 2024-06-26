@@ -13,7 +13,6 @@ import {
 import routes from "routes";
 import axiosInstance from "api/axiosInstance";
 import { useEffect, useState } from "react";
-import { error } from "toastr";
 
 const AdminNavbar = (props) => {
     const location = useLocation();
@@ -39,18 +38,25 @@ const AdminNavbar = (props) => {
 
     const routesArray = location.pathname.replace("/", "").split("/").filter(Boolean);
 
-    const disableNavbar = location.pathname.includes("/admin/calendario") ||
-        location.pathname.includes("/admin/user-profile") ||
-        location.pathname.includes("/admin/graficas");
+    const disableNavbar = false;
 
     return (
         <>
             {!disableNavbar && (
                 <Navbar
                     className={`navbar-top ${
-                        location.pathname === "/admin/home" ? "navbar-dark" : ""
+                        location.pathname === "/admin/home" ||
+                        location.pathname.includes("/admin/calendario") ||
+                        location.pathname.includes("/admin/user-profile") ||
+                        location.pathname.includes("/admin/graficas")
+                            ? "navbar-dark"
+                            : ""
                     } ${
-                        location.pathname !== "/admin/home" && myStyles.navbarContainer
+                        location.pathname !== "/admin/home" &&
+                        !location.pathname.includes("/admin/calendario") &&
+                        !location.pathname.includes("/admin/user-profile") &&
+                        !location.pathname.includes("/admin/graficas") &&
+                        myStyles.navbarContainer
                     }`}
                     expand="md"
                     id="navbar-main"
@@ -93,10 +99,10 @@ const AdminNavbar = (props) => {
                                             />
                                         </span>
                                         <Media className="ml-2 d-none d-lg-block">
-                                        <span className="mb-0 text-sm font-weight-bold">
-                                            {`${user?.name} ${user?.lastname}`}
-                                        </span>
-                                    </Media>
+                                            <span className="mb-0 text-sm font-weight-bold">
+                                                {`${user?.name} ${user?.lastname}`}
+                                            </span>
+                                        </Media>
                                     </Media>
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
