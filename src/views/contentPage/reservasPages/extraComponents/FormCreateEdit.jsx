@@ -109,6 +109,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             /* En estos casos se tuvo que mandar directamente los valores a los campos con el atributo value ya que use Form no mostraba estos valores */
             setAdultos(reserva.cant_adultos);
             setNinos(reserva.cant_ninos);
+            setValue("estado_reserva", estado_reserva);
 
             setCurrentFile(file);
 
@@ -141,7 +142,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 });
             }
         }
-    }, [reserva]);
+    }, [reserva, setValue]);
 
     const handleTotalPeople = () => {
         const numberAdultos = parseInt(adultosString?.current?.value) || 0;
@@ -292,7 +293,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             }
 
             setTimeout(() => {
-                window.location.href = "/admin/reservas";
+                // window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
             console.error("Error al crear la reserva:", error);
@@ -310,7 +311,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             <h6 className="heading-small text-muted mb-4">Información requerida</h6>
             <div className="pl-lg-4">
                 <Row>
-                    <Col lg="12">
+                <Col lg="12" style={{ marginBottom: "1.5rem" }}>
                         <label className="form-control-label" htmlFor="input-username">
                             Cliente
                         </label>
@@ -437,30 +438,10 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                             />
                         </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
-                        <label className="form-control-label" htmlFor="languaje">
-                            Idioma
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <select
-                                className={`form-control-alternative ${myStyles.input}`}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}
-                                id="languaje"
-                                {...register("languaje")}
-                                defaultValue="es"
-                            >
-                                <option value="es">Español</option>
-                                <option value="en">Inglés</option>
-                            </select>
-                        </FormGroup>
-                    </Col> */}
 
                     {parameterId && (
                         <Col lg="12">
-                            <label className="form-control-label" htmlFor="input-city">
+                            <label className="form-control-label" htmlFor="estado_reserva">
                                 Estado de reserva
                             </label>
                             <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
@@ -470,7 +451,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         display: "flex",
                                         alignItems: "center",
                                     }}
-                                    id="input-city"
+                                    id="estado_reserva"
                                     {...register("estado_reserva")}
                                     // value={"Pendiente"}
                                     // defaultValue="Pendiente" // Cambiado de value a defaultValue
