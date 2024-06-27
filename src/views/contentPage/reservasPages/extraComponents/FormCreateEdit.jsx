@@ -35,6 +35,8 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [reservas, getReservas, createReserva, , updateReserva] = useCrud();
     const [reserva, setReserva] = useState();
     const [filePreview, setFilePreview] = useState(null);
+    const [fileUploadedMessage, setFileUploadedMessage] = useState("");
+
     const [clientName, setClientName] = useState();
     const [selectedOption, setSelectedOption] = useState(null);
 
@@ -165,13 +167,14 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     /* datos de lo que viene en el campo file */
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        // Verifica si el tamaño del archivo es menor o igual a 10 MB
         if (file && file.size <= 10 * 1024 * 1024) {
             const reader = new FileReader();
-            reader.onloadend = () => setFilePreview(reader.result);
-            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setFilePreview(reader.result); // Establece la vista previa del archivo
+                setFileUploadedMessage("Imagen subida correctamente."); // Mensaje de éxito
+            };
+            reader.readAsDataURL(file); // Lee el archivo como URL para la vista previa
         } else {
-            // Si el tamaño excede los 10 MB, muestra una alerta
             alert("El tamaño del archivo no puede superar los 10 MB.");
         }
     };
@@ -457,7 +460,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     // defaultValue="Pendiente" // Cambiado de value a defaultValue
                                 >
                                     <option value="">Seleccionar estado</option>
-                                    <option value="Pendiente">Pendiente a confirmar</option>
+                                    <option value="Pendiente a confirmar">Pendiente a confirmar</option>
                                     <option value="Confirmada">Confirmada</option>
                                     <option value="Cancelada">Cancelada</option>
                                     <option value="Lista de espera">Lista de espera</option>
@@ -518,6 +521,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         }}
                                         id="input-city"
                                         {...register("anticipo.banco")}
+                                        defaultValue="PEN"
                                         required={collapseIsOpen}
                                     >
                                         <option value="">Seleccionar banco</option>
@@ -528,6 +532,9 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         <option value="Scotiabank">Scotiabank</option>
                                         <option value="BBVA">BBVA</option>
                                         <option value="BanBif">BanBif</option>
+                                        <option value="Banco de la Nación">Banco de la Nación</option>
+                                        <option value="Pichincha">Pichincha</option>
+                                        <option value="Paypal">Paypal</option>
                                     </select>
                                 </FormGroup>
                             </Col>
@@ -602,7 +609,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                             onChange={handleFileChange}
                                         />
                                         <label className="custom-file-label" htmlFor="customFile">
-                                            No se ha seleccionado ningún archivo.
+                                        {fileUploadedMessage || "No se ha seleccionado ningún archivo."}
                                         </label>
                                     </div>
                                 </FormGroup>
