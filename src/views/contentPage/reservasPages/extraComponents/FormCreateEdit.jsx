@@ -310,7 +310,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
             <h6 className="heading-small text-muted mb-4">Información requerida</h6>
             <div className="pl-lg-4">
                 <Row>
-                    <Col lg="6">
+                    <Col lg="12">
                         <label className="form-control-label" htmlFor="input-username">
                             Cliente
                         </label>
@@ -342,21 +342,6 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                         {errors.clienteId && (
                             <span className="text-danger">Debe seleccionar un cliente.</span>
                         )}
-                    </Col>
-
-                    <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-email">
-                            Motivo de reserva
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id=""
-                                placeholder="Describa el motivo"
-                                type="text"
-                                {...register("motivo_reserva")}
-                            />
-                        </FormGroup>
                     </Col>
                     <Col lg="6">
                         <label className="form-control-label" htmlFor="input-first-name">
@@ -439,7 +424,21 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                         </FormGroup>
                     </Col>
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="language">
+                        <label className="form-control-label" htmlFor="input-email">
+                            Motivo de reserva
+                        </label>
+                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                            <input
+                                className={`form-control-alternative ${myStyles.input}`}
+                                id=""
+                                placeholder="Describa el motivo"
+                                type="text"
+                                {...register("motivo_reserva")}
+                            />
+                        </FormGroup>
+                    </Col>
+                    {/* <Col lg="6">
+                        <label className="form-control-label" htmlFor="languaje">
                             Idioma
                         </label>
                         <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
@@ -449,15 +448,15 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                     display: "flex",
                                     alignItems: "center",
                                 }}
-                                id="language"
-                                {...register("language")}
+                                id="languaje"
+                                {...register("languaje")}
                                 defaultValue="es"
                             >
                                 <option value="es">Español</option>
                                 <option value="en">Inglés</option>
                             </select>
                         </FormGroup>
-                    </Col>
+                    </Col> */}
 
                     {parameterId && (
                         <Col lg="12">

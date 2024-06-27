@@ -43,6 +43,7 @@ export const CustomerDetail = () => {
                                         <p><strong> DNI </strong>{customerData.dni|| "N/A"} </p>
                                         <p><strong> RUC </strong>{customerData.ruc|| "N/A"} </p>
                                         <p><strong> Numero de pasaporte: </strong>{customerData.numero_pasaporte|| "N/A"} </p>
+                                        <p><strong>Idioma:</strong> {customerData.languaje === 'es' ? 'Español' : customerData.languaje === 'en_US' ? 'Inglés' : 'N/A'}</p>
                                 </CardBody>
                             </Card>
                         )}

@@ -24,7 +24,7 @@ export const FormCreateEdit = ({ id }) => {
             let clientEdit = client?.filter((element) => element.id === parseId);
 
             if (clientEdit.length > 0) {
-                const { name, lastname, email, countryCode, cellphone, dni, ruc, numero_pasaporte, address, allergies } = clientEdit[0];
+                const { name, lastname, email, countryCode, cellphone, dni, ruc, numero_pasaporte, address, allergies,languaje } = clientEdit[0];
                 reset({
                     name,
                     lastname,
@@ -36,9 +36,12 @@ export const FormCreateEdit = ({ id }) => {
                     numero_pasaporte,
                     address,
                     allergies,
+                    languaje,
                 });
                 setValue('countryCode', countryCode);
                 setValue('cellphone', countryCode + cellphone);
+                setValue('languaje', languaje); 
+
             }
         }
     }, [client]);
@@ -115,12 +118,13 @@ export const FormCreateEdit = ({ id }) => {
                     dni: "",
                     ruc: "",
                     numero_pasaporte: "",
+                    languaje: "es", 
                 });
-
+            }
                 setTimeout(() => {
                     window.location.href = "/admin/clients";
                 }, 1250);
-            }
+           
         } catch (error) {
             console.error("Error:", error);
             toast.error("Hubo un error al procesar la solicitud");
@@ -232,42 +236,63 @@ export const FormCreateEdit = ({ id }) => {
                     </Col>
                     
                     <Col lg="6">
-                        <label className="form-control-label" htmlFor="input-email">
-                            Correo
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-email"
-                                placeholder="Ingrese el correo"
-                                type="email"
-                                {...register("email", {
-                                    pattern: {
-                                        value: /^\S+@\S+$/i,
-                                        message: "Correo inválido"
-                                    }
-                                })}
-                            />
-                        </FormGroup>
-                        <div className="text-danger">{errors.email && errors.email.message}</div>
-                        <div className="text-danger">{serverErrors.email}</div>
-                    </Col>
-                    
-                    <Col md="12">
-                        <label className="form-control-label mt-4" htmlFor="input-allergies">
-                            Alergias
-                        </label>
-                        <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
-                            <input
-                                className={`form-control-alternative ${myStyles.input}`}
-                                id="input-allergies"
-                                placeholder="Ingrese las alergias"
-                                type="text"
-                                {...register("allergies")}
-                            />
-                        </FormGroup>
-                    </Col>
-                </Row>
+            <label className="form-control-label" htmlFor="input-email">
+                Correo
+            </label>
+            <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                <input
+                    className={`form-control-alternative ${myStyles.input}`}
+                    id="input-email"
+                    placeholder="Ingrese el correo"
+                    type="email"
+                    {...register("email", {
+                        pattern: {
+                            value: /^\S+@\S+$/i,
+                            message: "Correo inválido"
+                        }
+                    })}
+                />
+            </FormGroup>
+            <div className="text-danger">{errors.email && errors.email.message}</div>
+            <div className="text-danger">{serverErrors.email}</div>
+        </Col>
+            </Row>
+            <Row>
+                <Col lg="6">
+                    <label className="form-control-label" htmlFor="input-allergies">
+                        Alergias
+                    </label>
+                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <input
+                            className={`form-control-alternative ${myStyles.input}`}
+                            id="input-allergies"
+                            placeholder="Ingrese las alergias"
+                            type="text"
+                            {...register("allergies")}
+                        />
+                    </FormGroup>
+                </Col>
+                <Col lg="6">
+                    <label className="form-control-label" htmlFor="languaje">
+                        Idioma
+                    </label>
+                    <FormGroup className={myStyles.inputSearch + " " + myStyles.Inputgroup}>
+                        <select
+                            className={`form-control-alternative ${myStyles.input}`}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                            id="languaje"
+                            {...register("languaje")}
+                            defaultValue="es"
+                        >
+                            <option value="es">Español</option>
+                            <option value="en_US">Inglés</option>
+                        </select>
+                    </FormGroup>
+                </Col>
+            </Row>
             </div>
             <hr className="my-4" />
             <h6 className="heading-small text-muted mb-4">Información adicional</h6>

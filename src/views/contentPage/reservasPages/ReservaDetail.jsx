@@ -87,6 +87,7 @@ export const ReservaDetail = () => {
                                 <p><strong>Niños:</strong> {reservaData.cant_ninos || 'N/A'}</p>
                                 <p><strong>Anticipo Requerido: </strong> {reservaData.anticipo_required ? 'Sí' : 'No'}</p>
                                 <p><strong>Usuario que registró: </strong> {reservaData.usuario?.name || 'N/A'} {reservaData.usuario?.lastname || 'N/A'}</p>
+                                <p><strong>Idioma: </strong> {reservaData.client?.languaje|| 'N/A'}</p>
                             </CardBody>
                         </Card>
                     )}

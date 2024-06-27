@@ -65,6 +65,7 @@ const Configuracion = () => {
                                             <th>Duración de Reserva (horas)</th>
                                             <th>Hora Mínima</th>
                                             <th>Hora Máxima</th>
+                                            <th>Personas Anticipo</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -74,6 +75,8 @@ const Configuracion = () => {
                                             <td>{configuracion.duracion_reserva !== undefined && configuracion.duracion_reserva !== null ? configuracion.duracion_reserva : 'N/A'}</td>
                                             <td>{configuracion.hora_min !== undefined && configuracion.hora_min !== null ? configuracion.hora_min : 'N/A'}</td>
                                             <td>{configuracion.hora_max !== undefined && configuracion.hora_max !== null ? configuracion.hora_max : 'N/A'}</td>
+                                            <td>{configuracion.anticipo_persona !== undefined && configuracion.anticipo_persona !== null ? configuracion.anticipo_persona : 'N/A'}</td>
+
                                             <td>
                                                 <Button color="primary" onClick={handleEditClick}>Editar</Button>
                                             </td>
@@ -85,7 +88,7 @@ const Configuracion = () => {
                                 <ModalHeader toggle={toggleModal}>Editar Configuración</ModalHeader>
                                 <ModalBody>
                                     <FormGroup>
-                                        <Label for="aforo">Aforo por hora</Label>
+                                        <Label for="aforo">Aforo por hora (personas)</Label>
                                         <Input
                                             type="number"
                                             name="aforo"
@@ -121,6 +124,16 @@ const Configuracion = () => {
                                             name="hora_max"
                                             id="hora_max"
                                             value={editConfig.hora_max || ''}
+                                            onChange={handleInputChange}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="anticipo_persona">Cantidad de personas para Anticipo</Label>
+                                        <Input
+                                            type="number"
+                                            name="anticipo_persona"
+                                            id="anticipo_persona"
+                                            value={editConfig.anticipo_persona || ''}
                                             onChange={handleInputChange}
                                         />
                                     </FormGroup>

@@ -115,7 +115,7 @@ const Reserva = () => {
                                             <Table striped responsive>
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
+                                                        <th>ID</th>
                                                         <th>Nombre del Cliente</th>
                                                         <th>Fecha de reserva</th>
                                                         <th>Hora de reserva</th>
