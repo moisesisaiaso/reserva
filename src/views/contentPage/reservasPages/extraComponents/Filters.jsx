@@ -14,16 +14,17 @@ export const Filters = ({ reservas, setListaFiltrada }) => {
     const inputDia = useRef(null);
     const inputEstado = useRef(null);
     const inputCliente = useRef(null);
-    const inputIdReserva = useRef(null); 
+    const inputIdReserva = useRef(null);
     const [horaSeleccionada, setHoraSeleccionada] = useState("");
     const [diaEspecifico, setDiaEspecifico] = useState("");
     const [mesSeleccionado, setMesSeleccionado] = useState("");
     const [nombreCliente, setNombreCliente] = useState("");
     const [fechaSeleccionada, setFechaSeleccionada] = useState("");
-    const [idReserva, setIdReserva] = useState(""); 
+    const [idReserva, setIdReserva] = useState("");
 
     // Función para buscar reservas según los criterios de búsqueda
     function searchReserva() {
+        if (!reservas) return; // Validar que reservas esté definido
         const filteredReservas = reservas.filter((reserva) => {
             let mesMatch = true;
             let diaMatch = true;
@@ -102,7 +103,7 @@ export const Filters = ({ reservas, setListaFiltrada }) => {
         <div className={myStyles.inputFilters}>
             <Form>
                 <Row>
-                <Col xs={12} sm={6} md={1}>
+                    <Col xs={12} sm={6} md={1}>
                         <FormGroup>
                             <Input
                                 type="text"
