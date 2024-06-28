@@ -11,7 +11,6 @@ export const FormCreateEdit = ({ id }) => {
     const [mesa, getMesas, createMesa, , updateMesa] = useCrud();
     const [serverErrors, setServerErrors] = useState({});
     const [showError, setShowError] = useState(false);
-    const [previewImage, setPreviewImage] = useState(null);
 
     useEffect(() => {
         getMesas("/intimar/mesa");
@@ -23,15 +22,13 @@ export const FormCreateEdit = ({ id }) => {
             let mesaEdit = mesa?.find((element) => element.id === parseId);
 
             if (mesaEdit) {
-                const { ubicacion_mesa, numero_mesa, imagen_mesa } = mesaEdit;
+                const { ubicacion_mesa, numero_mesa } = mesaEdit;
                 reset({
                     ubicacion_mesa,
-                    numero_mesa,
-                    imagen_mesa
+                    numero_mesa
                 });
                 setValue('ubicacion_mesa', ubicacion_mesa);
                 setValue('numero_mesa', numero_mesa);
-                setPreviewImage(imagen_mesa);
             }
         }
     }, [id, mesa, reset, setValue]);
@@ -64,24 +61,17 @@ export const FormCreateEdit = ({ id }) => {
         }
 
         try {
-            const formData = new FormData();
-            for (const key in data) {
-                formData.append(key, data[key]);
-            }
-
             if (id) {
-                await updateMesa("/intimar/mesa", id, formData);
+                await updateMesa("/intimar/mesa", id, data);
                 toast.success("Mesa editada correctamente");
             } else {
-                await createMesa("/intimar/mesa", formData);
+                await createMesa("/intimar/mesa", data);
                 toast.success("Mesa creada correctamente");
 
                 reset({
                     ubicacion_mesa: "",
-                    numero_mesa: "",
-                    imagen_mesa: null
+                    numero_mesa: ""
                 });
-                setPreviewImage(null);
             }
             setTimeout(() => {
                 window.location.href = "/admin/mesas";
@@ -99,23 +89,12 @@ export const FormCreateEdit = ({ id }) => {
         }
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     return (
         <form onSubmit={handleSubmit(submit, handleError)}>
             <h6 className="heading-small text-muted mb-4">Información de la mesa</h6>
             <div className="pl-lg-4">
                 <Row>
-                    <Col md="6">
+                <Col md="6">
                         <label className="form-control-label" htmlFor="input-ubicacion-mesa">
                             Ubicación de la mesa
                         </label>
@@ -154,36 +133,14 @@ export const FormCreateEdit = ({ id }) => {
                                     type="text"
                                     {...register("numero_mesa", {
                                         required: "Número de la mesa es requerido",
+                                        // pattern: {
+                                        //     value: /^[0-9]*$/,
+                                        //     message: "El número de la mesa solo debe contener números"
+                                        // }
                                     })}
                                 />
                             </div>
                             {errors.numero_mesa && <span className="text-danger">{errors.numero_mesa.message}</span>}
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg="12">
-                        <div className="form-group">
-                            <label className="form-control-label" htmlFor="input-imagen_mesa">
-                                Imagen de la mesa
-                            </label>
-                            <div className={`${myStyles.inputSearch} ${myStyles.Inputgroup}`}>
-                                <input
-                                    className={`form-control-alternative ${myStyles.input}`}
-                                    id="input-imagen_mesa"
-                                    type="file"
-                                    accept="image/*"
-                                    {...register("imagen_mesa")}
-                                    onChange={handleImageChange}
-                                />
-                            </div>
-                            {previewImage && (
-                                <img
-                                    src={previewImage}
-                                    alt="Vista previa de la imagen"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '10px' }}
-                                />
-                            )}
                         </div>
                     </Col>
                 </Row>
