@@ -171,7 +171,8 @@ export const FormCreateEdit = ({ id, type }) => {
                             <select
                                 className={`form-control-alternative ${myStyles.input}`}
                                 type="select"
-                                multiple
+                                multiple                                
+                                style={{ height: '3rem !important' }}
                                 {...register("mesas")}
                             >
                                 {mesasList?.map((mesa) => {

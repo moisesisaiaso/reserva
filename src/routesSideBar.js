@@ -65,7 +65,8 @@ export let routesSideBar = [
         name: "Mesas",
         icon: "ni ni-support-16 text-red",
         layout: "/admin",
-        roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA"],
+        roles: ["ROL_ADMINISTRADOR", "ROL_RECEPCIONISTA","ROL_VIGILANTE",
+            "ROL_MESERO"],
     },
     {
         path: "/graficas",

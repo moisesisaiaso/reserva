@@ -25,13 +25,11 @@ const Reserva = () => {
 
     const itemsPerPage = 10;
 
-    /* obtengo la cantidad de paginas según la lista */
     useEffect(() => {
         const totalItems = isFilter ? listaFiltrada?.length || 0 : reservas?.length || 0;
         setPages(Math.ceil(totalItems / itemsPerPage));
     }, [listaFiltrada, reservas, isFilter]);
 
-    // función para obtener la lista cortada segun los items por pagina
     const getDataPaginate = (data) => {
         if (data) {
             const cutArray = getPaginatedData(data, currentPage, itemsPerPage);
@@ -39,14 +37,12 @@ const Reserva = () => {
         }
     };
 
-    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
     useEffect(() => {
         if (isFilter) {
             setCurrentPage(1);
         }
     }, [listaFiltrada]);
 
-   // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
     useEffect(() => {
         const data = isFilter ? listaFiltrada : reservas;
         if (data) {
@@ -60,25 +56,30 @@ const Reserva = () => {
         setIsFilter(true);
     };
 
-    // pagina actual vuelve a ser 1 si se ha hecho un filtrado
-    useEffect(() => {
-        if (isFilter) {
-            setCurrentPage(1);
-        }
-    }, [listaFiltrada]);
-
-    // llama a la función getDataPaginate y envía la lista correspondiente del filtrado o los datos enteros
     useEffect(() => {
         if (!isFilter) {
             getDataPaginate(reservas);
-            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+            setFilteredReservasCount(reservas?.length);
         } else {
             getDataPaginate(listaFiltrada);
-            setFilteredReservasCount(reservas?.length); // Actualizar el contador al número total de reservas
+            setFilteredReservasCount(listaFiltrada?.length); // Corregir aquí para contar los elementos filtrados
         }
     }, [listaFiltrada, reservas, currentPage]);
 
-    console.log("paginas: ", pages);
+    // Función para ordenar las reservas por fecha y luego por hora
+    const sortReservas = (a, b) => {
+        // Ordenar por fecha (de más reciente a más antigua)
+        const dateA = new Date(a.fecha_reserva).getTime();
+        const dateB = new Date(b.fecha_reserva).getTime();
+        if (dateA !== dateB) {
+            return dateB - dateA;
+        } else {
+            // Ordenar por hora (de menor a mayor)
+            const timeA = parseInt(a.hora_reserva.replace(":", ""));
+            const timeB = parseInt(b.hora_reserva.replace(":", ""));
+            return timeA - timeB;
+        }
+    };
 
     return (
         <>
@@ -102,10 +103,10 @@ const Reserva = () => {
                                 </h2>
 
                                 <section>
-                                    <Filters 
-                                        reservas={reservas} 
-                                        setListaFiltrada={handleFilter} 
-                                        setIsFilter={setIsFilter} 
+                                    <Filters
+                                        reservas={reservas}
+                                        setListaFiltrada={handleFilter}
+                                        setIsFilter={setIsFilter}
                                     />
                                 </section>
 
@@ -115,7 +116,7 @@ const Reserva = () => {
                                             <Table striped responsive>
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
+                                                        <th>ID</th>
                                                         <th>Nombre del Cliente</th>
                                                         <th>Fecha de reserva</th>
                                                         <th>Hora de reserva</th>
@@ -126,20 +127,22 @@ const Reserva = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {reservaList?.map((reserva, i) => (
-                                                        <TableComponent
-                                                            key={reserva.id}
-                                                            reserva={reserva}
-                                                            lengthId={i}
-                                                            deleteReserva={deleteReserva}
-                                                            currentPage={currentPage}
-                                                            itemsPerPage={itemsPerPage}
-                                                        />
-                                                    ))}
+                                                    {reservaList
+                                                        .sort(sortReservas)
+                                                        .map((reserva, i) => (
+                                                            <TableComponent
+                                                                key={reserva.id}
+                                                                reserva={reserva}
+                                                                lengthId={i}
+                                                                deleteReserva={deleteReserva}
+                                                                currentPage={currentPage}
+                                                                itemsPerPage={itemsPerPage}
+                                                            />
+                                                        ))}
                                                 </tbody>
                                             </Table>
                                         ) : (
-                                            reservaList?.map((reserva) => (
+                                            reservaList.map((reserva) => (
                                                 <CardReserva key={reserva.id} reserva={reserva} />
                                             ))
                                         )
@@ -164,3 +167,4 @@ const Reserva = () => {
 };
 
 export default Reserva;
+

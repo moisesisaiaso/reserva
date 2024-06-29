@@ -14,17 +14,16 @@ export const CardClient = ({ client }) => {
                 className={`my-2 ${myStyles.card}`}
                 color="primary"
                 outline
-                style={{
-                    width: "18rem",
-                }}
+                style={{ width: '18rem', height: '20rem' }}
+
             >
                 <CardHeader className={myStyles.cardTitle}>
                     <h4>
                         {name} {lastname}
                     </h4>
                 </CardHeader>
-                <CardBody>
-                    <CardText>
+                <CardBody className="text-center d-flex flex-column justify-content-between">
+                <CardText>
                         <ul className={myStyles.cardList}>
                             <li>
                                 <i className="ni ni-email-83" /> {email || "Sin email"}

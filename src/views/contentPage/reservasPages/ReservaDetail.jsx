@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "api/axiosInstance";
 import myStyles from "../../../assets/css/myStyles.module.css";
-import { Container, Row, Col, Card, CardHeader, CardBody, Badge } from "reactstrap";
+import { Container, Row, Col, Card, CardHeader, CardBody, Badge, Button } from "reactstrap";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const ReservaDetail = () => {
     const location = useLocation();
     const reservaId = location.state;
     const [reservaData, setReservaData] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchReservaData = async () => {
@@ -55,6 +57,10 @@ export const ReservaDetail = () => {
         }
     };
 
+    const handleMesa = () => {
+        navigate("/admin/mesas/crearAsignacion", { state: { id: reservaId, type: "reserva" } });
+    };
+
     return (
         <Container className={myStyles.content} fluid>
             <Row>
@@ -65,12 +71,12 @@ export const ReservaDetail = () => {
                                 <h1>Detalle de la Reserva con ID: {reservaData.id}</h1>
                             </CardHeader>
                             <CardBody>
-                                <h3>Cliente: {reservaData.client?.name} {reservaData.client?.lastname }</h3>
+                                <h3>Cliente: {reservaData.client?.name} {reservaData.client?.lastname}</h3>
                                 <p><strong>Celular:</strong> {reservaData.client?.cellphone}</p>
                                 <p><strong>Email:</strong> {reservaData.client?.email || 'N/A'}</p>
                                 <p><strong>Fecha de Reserva:</strong> {reservaData.fecha_reserva || 'N/A'}</p>
                                 <p><strong>Hora de Reserva:</strong> {reservaData.hora_reserva || 'N/A'}</p>
-                                <p><strong>Estado de la Reserva: </strong> 
+                                <p><strong>Estado de la Reserva: </strong>
                                     <Badge color={getEstadoReservaColor()} pill>
                                         {reservaData.estado_reserva || 'N/A'}
                                     </Badge>
@@ -80,6 +86,7 @@ export const ReservaDetail = () => {
                                 <p><strong>Niños:</strong> {reservaData.cant_ninos || 'N/A'}</p>
                                 <p><strong>Anticipo Requerido: </strong> {reservaData.anticipo_required ? 'Sí' : 'No'}</p>
                                 <p><strong>Usuario que registró: </strong> {reservaData.usuario?.name || 'N/A'} {reservaData.usuario?.lastname || 'N/A'}</p>
+                                <p><strong>Idioma: </strong> {reservaData.client?.languaje|| 'N/A'}</p>
                             </CardBody>
                         </Card>
                     )}
@@ -95,7 +102,7 @@ export const ReservaDetail = () => {
                                 <p><strong>Monto del Anticipo:</strong> {reservaData.anticipo.monto_anticipo}</p>
                                 <p><strong>Banco:</strong> {reservaData.anticipo.banco}</p>
                                 <p><strong>Moneda:</strong> {reservaData.anticipo.moneda}</p>
-                                <p><strong>Estado del Anticipo:</strong> 
+                                <p><strong>Estado del Anticipo:</strong>
                                     <Badge color={getEstadoAnticipoColor()} pill>
                                         {reservaData.anticipo.estado_anticipo}
                                     </Badge>
@@ -117,8 +124,13 @@ export const ReservaDetail = () => {
                 <Col md="12">
                     {reservaData && (
                         <Card className="shadow mt-4">
-                            <CardHeader>
-                                <h1>Horario y Mesas</h1>
+                            <CardHeader style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <h1>Horario y Mesa</h1>
+                                {reservaData.hora_llegada === "Aún no asignada" || !reservaData.hora_llegada ? (
+                                    <Button color="info" onClick={handleMesa}>
+                                        Asignar Mesas
+                                    </Button>
+                                ) : null}
                             </CardHeader>
                             <CardBody>
                                 <p><strong>Hora de Llegada:</strong> {reservaData.hora_llegada || 'Aún no asignada'}</p>                              

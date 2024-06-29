@@ -66,30 +66,34 @@ export const CardMesa = ({
 
                 <CardBody>
                     {estado !== "Disponible" ? (
-                        <CardText style={{ marginBottom: "2rem" }}>
-                            <ul className={myStyles.cardList}>
+                        <CardText style={{ 
+                            marginBottom: "2rem",
+                            listStyle: "none",
+                            padding: "0",
+                        }}>
+                            <ul className={myStyles.cardList} style={{ margin: "0", padding: "0", lineHeight: "1.1" }}>
                                 {reserva ? (
                                     <>
-                                        <li>
+                                        <li style={{ marginBottom: "0rem" }}>
                                             <i className="ni ni-single-02" /> {reserva?.client.name}{" "}
                                             {reserva?.client.lastname}
                                         </li>
-                                        <li>
-                                            <i class="ni ni-watch-time"></i> {reserva?.hora_llegada}
+                                        <li style={{ marginBottom: "0rem" }}>
+                                            <i className="ni ni-watch-time"></i> {reserva?.hora_llegada}
                                         </li>
-
-                                        <li>
+                                        <li style={{ marginBottom: "0rem" }}>
                                             <i className="ni ni-badge" /> {reserva?.mozo.name}
                                         </li>
                                     </>
                                 ) : (
-                                    <p>Cargando...</p>
+                                    <p style={{ marginBottom: "0rem" }}>Cargando...</p>
                                 )}
-                                <li>
-                                    <i class="ni ni-fat-delete"></i> {estado}
-                                </li>
+                                {/* <li style={{ marginBottom: "0rem" }}>
+                                    <i className="ni ni-fat-delete"></i> {estado}
+                                </li> */}
                             </ul>
                         </CardText>
+
                     ) : (
                         <CardText style={{ marginBottom: "0.5rem" }}>
                             <ul

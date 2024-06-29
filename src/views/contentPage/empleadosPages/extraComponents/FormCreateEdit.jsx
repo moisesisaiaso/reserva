@@ -333,7 +333,7 @@ export const FormCreateEdit = ({ id }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg="12">
+                <Col lg="6" className="ml-auto">
                         <div className="form-group">
                             <label className="form-control-label" htmlFor="input-confirm-password">
                                 Confirmar Contraseña

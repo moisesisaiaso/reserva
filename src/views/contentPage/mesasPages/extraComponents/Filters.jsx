@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
-import { FormGroup, InputGroup, Col, Row, Button } from "reactstrap";
+import { FormGroup, Button } from "reactstrap";
 
 export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
     const inputEstado = useRef();
+    const [selectedFilter, setSelectedFilter] = useState("Todos");
 
     const handleSearch = () => {
         const value = inputEstado.current?.value;
@@ -15,13 +16,16 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
         setIsFilter(true);
     };
 
-    const [selectedFilter, setSelectedFilter] = useState("Todos");
     const filterByUbicacion = (e, zona) => {
         e.preventDefault();
         setSelectedFilter(zona);
-        const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
-        setListaFiltrada(filteredMesas);
-        setIsFilter(true);
+
+        // Verificar si mesas está definido antes de filtrar
+        if (mesas) {
+            const filteredMesas = mesas.filter((mesa) => mesa.ubicacion_mesa === zona);
+            setListaFiltrada(filteredMesas);
+            setIsFilter(true);
+        }
     };
 
     const showAllMesas = (e) => {

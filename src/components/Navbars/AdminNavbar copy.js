@@ -13,6 +13,7 @@ import {
 import routes from "routes";
 import axiosInstance from "api/axiosInstance";
 import { useEffect, useState } from "react";
+import { error } from "toastr";
 
 const AdminNavbar = (props) => {
     const location = useLocation();
@@ -38,31 +39,23 @@ const AdminNavbar = (props) => {
 
     const routesArray = location.pathname.replace("/", "").split("/").filter(Boolean);
 
-    const disableNavbar = false;
+    const disableNavbar = location.pathname.includes("/admin/calendario") ||
+        location.pathname.includes("/admin/user-profile");
 
     return (
         <>
             {!disableNavbar && (
                 <Navbar
                     className={`navbar-top ${
-                        location.pathname === "/admin/home" ||
-                        location.pathname.includes("/admin/calendario") ||
-                        location.pathname.includes("/admin/user-profile") ||
-                        location.pathname.includes("/admin/graficas")
-                            ? "navbar-dark"
-                            : ""
+                        location.pathname === "/admin/home" ? "navbar-dark" : ""
                     } ${
-                        location.pathname !== "/admin/home" &&
-                        !location.pathname.includes("/admin/calendario") &&
-                        !location.pathname.includes("/admin/user-profile") &&
-                        !location.pathname.includes("/admin/graficas") &&
-                        myStyles.navbarContainer
+                        location.pathname !== "/admin/home" && myStyles.navbarContainer
                     }`}
                     expand="md"
                     id="navbar-main"
                 >
                     <Container fluid>
-                        {location.pathname === "/inicio" ? (
+                        {location.pathname === "/admin/home" ? (
                             <>
                                 <Link
                                     className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
@@ -73,13 +66,13 @@ const AdminNavbar = (props) => {
                             </>
                         ) : (
                             <ul className={myStyles.routeLink}>
-                                {/* <li>
-                                    <NavLink to="/inicio">Inicio</NavLink>
-                                </li> */}
+                                <li>
+                                    <NavLink to="/admin/home">Inicio</NavLink>
+                                </li>
                                 {routesArray.map((route, i) => (
                                     <li key={i}>
                                         <NavLink
-                                            to={`${route}`}
+                                            to={`/admin/${route}`}
                                             activeStyle={{ color: "red" }}
                                         >
                                             / {route}
@@ -99,7 +92,7 @@ const AdminNavbar = (props) => {
                                             />
                                         </span>
                                         <Media className="ml-2 d-none d-lg-block">
-                                            <span className="mb-0 text-sm font-weight-bold">
+                                            <span className="mb-0 text-sm font-weight-bold text-white">
                                                 {`${user?.name} ${user?.lastname}`}
                                             </span>
                                         </Media>

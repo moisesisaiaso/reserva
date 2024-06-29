@@ -108,7 +108,10 @@ Thank you for choosing us!
     return (
         <>
             <tr>
-                <th scope="row">{lengthId + 1 + (currentPage - 1) * itemsPerPage}</th>
+                {/* <th scope="row">{lengthId + 1 + (currentPage - 1) * itemsPerPage}</th> */}
+
+                <th scope="row">{id}</th>
+                {/* <td>{id}</td> */}
                 <td>
                     {client?.name} {client?.lastname}
                 </td>
