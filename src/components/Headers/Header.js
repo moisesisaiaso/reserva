@@ -12,9 +12,10 @@ const Header = () => {
     const [porcentajeCapacidad, setPorcentajeCapacidad] = useState();
     const [totalAsignadas, setTotalAsignadas] = useState(0);
     const [mesasDisponibles, setMesasDisponibles] = useState(0);
-    const [mesasOcupadas, setMesasOcupadas] = useState(0); // Nuevo estado
+    const [mesasOcupadas, setMesasOcupadas] = useState(0); 
     const [configuracion, setConfiguracion] = useState({});
     const [totalClientesHoy, setTotalClientesHoy] = useState(0);
+    const [reservasHoy, setReservasHoy] = useState(0); 
 
     useEffect(() => {
         getReservas("intimar/reserva");
@@ -58,7 +59,7 @@ const Header = () => {
             }
 
             /* porcentaje de capacidad total */
-            const porcentaje = (aforoByReserva / 60) * 100;
+            const porcentaje = (aforoByReserva / configuracion.aforo) * 100;
             console.log("porcentaje: ", porcentaje);
             for (let i = 0; i <= porcentaje; i++) {
                 setTimeout(() => {
@@ -85,12 +86,11 @@ const Header = () => {
     useEffect(() => {
         const today = new Date();
         const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Enero es 0
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
         const yyyy = today.getFullYear();
         const diaActual = `${yyyy}-${mm}-${dd}`;
-
+    
         if (reservas) {
-            // console.log("Reservas:", reservas);
             const reservasHoy = reservas.filter(
                 (reserva) => reserva.fecha_reserva === diaActual && (reserva.estado_reserva === "Finalizada" || reserva.estado_reserva === "En proceso")
             );
@@ -101,9 +101,10 @@ const Header = () => {
             });
             console.log("Total clientes hoy:", totalClientes);
             setTotalClientesHoy(totalClientes);
+            setReservasHoy(reservasHoy.length); 
         }
     }, [reservas]);
-
+    
 
 
     return (
@@ -196,10 +197,11 @@ const Header = () => {
                                         </Row>
                                         <p className="mt-3 mb-0 text-muted text-sm">
                                             <span className="text-danger mr-2">
-                                                <i className="fas fa-arrow-right" /> Ocupadas:{" "}
-                                                {mesasOcupadas}
-                                            </span>{" "}
-                                            <span className="text-nowrap">Mesas</span>
+                                                <i className="fas fa-arrow-right" />  {mesasOcupadas}
+                                                {/* {" "}{mesasOcupadas} */}
+                                            </span>
+                                            {/* {" "} */}
+                                            <span className="text-nowrap">mesas ocupadas</span>
                                         </p>
                                     </CardBody>
                                 </Card>
@@ -213,7 +215,7 @@ const Header = () => {
                                                     tag="h5"
                                                     className="text-uppercase text-muted mb-0"
                                                 >
-                                                    Clientes Hoy 
+                                                   Total de Clientes Hoy 
                                                 </CardTitle>
                                                 <span className="h2 font-weight-bold mb-0">
                                                     {totalClientesHoy}
@@ -225,12 +227,23 @@ const Header = () => {
                                                 </div>
                                             </Col>
                                         </Row>
-                                        <p className="mt-3 mb-0 text-muted text-sm">
+                                        {/* <p className="mt-3 mb-0 text-muted text-sm">
                                             <span className="text-warning mr-2">
                                                 <i className="fas fa-arrow-right" /> .
                                             </span>{" "}
-                                            <span className="text-nowrap">hoy </span>
+                                            <span className="text-nowrap">comensales de </span>
+                                            <span className="h2 font-weight-bold mb-0">
+                                                    {reservasHoy}
+                                                </span>
+                                        </p> */}
+                                        <p className="mt-3 mb-0 text-muted text-sm">
+                                            <span className="text-danger mr-2">
+                                                <i className="fas fa-arrow-right" /> De {reservasHoy}
+                                            </span>
+                                            {/* {" "} */}
+                                            <span className="text-nowrap">reservas</span>
                                         </p>
+                                        
                                     </CardBody>
                                 </Card>
                             </Col>

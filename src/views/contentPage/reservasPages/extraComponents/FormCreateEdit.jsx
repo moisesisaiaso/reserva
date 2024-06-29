@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
+import axiosInstance from "api/axiosInstance";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +21,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [ninos, setNinos] = useState();
 
     const [collapseIsOpen, setCollapseIsOpen] = useState(false);
-
+    const [configId, setConfigId] = useState(null);
     const [currentFile, setCurrentFile] = useState();
     const {
         handleSubmit,
@@ -36,6 +37,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     const [reserva, setReserva] = useState();
     const [filePreview, setFilePreview] = useState(null);
     const [fileUploadedMessage, setFileUploadedMessage] = useState("");
+    const [configuracion, setConfiguracion] = useState({});
 
     const [clientName, setClientName] = useState();
     const [selectedOption, setSelectedOption] = useState(null);
@@ -52,6 +54,19 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
     }, [
         parameterId,
     ]); /* al no pasar el array de dependencia con un valor en este caso aunque si me llegara por props el parameterId la primera vez que se renderizaba el componente no me llegaba el valor y no obtenía los datos a editar por eso es bueno establecerlo en el array de dependencias */
+
+    useEffect(() => {
+        const fetchConfiguracion = async () => {
+            try {
+                const response = await axiosInstance.get("/intimar/configuracion");
+                const config = response.data.data;
+                setConfiguracion(config);
+            } catch (error) {
+                console.error("Error fetching configuration data:", error);
+            }
+        };
+        fetchConfiguracion();
+    }, []);
 
     useEffect(() => {
         /* para obtener el cliente si existe su id cuando viene de la tabla clientes*/
@@ -152,11 +167,11 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
         setAdultos(numberAdultos);
         setNinos(numberNinos);
         const totalPeople = numberAdultos + numberNinos;
-        setCollapseIsOpen(totalPeople >= 8);
+        setCollapseIsOpen(totalPeople >= configuracion.anticipo_persona);
 
         // Calcular el monto del anticipo
         let montoAnticipo = 0;
-        if (totalPeople >= 8) {
+        if (totalPeople >= configuracion.anticipo_persona) {
             montoAnticipo = totalPeople * 20;
         }
 
