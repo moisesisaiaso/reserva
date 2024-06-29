@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { login } from "api/auth";
 import myStyles from "../../assets/css/myStyles.module.css";
+import { useForm } from "react-hook-form";
 import {
     Button,
     Card,
@@ -17,35 +16,41 @@ import {
 } from "reactstrap";
 
 const Login = () => {
-    const navigate = useNavigate();
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors },
     } = useForm();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [redirecting, setRedirecting] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const onSubmit = async (data) => {
         setLoading(true);
         setError(null);
+        setSuccess(false);
         try {
             const response = await login(data);
-            // Si el inicio de sesión es exitoso, redirige al dashboard
-            setRedirecting(true);
-            navigate("/admin/home");
+            if (response && response.success) {
+                reset({
+                    email: "",
+                    password: "",
+                });
+                setSuccess(true);
+                setTimeout(() => {
+                    window.location.href = "/admin/home";
+                }, 2000);
+            } else {
+                throw new Error(response?.message || "Error desconocido al iniciar sesión");
+            }
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
-            setError(error.message || "Error desconocido al iniciar sesión.");
+            setError("Error al iniciar sesión. Por favor, intente de nuevo.");
         } finally {
             setLoading(false);
         }
     };
-
-    if (redirecting) {
-        return <div>Redirigiendo al home...</div>;
-    }
 
     return (
         <Col lg="5" md="7" className={myStyles.cardLogin}>
@@ -91,9 +96,21 @@ const Login = () => {
                                 <span className="text-danger">Este campo es requerido</span>
                             )}
                         </FormGroup>
+                        <div className="custom-control custom-control-alternative custom-checkbox">
+                            <input
+                                className="custom-control-input"
+                                id="customCheckLogin"
+                                type="checkbox"
+                            />
+                        </div>
                         {error && (
                             <div className="text-center text-danger mb-3">
                                 <small>{error}</small>
+                            </div>
+                        )}
+                        {success && (
+                            <div className="text-center text-success mb-3">
+                                <small>Inicio de sesión exitoso. Redirigiendo...</small>
                             </div>
                         )}
                         <div className="text-center">

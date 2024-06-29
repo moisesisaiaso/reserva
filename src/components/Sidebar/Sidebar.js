@@ -45,7 +45,7 @@ const Sidebar = (props) => {
         const resp = await axiosInstance.get("/intimar/employee/profile");
         setEmployee(resp.data);
 
-        console.log("entra");
+        // console.log("entra");
     };
     useEffect(() => {
         empleado();
@@ -96,8 +96,8 @@ const Sidebar = (props) => {
         window.location.href = "/login";
     };
 
-    console.log("nueva lista de rutas: ", routesList);
-    console.log("employee: ", employee);
+    // console.log("nueva lista de rutas: ", routesList);
+    // console.log("employee: ", employee);
     // Función para crear los enlaces del menú
     const createLinks = (routesList) => {
         return routesList.map((route, key) => {

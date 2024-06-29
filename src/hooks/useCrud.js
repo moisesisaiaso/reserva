@@ -10,8 +10,8 @@ export const useCrud = () => {
             .get(path)
             .then(({ data }) => {
                 setApiData(data.data);
-                console.log(data.data);
-                console.log("datos recibidos");
+                // console.log(data.data);
+                // console.log("datos recibidos");
             })
             .catch((error) => console.log(error));
     };
@@ -94,7 +94,7 @@ export const useCrud = () => {
     };
 
     useEffect(() => {
-        console.log("un elemento:", apiData);
+        // console.log("un elemento:", apiData);
     }, [apiData]);
 
     return [apiData, getApi, postApi, deleteApi, updateApi, removeApi, finalizarApi];

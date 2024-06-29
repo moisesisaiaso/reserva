@@ -90,7 +90,7 @@ const Header = () => {
         const diaActual = `${yyyy}-${mm}-${dd}`;
 
         if (reservas) {
-            console.log("Reservas:", reservas);
+            // console.log("Reservas:", reservas);
             const reservasHoy = reservas.filter(
                 (reserva) => reserva.fecha_reserva === diaActual && (reserva.estado_reserva === "Finalizada" || reserva.estado_reserva === "En proceso")
             );
@@ -213,7 +213,7 @@ const Header = () => {
                                                     tag="h5"
                                                     className="text-uppercase text-muted mb-0"
                                                 >
-                                                    Clientes Totales
+                                                    Clientes Hoy 
                                                 </CardTitle>
                                                 <span className="h2 font-weight-bold mb-0">
                                                     {totalClientesHoy}

@@ -64,22 +64,42 @@ axiosInstance.interceptors.response.use(
 
 // Función para iniciar sesión. Toma un correo electrónico y una contraseña, hace una solicitud POST a la ruta de inicio de sesión y almacena el token de acceso, el token de actualización y la información del usuario en el almacenamiento local si la respuesta es exitosa.
 export async function login(credentials) {
-    console.log(credentials);
-
     try {
         const response = await axios.post(`${apiUrl}intimar/auth/signin`, credentials);
         const { data } = response;
-        const { accessToken, refreshToken } = data;
 
-        if (response.status === 200) {
-            axiosInstance.defaults.headers.common["x-access-token"] = accessToken;
-            localStorage.setItem("access_token", accessToken);
-            localStorage.setItem("refresh_token", refreshToken);
+        if (response.status === 200 && data.accessToken) {
+            console.log('Token recibido:', data.accessToken);
+            axiosInstance.defaults.headers.common["x-access-token"] = data.accessToken;
+            localStorage.setItem("access_token", data.accessToken);
+            if (data.refreshToken) {
+                localStorage.setItem("refresh_token", data.refreshToken);
+            }
+            return data; 
+        } else {
+            console.log('Respuesta inesperada:', data);
+            throw new Error("No se recibió un token de acceso válido del servidor");
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error completo:", error);
+        if (error.response) {
+            if (error.response.status === 401) {
+                throw new Error("Contraseña incorrecta");
+            } else if (error.response.status === 404) {
+                throw new Error("Usuario no encontrado");
+            } else {
+                console.log('Datos de la respuesta de error:', error.response.data);
+                throw new Error(`Error del servidor: ${error.response.status} - ${error.response.data.message || 'Sin mensaje'}`);
+            }
+        } else if (error.request) {
+            throw new Error("No se recibió respuesta del servidor. Verifique su conexión.");
+        } else {
+            throw error;
+        }
     }
 }
+
+
 
 // Función para refrescar el token de acceso. Hace una solicitud POST a la ruta de actualización del token con el token de actualización almacenado en el almacenamiento local del navegador y devuelve la respuesta.
 async function refreshAccessToken() {
