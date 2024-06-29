@@ -8,6 +8,7 @@ import { TableComponent } from "./extraComponents/TableComponent";
 import { getPaginatedData } from "views/generalComponents/getPaginatedData";
 import { OptionBtn } from "./extraComponents/OptionBtn";
 import myStyles from "../../../assets/css/myStyles.module.css";
+import { set } from "date-fns";
 
 const Reserva = () => {
     const [isTable, setIsTable] = useState(true);
@@ -15,6 +16,7 @@ const Reserva = () => {
     const [reservaList, setReservaList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredReservasCount, setFilteredReservasCount] = useState(0);
+    const [filteredClientesCount, setFilteredClientesCount] = useState(0);
     const [pages, setPages] = useState(1);
     const [listaFiltrada, setListaFiltrada] = useState([]);
     const [isFilter, setIsFilter] = useState(false);
@@ -48,6 +50,15 @@ const Reserva = () => {
         if (data) {
             getDataPaginate(data);
             setFilteredReservasCount(data.length);
+            //obtener la cantidad de personas por fecha
+            let totalClientes = 0;
+            data?.map(reserva => {
+                totalClientes += reserva.cant_adultos + reserva.cant_ninos ;
+            });
+            console.log (totalClientes);
+            setFilteredClientesCount(totalClientes);
+            
+            
         }
     }, [listaFiltrada, reservas, currentPage, isFilter]);
 
@@ -99,7 +110,8 @@ const Reserva = () => {
                                 </section>
 
                                 <h2 className={myStyles.clientsH2}>
-                                    Lista de Reservas ({filteredReservasCount} Reservas)
+                                 Lista de Reservas ({filteredReservasCount} Reservas   
+                                    {isFilter && ` / ${filteredClientesCount} Clientes`})
                                 </h2>
 
                                 <section>

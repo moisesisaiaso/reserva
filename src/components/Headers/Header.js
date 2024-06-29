@@ -1,5 +1,7 @@
 import { useCrud } from "hooks/useCrud";
 import { useEffect, useState } from "react";
+import axiosInstance from "api/axiosInstance";
+
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 const Header = () => {
@@ -11,11 +13,26 @@ const Header = () => {
     const [totalAsignadas, setTotalAsignadas] = useState(0);
     const [mesasDisponibles, setMesasDisponibles] = useState(0);
     const [mesasOcupadas, setMesasOcupadas] = useState(0); // Nuevo estado
+    const [configuracion, setConfiguracion] = useState({});
+    const [totalClientesHoy, setTotalClientesHoy] = useState(0);
 
     useEffect(() => {
         getReservas("intimar/reserva");
         getMesas("intimar/mesa");
         getClientes("intimar/client");
+    }, []);
+    useEffect(() => {
+        const fetchConfiguracion = async () => {
+            try {
+                const response = await axiosInstance.get("/intimar/configuracion");
+                const config = response.data.data;
+                setConfiguracion(config);
+            } catch (error) {
+                console.error("Error fetching configuration data:", error);
+            }
+        };
+
+        fetchConfiguracion();
     }, []);
 
     useEffect(() => {
@@ -63,6 +80,32 @@ const Header = () => {
         }
     }, [mesas]);
 
+
+    // Obtener la cantidad de clientes acumulados del día
+    useEffect(() => {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Enero es 0
+        const yyyy = today.getFullYear();
+        const diaActual = `${yyyy}-${mm}-${dd}`;
+
+        if (reservas) {
+            console.log("Reservas:", reservas);
+            const reservasHoy = reservas.filter(
+                (reserva) => reserva.fecha_reserva === diaActual && (reserva.estado_reserva === "Finalizada" || reserva.estado_reserva === "En proceso")
+            );
+            console.log("Reservas de hoy:", reservasHoy);
+            let totalClientes = 0;
+            reservasHoy.forEach((reserva) => {
+                totalClientes += reserva.cant_adultos + reserva.cant_ninos;
+            });
+            console.log("Total clientes hoy:", totalClientes);
+            setTotalClientesHoy(totalClientes);
+        }
+    }, [reservas]);
+
+
+
     return (
         <>
             <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -81,7 +124,7 @@ const Header = () => {
                                                 >
                                                     Aforo máximo
                                                 </CardTitle>
-                                                <span className="h2 font-weight-bold mb-0">50</span> 
+                                                <span className="h2 font-weight-bold mb-0">{configuracion.aforo}</span> 
                                             </div>
                                             <Col className="col-auto">
                                                 <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -173,7 +216,7 @@ const Header = () => {
                                                     Clientes Totales
                                                 </CardTitle>
                                                 <span className="h2 font-weight-bold mb-0">
-                                                    {clients?.length}
+                                                    {totalClientesHoy}
                                                 </span>
                                             </div>
                                             <Col className="col-auto">
@@ -186,7 +229,7 @@ const Header = () => {
                                             <span className="text-warning mr-2">
                                                 <i className="fas fa-arrow-right" /> .
                                             </span>{" "}
-                                            <span className="text-nowrap">este mes </span>
+                                            <span className="text-nowrap">hoy </span>
                                         </p>
                                     </CardBody>
                                 </Card>
