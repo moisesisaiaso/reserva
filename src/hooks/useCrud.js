@@ -28,19 +28,19 @@ export const useCrud = () => {
 
     /* Create */
     const postApi = async (path, data) => {
-        console.log(data);
-        return await axiosInstance
-            .post(path, data)
-            .then(() => {
-                console.log("Data enviada");
-                if (apiData) {
-                    console.log("apiData: " + apiData);
-                    setApiData([data, ...apiData]);
-                }
-            })
-            .catch((error) => console.log(error));
+        try {
+            const response = await axiosInstance.post(path, data);
+            if (apiData) {
+                setApiData([response.data, ...apiData]);
+            }
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data) {
+                throw error.response.data;
+            }
+            throw error;
+        }
     };
-
     /* DELETE */
     const deleteApi = async (path, id) => {
         return await axiosInstance
@@ -54,23 +54,22 @@ export const useCrud = () => {
             .catch((error) => console.log(error));
     };
 
-    /* UPDATE */
+    
     const updateApi = async (path, id, data) => {
-        return await axiosInstance
-            .put(`${path}/${id}`, data)
-            .then(() => {
-                const newData = apiData.map((element) => {
-                    if (element.id === id) {
-                        return data;
-                    }
-                    return element;
-                });
-                setApiData(newData);
-                console.log("registro actualizado");
-            })
-            .catch((error) => console.log(error));
+        try {
+            const response = await axiosInstance.put(`${path}/${id}`, data);
+            const newData = apiData.map((element) => {
+                if (element.id === id) {
+                    return response.data;
+                }
+                return element;
+            });
+            setApiData(newData);
+            return response.data;
+        } catch (error) {
+            throw error; // Propaga el error completo
+        }
     };
-
     /* REMOVE PIVOTE */
     const removeApi = async (path) => {
         console.log(path);

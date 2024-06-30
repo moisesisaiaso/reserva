@@ -314,11 +314,22 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                 window.location.href = "/admin/reservas";
             }, 1250);
         } catch (error) {
-            console.error("Error al crear la reserva:", error);
-            toast.error("Hubo un error al procesar la solicitud");
+            console.error("Error al procesar la reserva:", error);
+            
+            let errorMessage = "Hubo un error al procesar la solicitud. Por favor, intente de nuevo.";
+    
+            // Verificar si el error es una respuesta de la API
+            if (error && typeof error === 'object') {
+                if (error.message) {
+                    errorMessage = error.message;
+                } else if (error.response && error.response.data && error.response.data.message) {
+                    errorMessage = error.response.data.message;
+                }
+            }
+    
+            toast.error(errorMessage);
         }
     };
-
     const clientOptions = clients?.map((client) => ({
         value: client?.id,
         label: `${client?.name} ${client?.lastname}`,
@@ -550,6 +561,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         <option value="Banco de la Nación">Banco de la Nación</option>
                                         <option value="Pichincha">Pichincha</option>
                                         <option value="Paypal">Paypal</option>
+                                        <option value="Otro">Otro</option>
                                     </select>
                                 </FormGroup>
                             </Col>
@@ -577,6 +589,7 @@ export const FormCreateEdit = ({ parameterId, reservarWithClientId }) => {
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="GBP">GBP</option>
+                                        <option value="Otro">Otro</option>
                                     </select>
                                 </FormGroup>
                             </Col>

@@ -152,6 +152,7 @@ export const FormCreateEdit = ({ id }) => {
                                 <option value="Poltrona">Poltrona</option>
                                 <option value="Embarcación">Embarcación</option>
                                 <option value="Cafetin">Cafetin</option>
+                                <option value="Extra">Extra</option>
                             </select>
                             {errors.ubicacion_mesa && <p className="text-danger">Ubicación de mesa es requerida</p>}
                         </FormGroup>
