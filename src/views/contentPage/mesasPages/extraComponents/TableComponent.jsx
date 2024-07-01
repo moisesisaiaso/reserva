@@ -55,7 +55,8 @@ export const TableComponent = ({ mesa, deleteMesa, lengthId, itemsPerPage, curre
     return (
         <>
             <tr>
-                <th scope="row">{lengthId + 1 + groupPage}</th>
+                {/* <th scope="row">{lengthId + 1 + groupPage}</th> */}
+                <td>{id}</td>
                 <td>{ubicacion_mesa}</td>
                 <td>{numero_mesa} </td>
                 <td>{mesa.estado_mesa ? "Disponible" : "No disponible"}</td>

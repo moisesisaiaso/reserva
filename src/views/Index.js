@@ -127,6 +127,7 @@ const Index = (props) => {
                                         mesas={mesas}
                                         setListaFiltrada={setListaFiltrada}
                                         setIsFilter={setIsFilter}
+                                        showCroquis={false}
                                     />
                                 </section>
 

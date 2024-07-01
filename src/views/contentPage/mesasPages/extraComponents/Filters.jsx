@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react";
 import myStyles from "../../../../assets/css/myStyles.module.css";
-import { FormGroup, Button } from "reactstrap";
+import { FormGroup, Button, Modal, ModalBody } from "reactstrap";
+import imagen from "../../../../assets/img/theme/zonas.png";
 
-export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
+export const Filters = ({ mesas, setListaFiltrada, setIsFilter, showCroquis }) => {
     const inputEstado = useRef();
     const [selectedFilter, setSelectedFilter] = useState("Todos");
+    const [modalOpen, setModalOpen] = useState(false);
 
     const handleSearch = () => {
         const value = inputEstado.current?.value;
@@ -41,7 +43,7 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
             ? `${myStyles.button} ${myStyles.selected}`
             : myStyles.button;
     };
-
+    const toggleModal = () => setModalOpen(!modalOpen);
     const zonas = [
         "Playa",
         "Terraza",
@@ -111,6 +113,25 @@ export const Filters = ({ mesas, setListaFiltrada, setIsFilter }) => {
                     {zona}
                 </Button>
             ))}
+
+        {showCroquis && (
+                <div style={{
+                    alignSelf: "flex-end",
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-end",
+                }}>
+                    <a href="#" onClick={toggleModal}>Ver croquis</a>
+                </div>
+            )}
+
+            {showCroquis && (
+                <Modal isOpen={modalOpen} toggle={toggleModal} size="lg" className={myStyles.fullScreenOverlay}>
+                    <ModalBody className={myStyles.modalBody}>
+                        <img src={imagen} alt="imagen" className={myStyles.fullScreenImage} />
+                    </ModalBody>
+                </Modal>
+            )}
         </div>
     );
 };

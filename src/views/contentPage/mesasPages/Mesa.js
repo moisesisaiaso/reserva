@@ -139,6 +139,7 @@ const Mesa = () => {
                                             mesas={mesas}
                                             setListaFiltrada={setListaFiltrada}
                                             setIsFilter={setIsFilter}
+                                            showCroquis={true}
                                         />
                                     )}
                                 </section>
